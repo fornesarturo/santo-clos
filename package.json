@@ -1,0 +1,32 @@
+{
+  "name": "santo-clos",
+  "version": "1.0.0",
+  "description": "A secret santa web-based application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fornesarturo/santo-clos.git"
+  },
+  "keywords": [
+    "secret-santa"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fornesarturo/santo-clos/issues"
+  },
+  "homepage": "https://github.com/fornesarturo/santo-clos#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "mariadb-utilities": "^1.0.1",
+    "mariasql": "^0.2.6",
+    "mysql": "^2.15.0",
+    "object-to-xml": "^1.1.0"
+  }
+}
