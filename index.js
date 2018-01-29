@@ -8,12 +8,18 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var mariadb;
 var apiRouter = express.Router();
 
 apiRouter.route("/api/xml")
 .get((req, res, next) => {
     let data;
     let user = req.query["name"] || "default";
+    mariadb.query("SELECT * FROM usuarios WHERE username = :id", 
+        {id : user}, (err, rows) => {
+            if (err) throw err;
+            console.dir(rows);
+        });
     if(data) {
         res.set('Content-Type', 'text/xml');
         res.send(o2x({
@@ -27,9 +33,22 @@ apiRouter.route("/api/json")
 .get((req, res, next) => {
     let data;
     let user = req.query["name"] || "default";
+    mariadb.query("SELECT * FROM usuarios WHERE username = :id",
+        {id: user}, (err, rows) => {
+            if (err) throw err;
+            console.dir(rows);
+        });
     if(data) {
         res.json(data);
     }
 })
 
-http.createServer(app).listen(8080);
+http.createServer(app).listen(8080, () => {
+    mariadb = new MariaDBClient({
+        host: 'localhost',
+        user: 'admin',
+        password: 'admin'
+    });
+    console.log(mariadb);
+    console.log("Listening on port 8080 . . .");
+});
