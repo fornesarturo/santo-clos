@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const o2x = require('object-to-xml');
 const MariaDBClient = require('mariasql');
+const dotenv = require('dotenv').config();
 
 var app = express();
 app.use(bodyParser.json());
@@ -13,7 +14,7 @@ var apiRouter = express.Router();
 
 app.use(apiRouter);
 
-apiRouter.route("/api/xml")
+apiRouter.route("/api/xml/user")
 .get((req, res, next) => {
     let data;
     let user = req.query["name"] || "default";
@@ -35,7 +36,7 @@ apiRouter.route("/api/xml")
         });
 });
 
-apiRouter.route("/api/json")
+apiRouter.route("/api/json/user")
 .get((req, res, next) => {
     let user = req.query["name"] || "default";
     mariadb.query("SELECT * FROM test_santoclos.usuarios WHERE username = :id",
@@ -56,9 +57,8 @@ http.createServer(app).listen(8080, () => {
     let mariaPassword = process.argv[2];
     mariadb = new MariaDBClient({
         host: 'localhost',
-        user: 'root',
-        password: mariaPassword
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS
     });
-    console.log(mariadb);
-    console.log("Listening on port 8080 . . .");
+    console.log("Listening on port 8080 . . .\n");
 });

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/fornesarturo/santo-clos#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "http": "0.0.0",
     "https": "^1.0.0",
