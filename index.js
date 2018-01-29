@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const cache = require('./cache.js');
 const o2x = require('object-to-xml');
 const MariaDBClient = require('mariasql');
 const dotenv = require('dotenv').config();
@@ -15,7 +16,7 @@ var apiRouter = express.Router();
 app.use(apiRouter);
 
 apiRouter.route("/api/xml/user")
-.get((req, res, next) => {
+.get(cache(20), (req, res, next) => {
     let data;
     let user = req.query["name"] || "default";
     mariadb.query("SELECT * FROM test_santoclos.usuarios WHERE username = :id", 
@@ -37,7 +38,7 @@ apiRouter.route("/api/xml/user")
 });
 
 apiRouter.route("/api/json/user")
-.get((req, res, next) => {
+    .get(cache(20), (req, res, next) => {
     let user = req.query["name"] || "default";
     mariadb.query("SELECT * FROM test_santoclos.usuarios WHERE username = :id",
         {id: user}, (err, rows) => {
