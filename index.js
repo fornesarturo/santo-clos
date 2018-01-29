@@ -54,7 +54,6 @@ apiRouter.route("/api/json/user")
 })
 
 http.createServer(app).listen(8080, () => {
-    let mariaPassword = process.argv[2];
     mariadb = new MariaDBClient({
         host: 'localhost',
         user: process.env.DB_USER,
