@@ -2,9 +2,10 @@
   "name": "santo-clos",
   "version": "1.0.0",
   "description": "A secret santa web-based application",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,6 @@
     "express": "^4.16.2",
     "http": "0.0.0",
     "https": "^1.0.0",
-    "mariadb-utilities": "^1.0.1",
     "mariasql": "^0.2.6",
     "memory-cache": "^0.2.0",
     "mysql": "^2.15.0",
