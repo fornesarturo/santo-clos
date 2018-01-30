@@ -5,6 +5,7 @@ const cache = require('./cache.js');
 const o2x = require('object-to-xml');
 const MariaDBClient = require('mariasql');
 const dotenv = require('dotenv').config();
+const path = require('path');
 
 var app = express();
 app.use(bodyParser.json());
@@ -14,6 +15,13 @@ var mariadb;
 var apiRouter = express.Router();
 
 app.use(apiRouter);
+
+app.use(express.static( __dirname + '/html'));
+
+apiRouter.route('/')
+.get(function(req, res, next) {
+    res.status(200).sendFile(path.join(__dirname, 'html', 'index.html'));
+});
 
 apiRouter.route("/api/xml/user")
 .get(cache(20), (req, res, next) => {
