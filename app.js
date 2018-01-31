@@ -27,7 +27,7 @@ apiRouter.route("/api/xml/user")
 .get(cache(20), (req, res, next) => {
     let data;
     let user = req.query["name"] || "default";
-    mariadb.query("SELECT * FROM test_santoclos.usuarios WHERE username = :id", 
+    mariadb.query("SELECT * FROM santoclos.user WHERE username = :id", 
         {id : user}, (err, rows) => {
             if (err) throw err;
             if (rows.info.numRows > 0) {
@@ -46,9 +46,9 @@ apiRouter.route("/api/xml/user")
 });
 
 apiRouter.route("/api/json/user")
-    .get(cache(20), (req, res, next) => {
+.get(cache(20), (req, res, next) => {
     let user = req.query["name"] || "default";
-    mariadb.query("SELECT * FROM test_santoclos.usuarios WHERE username = :id",
+    mariadb.query("SELECT * FROM santoclos.user WHERE username = :id",
         {id: user}, (err, rows) => {
             if (err) throw err;
             if (rows.info.numRows > 0) {
@@ -61,6 +61,23 @@ apiRouter.route("/api/json/user")
             }
         });
 })
+
+apiRouter.route("/api/event/users")
+.get(cache(20), (req, res, next) => {
+    let event = req.query["id"] || "default";
+    mariadb.query("SELECT * FROM santoclos.participant WHERE eventId = :id"),
+        {id: event}, (err, rows) => {
+            if (err) throw err;
+            if (rows.info.numRows > 0) {
+                let data = [];
+                rows.forEach(element => {
+                    data.push(element);
+                    console.log(element);
+                });
+                res.json(data);
+            }
+        }
+});
 
 http.createServer(app).listen(8080, () => {
     mariadb = new MariaDBClient({
