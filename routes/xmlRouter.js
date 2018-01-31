@@ -16,7 +16,6 @@ xmlRouter.route("/user")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        console.log(data);
                         util.xml(data, res);
                     }
                 });
