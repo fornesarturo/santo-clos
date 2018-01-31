@@ -7,7 +7,7 @@ var xmlRouter = express.Router();
 
 xmlRouter.route("/user")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + ": " + (req.originalUrl || req.url));
+        console.log(req.method + " " + (req.originalUrl || req.url));
         let data;
         let user = req.query["user"] || false;
         if (user)
@@ -24,7 +24,7 @@ xmlRouter.route("/user")
 
 xmlRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + ": " + (req.originalUrl || req.url));
+        console.log(req.method + " " + (req.originalUrl || req.url));
         let event = req.query["id"] || false;
         if (event)
             mariadb.query("SELECT * FROM santoclos.participant WHERE eventId = :id",
@@ -40,11 +40,12 @@ xmlRouter.route("/event/users")
 
 xmlRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + ": " + (req.originalUrl || req.url));
+        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
-        if (user)
-            mariadb.query("SELECT * FROM santoclos.event JOIN santoclos.wish ON event.eventId = wish.eventId AND wish.username = :username",
-                { username: user }, (err, rows) => {
+        let event = req.query["id"] || false;
+        if (user && event)
+            mariadb.query("SELECT * FROM santoclos.event JOIN santoclos.wish ON event.eventId = wish.eventId AND wish.username = :username AND wish.eventId = :id",
+                { id: event, username: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
@@ -55,7 +56,7 @@ xmlRouter.route("/event/wishlist")
 
 xmlRouter.route("/event/giftee")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + ": " + (req.originalUrl || req.url));
+        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
