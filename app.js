@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const PORT = process.env.PORT || 8080;
 
 var app = express();
 app.use(bodyParser.json());
@@ -12,6 +13,6 @@ app.use('/api/xml', require('./routes/xmlRouter.js'));
 
 app.use(express.static( __dirname + '/html'));
 
-http.createServer(app).listen(8080, () => {
+http.createServer(app).listen(PORT, () => {
     console.log("Listening on port 8080 . . .\n");
 });
