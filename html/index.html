@@ -22,100 +22,46 @@
 		<div class="container-contact3">
 			<div class="wrap-contact3">
 				<form class="contact3-form validate-form">
-					
-					<span class="contact3-form-title">
-						<b>Santo Clos DB</b>
-					</span>
+					                   
+                    <div>
+                            <form class="form-signin">
+                                    <div class="text-center">
+                                        <img class="mb-4" src="images/santo_clos.png" alt="" width="170" height="120">
+                                        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                                    </div>
+                            </form>
+                    </div>
 
-					<span class="contact3-form-title-switch">
-						<div class="inlineFirst">
-							JSON
-						</div> 
-						<div class="inline">
-							<br>
-							<label class="switch">
-								<input type="checkbox" id="requestType">
-								<span class="slider"></span>
-							</label>
-						</div>
-						<div class="inline">
-							XML
-						</div>
-					</span>
-
-					<div class="wrap-contact3-form-radio">
-						<div class="contact3-form-radio">
-							<input class="input-radio3" id="radio2" type="radio" name="choice">
-							<label class="label-radio3" for="radio2">
-								GET /user
-							</label>
-						</div>
-
-						<div class="contact3-form-radio m-r-42">
-							<input class="input-radio3" id="radio1" type="radio" name="choice" checked="checked">
-							<label class="label-radio3" for="radio1">
-								POST /user
-							</label>
-						</div>
-
-						<div class="contact3-form-radio">
-							<input class="input-radio3" id="radio3" type="radio" name="choice">
-							<label class="label-radio3" for="radio3">
-								GET /event/users
-							</label>
-						</div>
-
-						<div class="contact3-form-radio">
-							<input class="input-radio3" id="radio4" type="radio" name="choice">
-							<label class="label-radio3" for="radio4">
-								GET /event/wishlist
-							</label>
-						</div>
-
-						<div class="contact3-form-radio">
-							<input class="input-radio3" id="radio5" type="radio" name="choice">
-							<label class="label-radio3" for="radio5">
-								Get /event/giftee
-							</label>
-						</div>
-					</div>
-
-					<div class="wrap-input3 validate-input insertName" data-validate="Name is required">
-						<input class="input3" type="text" name="name" placeholder="Name">
-						<span class="focus-input3"></span>
-					</div>
-					
-					<div class="wrap-input3 validate-input insertUsername" data-validate="Username is required">
-						<input class="input3" type="text" name="username" placeholder="Username">
-						<span class="focus-input3"></span>
-					</div>
-
-					<div class="wrap-input3 validate-input insertPassword" data-validate="Password is required">
-						<input class="input3" type="password" name="password" placeholder="Password">
-						<span class="focus-input3"></span>
-					</div>
-
-					<div class="wrap-input3 validate-input insertEmail" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input3" type="text" name="email" placeholder="Email">
-						<span class="focus-input3"></span>
-					</div>
-
-					<div class="wrap-input3 validate-input insertEventId" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input3" type="text" name="eventId" placeholder="Event ID">
-						<span class="focus-input3"></span>
-					</div>
+                    <div class="fields">
+                            <div class="wrap-input3 validate-input insertName" data-validate="Name is required">
+                                <input class="input3" type="text" name="name" placeholder="Name">
+                                <span class="focus-input3"></span>
+                            </div>
+                            
+                            <div class="wrap-input3 validate-input insertUsername" data-validate="Username is required">
+                                <input class="input3" type="text" name="username" placeholder="Username">
+                                <span class="focus-input3"></span>
+                            </div>
+            
+                            <div class="wrap-input3 validate-input insertEmail" data-validate = "Valid email is required: ex@abc.xyz">
+                                <input class="input3" type="text" name="email" placeholder="Email">
+                                <span class="focus-input3"></span>
+                            </div>
+            
+                            <div class="wrap-input3 validate-input insertPassword" data-validate="Password is required">
+                                <input class="input3" type="password" name="password" placeholder="Password">
+                                <span class="focus-input3"></span>
+                            </div>
+                    </div>
 				</form>
-
-				<div class="container-contact3-form-btn">
-					<button class="contact3-form-btn" onclick="request()">
-						Submit
-					</button>
-				</div>
-				
-				<div class="wrap-input3">
-					<textarea class="input3" name="message" placeholder="Response will appear here" id="responseArea"></textarea>
-					<span class="focus-input3"></span>
-				</div>
+                <div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <button class="btn btn-lg btn-secondary btn-block" type="submit">Continue as Guest</button>
+                      </div>
+                      <div class="text-center">
+                          <a color="blue" id="registerFields"><u>Register</u></a>
+                          <p class="mt-5 mb-3 text-muted">&copy; Santo Clos 2018</p>
+                </div>
 			</div>
 		</div>
 	</div>
@@ -125,7 +71,7 @@
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="js/main.js"></script>
+	<script src="js/main_test.js"></script>
 	<script src="js/requests.js"></script>
 <!--===============================================================================================-->
 </body>

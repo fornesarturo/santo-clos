@@ -4,75 +4,26 @@
 
 
     /*==================================================================
-    [ Focus Contact2 ]*/
-    $('.input3').each(function(){
-        $(this).on('blur', function(){
-            if($(this).val().trim() != "") {
-                $(this).addClass('has-val');
-            }
-            else {
-                $(this).removeClass('has-val');
-            }
-        })    
-    })
-            
+    [ Chose Options ]*/
 
-    /*==================================================================
-    [ Chose Radio ]*/
+   // LOGIN
 
-    // POST /user
-    $("#radio1").on('change', function(){
-        if ($(this).is(":checked")) {
-            $('.insertName').slideDown(300);
-            $('.insertUsername').slideDown(300);
-            $('.insertPassword').slideDown(300);
-            $('.insertEmail').slideDown(300);
-            $('.insertEventId').slideUp(300);
-        }
-    });
-    // GET /user
-    $("#radio2").on('change', function(){
-        if ($(this).is(":checked")) {
-            $('.insertName').slideUp(300);
-            $('.insertUsername').slideDown(300);
-            $('.insertPassword').slideUp(300);
-            $('.insertEmail').slideUp(300);
-            $('.insertEventId').slideUp(300);
-        }
-    });
-    // GET /event/users
-    $("#radio3").on('change', function(){
-        if ($(this).is(":checked")) {
-            $('.insertName').slideUp(300);
-            $('.insertUsername').slideUp(300);
-            $('.insertPassword').slideUp(300);
-            $('.insertEmail').slideUp(300);
-            $('.insertEventId').slideDown(300);
-        }
-    });
-    // GET /event/wishlist
-    $("#radio4").on('change', function(){
-        if ($(this).is(":checked")) {
-            $('.insertName').slideUp(300);
-            $('.insertUsername').slideDown(300);
-            $('.insertPassword').slideUp(300);
-            $('.insertEmail').slideUp(300);
-            $('.insertEventId').slideDown(300);
-        }
-    });
-    // GET /event/giftee
-    $("#radio5").on('change', function(){
-        if ($(this).is(":checked")) {
-            $('.insertName').slideUp(300);
-            $('.insertUsername').slideDown(300);
-            $('.insertPassword').slideUp(300);
-            $('.insertEmail').slideUp(300);
-            $('.insertEventId').slideDown(300);
-        }
+
+    $("#registerFields").click(function(){
+        $('.insertName').slideDown(300);
+        $('.insertEmail').slideDown(300);
+        $('.signInButton').slideUp(300);
+        $('.pleaseSignIn').slideUp(300);
+        $('.registerAccount').slideDown(300);
+        $('.registerText').slideUp(300);
+        $('.registerButton').slideDown(300);
     });
         
-  
-    
+    $("#addParticipant").click(function () {
+        console.log("Hey");
+        $("#participantContainer").append('<th scope="row">1</th><td><div class="wrap-input3 validate-input insertName" data-validate="Name is required"><input class="input3" type="text" name="name" placeholder="Name"><span class="focus-input3"></span></div></td><td><div class="wrap-input3 validate-input insertEmail" data-validate = "Valid email is required: ex@abc.xyz"><input class="input3" type="text" name="email" placeholder="Email"><span class="focus-input3"></span></div></td><td><button type="button" class="btn btn-danger">Remove</button></td>');
+    });
+
     /*==================================================================
     [ Validate ]*/
     var name = $('.validate-input input[name="name"]');
@@ -108,7 +59,4 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-    
-    
-
 })(jQuery);
