@@ -36,6 +36,38 @@ apiRouter.route("/user")
             res.json(req.body);
     });
 
+apiRouter.route("/event")
+    .get(cache(20), (req, res, next) => {
+        console.log(req.method + " " + (req.originalUrl || req.url));
+        let user = req.query["user"] || false;
+        if (user)
+            mariadb.query("SELECT * FROM event WHERE eventId = :id",
+                { id: eventId }, (err, rows) => {
+                    if (err) throw err;
+                    if (rows.info.numRows > 0) {
+                        let data = util.process(rows);
+                        res.charset = 'utf-8';
+                        res.json(data);
+                    }
+                });
+    })  
+    .post((req, res, next) => {
+        console.log(req.method + " " + (req.originalUrl || req.url));
+        if (req.body)
+            mariadb.query("INSERT INTO event(admin, name, eventDate, address, amount) VALUES(:admin, :name, :eventDate, :address, :amount)", 
+            {
+                admin: req.body.admin, name: req.body.name,
+                eventDate: req.body.eventDate, address: req.body.address,
+                amount: req.body.amount
+            }, (err, rows) => {
+                if (err) throw err;
+                console.dir(rows);
+                res.json(req.body);
+            })
+        else
+            res.json(req.body);
+    });
+
 apiRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
         console.log(req.method + " " + (req.originalUrl || req.url));

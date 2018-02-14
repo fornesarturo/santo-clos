@@ -21,6 +21,21 @@ xmlRouter.route("/user")
                 });
     });
 
+xmlRouter.route("/event")
+    .get(cache(20), (req, res, next) => {
+        console.log(req.method + " " + (req.originalUrl || req.url));
+        let user = req.query["user"] || false;
+        if (user)
+            mariadb.query("SELECT * FROM event WHERE eventId = :id",
+                { id: eventId }, (err, rows) => {
+                    if (err) throw err;
+                    if (rows.info.numRows > 0) {
+                        let data = util.process(rows);
+                        util.xml(data, res);
+                    }
+                });
+    })  
+
 xmlRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
         console.log(req.method + " " + (req.originalUrl || req.url));
