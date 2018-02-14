@@ -16,6 +16,12 @@
 	<link rel="stylesheet" type="text/css" href="css/switch.css">
 <!--===============================================================================================-->
 </head>
+<script>
+    function addParticipant(){
+        console.log("SUCK MY DICK BOY");
+        $("#participantContainer").append('<tbody><th scope="row">1</th><td><div class="wrap-input3 validate-input insertName" data-validate="Name is required"><input class="input3" type="text" name="name" placeholder="Name"><span class="focus-input3"></span></div></td><td><div class="wrap-input3 validate-input insertEmail" data-validate = "Valid email is required: ex@abc.xyz"><input class="input3" type="text" name="email" placeholder="Email"><span class="focus-input3"></span></div></td><td><button type="button" class="btn btn-danger">Remove</button></td></tbody>');
+    }
+</script>
 <body>
     <div>
             <nav class="navbar navbar-default" style="background-color:#80c64a;"> 
@@ -141,15 +147,11 @@
                             </tbody>
 
                             <thead> <tr> <th>#</th> <th>Participants</th> <th>E-mail</th> </tr> </thead> 
-                            <tbody>
-                                <tr>
-                                    <div class="participantContainer">
-                                    </div>
-                                </tr>                      
+                            <tbody class="participantContainer">                  
                             </tbody>
                           
                         </table>
-                        <button type="button" class="btn btn-info adddParticipant" id="addParticipant">Add Participant</button><br/>
+                        <button type="button" class="btn btn-info" id="addParticipant" onclick="addParticipant()">Add Participant</button><br/>
                       </div>
                       <br/>
                       <br/>
