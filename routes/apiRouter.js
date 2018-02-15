@@ -9,6 +9,7 @@ apiRouter.route("/user")
     .get(cache(20), (req, res, next) => {
         console.log(req.method + " " +  (req.originalUrl || req.url));
         let user = req.query["user"] || false;
+        console.log(user);
         if (user)
             mariadb.query("SELECT * FROM user WHERE username = :id",
                 { id: user }, (err, rows) => {
@@ -16,6 +17,7 @@ apiRouter.route("/user")
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         res.charset = 'utf-8';
+                        console.log(data);
                         res.json(data);
                     }
                 });

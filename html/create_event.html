@@ -87,14 +87,14 @@
                         <div class="col-md-6">
                             <div class="wrap-input3">
                                 <h7>Name of your event</h7>
-                                <input class="input3" type="text" name="eventDate" placeholder="Event Name">
+                                <input class="input3 eventName" type="text" name="eventName" placeholder="Event Name">
                                 <span class="focus-input3"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="wrap-input3">
                                 <h7>Date of your event</h7>
-                                <input class="input3" type="text" name="eventDate" placeholder="DD/MM/YYYY">
+                                <input class="input3 eventDate" type="text" name="eventDate" placeholder="DD/MM/YYYY">
                                 <span class="focus-input3"></span>
                             </div>
                         </div>
@@ -103,19 +103,24 @@
                         <div class="col-md-6">
                             <div class="wrap-input3">
                                 <h7>Address of your event</h7>
-                                <input class="input3" type="text" name="eventAddress" placeholder="Address">
+                                <input class="input3 eventAddress" type="text" name="eventAddress" placeholder="Address">
                                 <span class="focus-input3"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="wrap-input3">
                                 <h7>Amount to spend</h7>
-                                <input class="input3" type="text" name="eventDate" placeholder="$">
+                                <input class="input3 eventAmount" type="text" name="eventAmount" placeholder="$">
                                 <span class="focus-input3"></span>
                             </div>
                         </div>
                     </div> 
                 </div>
+                <br/>
+                      <div style="align-content: center">
+                        <button type="button" class="btn btn-primary" onclick="createEventStuff()">Create Event</button>
+                      </div>
+
                 <div class="panel panel-default">
                         <!-- Default panel contents -->
                         <div class="panel-heading" style="text-align: center">
@@ -154,10 +159,6 @@
                         <button type="button" class="btn btn-info" id="addParticipant" onclick="addParticipant()">Add Participant</button><br/>
                       </div>
                       <br/>
-                      <br/>
-                      <div style="align-content: center">
-                        <button type="button" class="btn btn-primary">Create Event</button>
-                      </div>
                      
 			</div>
 		</div>
@@ -169,7 +170,7 @@
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
 	<script src="js/main_test.js"></script>
-	<script src="js/requests.js"></script>
+    <script src="js/requests_event.js"></script>
 <!--===============================================================================================-->
 </body>
 </html>
