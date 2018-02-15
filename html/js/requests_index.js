@@ -2,6 +2,7 @@
 // HTML requests
 
 function createGuestEventHTML() {
+    $(this).load("file2.html");
     location.href = "/createEvent";
 }
 
