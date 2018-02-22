@@ -13,7 +13,7 @@ function signJWT(subParam) {
             iss: "santo-clos.herokuapp.com",
             sub: subParam
         },
-        "secret",
+        "santoclos",
         { algorithm: 'HS256' }
     );
     return token;
@@ -36,6 +36,8 @@ authRouter.route("/")
                         access_token: bearToken
                     }
                     res.json(data);
+                } else {
+                    res.json({});
                 }
             });
     }
