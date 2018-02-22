@@ -12,4 +12,10 @@ staticRouter.route('/')
         res.status(200).sendFile(path.join(__dirname, '../html', 'index.html'));
     });
 
+staticRouter.route('/createEvent')
+    .get(cache(20), (req, res, next) => {
+        console.log(req.method + " " + (req.originalUrl || req.url));
+        res.status(200).sendFile(path.join(__dirname, '../html', 'create_event.html'));
+    });
+
 module.exports = staticRouter;

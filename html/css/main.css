@@ -159,6 +159,17 @@ iframe {
   overflow: hidden;
   padding: 72px 55px 65px 55px;
 }
+.wrap-contact4 {
+  width: 900px;
+  background: #80c64a;
+  background: -webkit-linear-gradient(45deg, #56ab2f, #a8e063);
+  background: -o-linear-gradient(45deg, #56ab2f, #a8e063);
+  background: -moz-linear-gradient(45deg, #56ab2f, #a8e063);
+  background: linear-gradient(45deg, #56ab2f, #a8e063);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 72px 55px 65px 55px;
+}
 
 
 /*------------------------------------------------------------------
