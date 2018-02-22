@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 8080;
 
 
 var app = express();
+app.use(cookieParser);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
