@@ -2,45 +2,50 @@ const express = require('express');
 const util = require('../util/util.js');
 const cache = require('../util/cache.js');
 var mariadb = require('../util/mariadb.js');
+const auth = require('../util/authenticate.js');
 
-var apiRouter = express.Router();   
+var apiRouter = express.Router();  
+
+apiRouter.route("/user")
+.post((req, res, next) => {
+    if (req.body)
+        mariadb.query("INSERT INTO user VALUES (:username, :password, :name, :email)",
+            {
+                username: req.body.username, password: req.body.password,
+                name: req.body.name, email: req.body.email
+            }, (err, rows) => {
+                if (err) {
+                    res.json({error: err});
+                    return;
+                }
+                else {
+                    res.redirect(307, '../../auth/token');
+                }
+            });
+    else
+        res.json(req.body);
+});
+
+// The following requests must be authenticated.
+apiRouter.use(auth.authenticateJWT);
 
 apiRouter.route("/user")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " +  (req.originalUrl || req.url));
         let user = req.query["user"] || false;
-        console.log(user);
         if (user)
-            mariadb.query("SELECT * FROM user WHERE username = :id",
+            mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
                 { id: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        res.charset = 'utf-8';
-                        console.log(data);
-                        res.json(data);
+                        req.body.data = data;
+                        next();
                     }
                 });
-    })
-    .post((req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
-        if (req.body)
-            mariadb.query("INSERT INTO user VALUES (:username, :password, :name, :email)",
-                {
-                    username: req.body.username, password: req.body.password,
-                    name: req.body.name, email: req.body.email
-                }, (err, rows) => {
-                    if (err) throw err;
-                    console.dir(rows);
-                    res.json(req.body);
-                });
-        else
-            res.json(req.body);
     });
 
 apiRouter.route("/event")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
@@ -48,13 +53,12 @@ apiRouter.route("/event")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        res.charset = 'utf-8';
-                        res.json(data);
+                        req.body.data = data;
+                        next();
                     }
                 });
     })  
     .post((req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         if (req.body)
             mariadb.query("INSERT INTO event(admin, name, eventDate, address, amount) VALUES(:admin, :name, :eventDate, :address, :amount)", 
             {
@@ -72,7 +76,6 @@ apiRouter.route("/event")
 
 apiRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let event = req.query["id"] || false;
         if (event)
             mariadb.query("SELECT * FROM participant WHERE eventId = :id",
@@ -80,8 +83,8 @@ apiRouter.route("/event/users")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        res.charset = 'utf-8';
-                        res.json(data);
+                        req.body.data = data;
+                        next();
                     }
                 });
 
@@ -89,7 +92,6 @@ apiRouter.route("/event/users")
 
 apiRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
@@ -98,15 +100,14 @@ apiRouter.route("/event/wishlist")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        res.charset = 'utf-8';
-                        res.json(data);
+                        req.body.data = data;
+                        next();
                     }
                 });
     });
 
 apiRouter.route("/event/giftee")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
@@ -115,10 +116,17 @@ apiRouter.route("/event/giftee")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        res.charset = 'utf-8';
-                        res.json(data);
+                        req.body.data = data;
+                        next();
                     }
                 });
     });
+
+// Only expect to use this on GET requests.
+apiRouter.use((req, res, next) => {
+    res.charset = 'utf-8';
+    let responseBody = {data: req.body.data, user: req.body.authUsername};
+    res.json(responseBody);
+});
 
 module.exports = apiRouter;

@@ -2,28 +2,31 @@ const express = require('express');
 const util = require('../util/util.js');
 const cache = require('../util/cache.js');
 var mariadb = require('../util/mariadb.js');
+const auth = require('../util/authenticate.js');
 
 var xmlRouter = express.Router();
 
+// The following requests must be authenticated.
+xmlRouter.use(auth.authenticateJWT);
+
 xmlRouter.route("/user")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let data;
         let user = req.query["user"] || false;
         if (user)
-            mariadb.query("SELECT * FROM user WHERE username = :id",
+            mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
                 { id: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        util.xml(data, res);
+                        req.body.data = data;
+                        next();
                     }
                 });
     });
 
 xmlRouter.route("/event")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
@@ -31,14 +34,14 @@ xmlRouter.route("/event")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        util.xml(data, res);
+                        req.body.data = data;
+                        next();
                     }
                 });
-    })  
+    });
 
 xmlRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let event = req.query["id"] || false;
         if (event)
             mariadb.query("SELECT * FROM participant WHERE eventId = :id",
@@ -46,7 +49,8 @@ xmlRouter.route("/event/users")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        util.xml(data, res);
+                        req.body.data = data;
+                        next();
                     }
                 });
 
@@ -54,7 +58,6 @@ xmlRouter.route("/event/users")
 
 xmlRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
@@ -63,14 +66,14 @@ xmlRouter.route("/event/wishlist")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        util.xml(data, res);
+                        req.body.data = data;
+                        next();
                     }
                 });
     });
 
 xmlRouter.route("/event/giftee")
     .get(cache(20), (req, res, next) => {
-        console.log(req.method + " " + (req.originalUrl || req.url));
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
@@ -79,9 +82,17 @@ xmlRouter.route("/event/giftee")
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
-                        util.xml(data, res);
+                        req.body.data = data;
+                        next();
                     }
                 });
     });
+
+// Only expect to use this on GET requests.
+xmlRouter.use((req, res, next) => {
+    res.charset = 'utf-8';
+    let responseBody = { data: req.body.data, user: req.body.authUsername };
+    util.xml(responseBody, res);
+});
 
 module.exports = xmlRouter;
