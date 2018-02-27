@@ -50,6 +50,8 @@ authRouter.route("/token")
                         signed: true, 
                         httpOnly: true 
                     });
+
+                    res.cookie("current_user", username);
                     res.json(data);
                 } else {
                     res.json({});
