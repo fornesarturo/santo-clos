@@ -68,22 +68,18 @@ $("#registerButton").click(() => {
 
     let checkPassed = true;
     if($(username).val().trim() == ""){
-        console.log("USER MISS");
         showValidate(username);
         checkPassed=false;
     }
     if($(password).val().trim() == ""){
-        console.log("PASS MISS");
         showValidate(password);
         checkPassed=false;
     }
     if($(email).val().trim() == ""){
-        console.log("EMAIL MISS");
         showValidate(email);
         checkPassed=false;
     }
     if($(name).val().trim() == ""){
-        console.log("NAME MISS");
         showValidate(name);
         checkPassed=false;
     }
