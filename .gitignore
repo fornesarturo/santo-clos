@@ -62,3 +62,5 @@ typings/
 
 # Local DB files
 local_DB
+DB
+*.sql
