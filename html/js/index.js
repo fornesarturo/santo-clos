@@ -1,74 +1,111 @@
-"use strict";
+//==================================================================
+// INPUT FIELDS
 
-// LOGIN
-$("#registerFields").click(function(){
-    $('.insertName').slideDown(300);
-    $('.insertEmail').slideDown(300);
-    $('.loginButton').slideUp(300);
-    $('.pleaseLogin').slideUp(300);
-    $('.registerAccount').slideDown(300);
-    $('.registerText').slideUp(300);
-    $('.registerButton').slideDown(300);
-    $('.goBackText').slideDown(300);
+// Function to change input fields to show according to mode
+let currentMode = 0 // 0 = login, 1 = register
+let buttonMode = $("#changeMode");
+buttonMode.click(() => {
+    if(currentMode == 0) {
+        buttonMode.val("I already have and account");
+        $(".registerOnly").slideDown(300);
+        $(".loginOnly").slideUp(300);
+        currentMode = 1;
+    }
+    else if (currentMode == 1) {
+        buttonMode.val("I don't have an account");
+        $(".loginOnly").slideDown(300);
+        $(".registerOnly").slideUp(300);
+        currentMode = 0;
+    }
 });
-
-$("#loginFields").click(function(){
-    $('.insertName').slideUp(300);
-    $('.insertEmail').slideUp(300);
-    $('.loginButton').slideDown(300);
-    $('.pleaseSignIn').slideDown(300);
-    $('.registerAccount').slideUp(300);
-    $('.registerButton').slideUp(300);
-    $('.goBackText').slideUp(300);
-    $('.registerText').slideDown(300);
-})
-
-/*==================================================================
-[ Focus ]*/
-$('.input3').each(function(){
-    $(this).on('blur', function(){
-        if($(this).val().trim() != "") {
-            $(this).addClass('has-val');
+//==================================================================
+// FOCUS WHEN INPUT HAS CONTENT
+$(".inputLine").each((index, element) => {
+    $(element).on("blur", () => {
+        if($(element).val().trim() != "") {
+            $(element).addClass("has-val");
         }
         else {
-            $(this).removeClass('has-val');
+            $(element).removeClass("has-val");
         }
     })    
 });    
 
 
-/*==================================================================
-[ Validate ]*/
-var name = $('.validate-input input[name="name"]');
-var username = $('.validate-input input[name="username"]');
-var password = $('.validate-input input[name="password"]');
-var email = $('.validate-input input[name="email"]');
+//==================================================================
+// INPUT VALIDATION
 
+// When login is clicked
+$("#loginButton").click(() => {
+    let username = $(".inputValidate input[name='username']");
+    let password = $(".inputValidate input[name='password']");
 
-$('.validate-form').on('submit',function(){
-    var check = true;
+    let checkPassed = true;
+    if($(username).val().trim() == ""){
+        showValidate(username);
+        checkPassed=false;
+    }
+    if($(password).val().trim() == ""){
+        showValidate(password);
+        checkPassed=false;
+    }
 
-    if($(name).val().trim() == '' || $(username).val().trim() == '' || $(password).val().trim() == '' || $(email).val().trim() == ''){
-        showValidate(name);
-        check=false;
+    if(checkPassed) {
+        console.log("DO REQUEST HERE");
+    }
+    else {
+        console.log("No can do baby doll");
     }
 });
+// When register is clicked
+$("#registerButton").click(() => {
+    let name = $(".inputValidate input[name='name']");
+    let username = $(".inputValidate input[name='username']");
+    let password = $(".inputValidate input[name='password']");
+    let email = $(".inputValidate input[name='email']");
 
+    let checkPassed = true;
+    if($(username).val().trim() == ""){
+        console.log("USER MISS");
+        showValidate(username);
+        checkPassed=false;
+    }
+    if($(password).val().trim() == ""){
+        console.log("PASS MISS");
+        showValidate(password);
+        checkPassed=false;
+    }
+    if($(email).val().trim() == ""){
+        console.log("EMAIL MISS");
+        showValidate(email);
+        checkPassed=false;
+    }
+    if($(name).val().trim() == ""){
+        console.log("NAME MISS");
+        showValidate(name);
+        checkPassed=false;
+    }
 
-$('.validate-form .input3').each(function(){
-    $(this).focus(function(){
-        hideValidate(this);
+    if(checkPassed) {
+        console.log("DO REQUEST HERE");
+    }
+    else {
+        console.log("No can do baby doll");
+    }
+});
+// Remove validation error on clicked input
+$(".mainForm .inputLine").each((index, element) => {
+    $(element).focus(() => {
+        hideValidate(element);
     });
 });
-
+// Show validation error
 function showValidate(input) {
-    var thisAlert = $(input).parent();
-
-    $(thisAlert).addClass('alert-validate');
+    let thisAlert = $(input).parent();
+    $(thisAlert).addClass("alertValidation");
 }
-
+// Remove validation error
 function hideValidate(input) {
-    var thisAlert = $(input).parent();
-
-    $(thisAlert).removeClass('alert-validate');
+    let thisAlert = $(input).parent();
+    $(thisAlert).removeClass("alertValidation");
 }
