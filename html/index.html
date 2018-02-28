@@ -6,64 +6,70 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/setup.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 	<link rel="stylesheet" type="text/css" href="css/switch.css">
 <!--===============================================================================================-->
 </head>
 <body>
 
-	<div class="bg-contact3" style="background-image: url('images/bg-01.jpg');">
-		<div class="container-contact3">
-			<div class="wrap-contact3">
-				<form class="contact3-form validate-form">
-					                   
-                    <div>
-                        <form class="form-signin">
-                            <div class="text-center">
-                                <img class="mb-4" src="images/santo_clos.png" alt="" width="170" height="120">
-                                <h1 class="h3 mb-3 font-weight-normal pleaseLogin">Please Log In</h1>
-                                <h1 style="display:none" class="h3 mb-3 font-weight-normal registerAccount">Register Account</h1>
-                            </div>
-                        </form>
-                    </div>
+	<div class="pageBG">
+		<div class="mainContainer">
+			<div class="mainWrapper">
+				<form class="mainForm">
+
+                    <span class="mainTitle">
+                        <b>Santo Clos</b>
+                    </span>
+
+                    <div class="text-center">
+                        <img class="mb-4" src="images/santo_clos.png" alt="" width="170" height="120">
+                    </div>   
+
+                    <span class="mainSubtitle">
+                        <b>Please Log In or Register</b>
+                    </span>
 
                     <div class="fields">
-                        <div style="display:none" class="wrap-input3 validate-input insertName" data-validate="Name is required">
-                            <input class="input3" type="text" name="name" placeholder="Name">
-                            <span class="focus-input3"></span>
+                        <div id="nameField" class="registerOnly inputWrapper inputValidate" style="display:none" data-validate="Name is required">
+                            <input class="inputLine" type="text" name="name" placeholder="Name">
+                            <span class="inputFocus"></span>
+                        </div>
+
+                        <div id="emailField" class="registerOnly inputWrapper inputValidate" style="display:none" data-validate = "Valid email is required: ex@abc.xyz">
+                            <input class="inputLine" type="text" name="email" placeholder="Email">
+                            <span class="inputFocus"></span>
                         </div>
                         
-                        <div class="wrap-input3 validate-input insertUsername" data-validate="Username is required">
-                            <input class="input3" type="text" name="username" placeholder="Username">
-                            <span class="focus-input3"></span>
+                        <div id="usernameField" class="loginAndRegister inputWrapper inputValidate" data-validate="Username is required">
+                            <input class="inputLine" type="text" name="username" placeholder="Username">
+                            <span class="inputFocus"></span>
                         </div>
         
-                        <div style="display:none" class="wrap-input3 validate-input insertEmail" data-validate = "Valid email is required: ex@abc.xyz">
-                            <input class="input3" type="text" name="email" placeholder="Email">
-                            <span class="focus-input3"></span>
-                        </div>
-        
-                        <div class="wrap-input3 validate-input insertPassword" data-validate="Password is required">
-                            <input class="input3" type="password" name="password" placeholder="Password">
-                            <span class="focus-input3"></span>
+                        <div id="passwordField" class="loginAndRegister inputWrapper inputValidate" data-validate="Password is required">
+                            <input class="inputLine" type="password" name="password" placeholder="Password">
+                            <span class="inputFocus"></span>
                         </div>
                     </div>
 
                 </form>
                 
                 <div>
-                    <button class="btn btn-lg btn-primary btn-block loginButton" type="submit" onclick="createLoginEventHTML()">Login</button>
-                    <button style="display:none" class="btn btn-lg btn-primary btn-block registerButton" type="submit" onclick="createRegisterEventHTML()">Register</button>
-                    <button class="btn btn-lg btn-secondary btn-block continueAsGuestButton" type="submit" onclick="createGuestEventHTML()">Continue as Guest</button>
+                    <div>
+                        <input type="button" id="loginButton" value="Log In" class="loginOnly btn btn-lg btn-primary btn-block">
+                        <input type="button" id="registerButton" value="Register" class="registerOnly btn btn-lg btn-primary btn-block" style="display:none">
+                    </div>
+                    <br>
+                    <div>
+                        <input type="button" class="btn btn-lg btn-secondary btn-block" id="changeMode" value="I don't have and account">
+                    </div>
                 </div>
                 <div class="text-center">
-                    <a class="registerText" color="blue" id="registerFields"><u>Register</u></a>
-                    <a class="goBackText" color="blue" id="loginFields" style="display:none"><u>Go Back</u></a>
                     <p class="mt-5 mb-3 text-muted">&copy; Santo Clos 2018</p>
                 </div>
 
@@ -72,7 +78,7 @@
 	</div>
 
 <!--===============================================================================================-->
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="vendor/jquery/jquery-3.3.1.js"></script>
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.js"></script>
 <!--===============================================================================================-->

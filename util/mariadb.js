@@ -11,7 +11,7 @@ const mariadb = new MariaDBClient({
 
 mariadb.query('SHOW DATABASES', (err, rows) => {
     if (err) throw err;
-    console.dir(rows);
+    else console.log("Connected to DB");
 });
 
 module.exports = mariadb;
