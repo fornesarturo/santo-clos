@@ -12,9 +12,9 @@ staticRouter.route('/')
         res.status(200).sendFile(path.join(__dirname, '../html', 'index.html'));
     });
 
-staticRouter.route('/createEvent')
+staticRouter.route('/main')
     .get(cache(20), auth.authenticateJWT, (req, res, next) => {
-        res.status(200).sendFile(path.join(__dirname, '../html', 'create_event.html'));
+        res.status(200).sendFile(path.join(__dirname, '../html', 'main.html'));
     });
 
 module.exports = staticRouter;

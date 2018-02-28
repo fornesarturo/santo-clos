@@ -1,7 +1,7 @@
 const express = require('express');
 const util = require('../util/util.js');
 const cache = require('../util/cache.js');
-var mariadb = require('../util/mariadb.js');
+const mariadb = require('../util/mariadb.js');
 const auth = require('../util/authenticate.js');
 
 var apiRouter = express.Router();  
