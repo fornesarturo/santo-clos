@@ -51,10 +51,12 @@ $("#loginButton").click(() => {
     }
 
     if(checkPassed) {
-        console.log("DO REQUEST HERE");
+        let usernameVal = $(username).val().trim();
+        let passwordVal = $(password).val().trim();
+        loginUser(usernameVal, passwordVal);
     }
     else {
-        console.log("No can do baby doll");
+        console.log("No can do baby doll (LOGIN)");
     }
 });
 // When register is clicked
@@ -87,10 +89,14 @@ $("#registerButton").click(() => {
     }
 
     if(checkPassed) {
-        console.log("DO REQUEST HERE");
+        let nameVal = $(name).val().trim();
+        let emailVal = $(email).val().trim();
+        let usernameVal = $(username).val().trim();
+        let passwordVal = $(password).val().trim();
+        createUser(nameVal, emailVal, usernameVal, passwordVal);
     }
     else {
-        console.log("No can do baby doll");
+        console.log("No can do baby doll (SIGNUP)");
     }
 });
 // Remove validation error on clicked input
