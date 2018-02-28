@@ -24,6 +24,7 @@ function createUser(name, email, username, password) {
     .then(resJSON => {
         if(resJSON.access_token && resJSON.type == "Bearer") {
             console.log("GO TO MENU");
+            loadMain();
         }
         else console.log(resJSON);
     });
@@ -53,7 +54,12 @@ function loginUser(username, password) {
     .then(resJSON => {
         if(resJSON.access_token && resJSON.type == "Bearer") {
             console.log("GO TO MENU");
+            loadMain();
         }
         else console.log(resJSON);
     });
+}
+
+function loadMain() {
+    location.href = "/main";
 }
