@@ -2,20 +2,23 @@
 // INPUT FIELDS
 
 // Function to change input fields to show according to mode
-let currentMode = 0 // 0 = login, 1 = register
+login = 0;
+register = 1;
+
+let currentMode = login
 let buttonMode = $("#changeMode");
 buttonMode.click(() => {
-    if(currentMode == 0) {
+    if(currentMode == login) {
         buttonMode.val("I already have and account");
         $(".registerOnly").slideDown(300);
         $(".loginOnly").slideUp(300);
-        currentMode = 1;
+        currentMode = register;
     }
-    else if (currentMode == 1) {
+    else if (currentMode == register) {
         buttonMode.val("I don't have an account");
         $(".loginOnly").slideDown(300);
         $(".registerOnly").slideUp(300);
-        currentMode = 0;
+        currentMode = login;
     }
 });
 //==================================================================
