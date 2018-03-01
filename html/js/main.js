@@ -1,20 +1,4 @@
-/*
-var settingsStuff = `<form class="settings'">
-                    <span class="mainTitle">
-                        <b>Hello world</b>
-                    </span>
-
-                   	<div id="usernameField" class="loginAndRegister inputWrapper inputValidate" data-validate="Username is required">
-                        <input class="inputLine" type="text" name="username" placeholder="Username">
-                        <span class="inputFocus"></span>
-                    </div>
-                    	
-                    </div>
-                </form>
-`;
-*/
-
-Vue.component('create-event', {
+const createEvent = {
   template: "<div class=\"mainContainer\"> \
 			<div class=\"mainWrapper\">\
 				<form class=\"createEvent\">\
@@ -28,10 +12,9 @@ Vue.component('create-event', {
                 </form>\
             </div>\
         </div>"
-});
+};
 
-
-Vue.component('settings', {
+const settings = {
   template: "<div class=\"mainContainer\">\
 			<div class=\"mainWrapper\">\
 				<form class=\"settings\">\
@@ -45,38 +28,47 @@ Vue.component('settings', {
                 </form>\
             </div>\
         </div>"
+};
+
+const hub = {
+    template: "<div class=\"mainContainer\">\
+            <div class=\"mainWrapper\">\
+            <h1>HUB</h1>\
+            </div>\
+        </div>"
+};
+
+const routes = [
+    { path: "/hub", component: hub },
+    { path: "/settings", component: settings },
+    { path: "/create-event", component: createEvent }
+];
+
+const router = new VueRouter({
+    routes: routes
 });
 
 var main = new Vue({
-  el: '#main',
-  data: {
-  	active: 'createEvent',
-    createEventActive: true,
-    settingsActive: false
-  },
-  methods: {
-    setCreateEventActive: function() {
-    	this.createEventActive = true;
-    	this.settingsActive = false;
-    	this.active = "createEvent";
+    router: router,
+    el: '#main',
+    data: {
+  	    activeView: 'hub'
     },
-    setSettingsActive: function() {
-    	this.settingsActive = true;
-    	this.createEventActive = false;
-		this.active = "settings";
-    },
-    setServicesActive: function() {
-    	this.settingsActive = false;
-    	this.createEventActive = false;
-		this.active = "services";
-    },
-    setContactActive: function() {
-    	this.settingsActive = false;
-    	this.createEventActive = false;
-		this.active = "contact";
+    methods: {
+        setHubActive: function() {
+            this.activeView = "hub";
+        },
+        setCreateEventActive: function() {
+            this.activeView = "create-event";
+        },
+        setSettingsActive: function() {
+		    this.activeView = "settings";
+        },
+        setServicesActive: function() {
+		    this.activeView = "services";
+        }
     }
 
-  }
 })
 
 //==================================================================
@@ -89,5 +81,5 @@ $(".inputLine").each((index, element) => {
         else {
             $(element).removeClass("has-val");
         }
-    })    
-});    
+    })
+});
