@@ -70,9 +70,9 @@ function getEventsAdminRequest() {
     fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
-        if(resJSON.data) {
-            console.log(resJSON);
+        if(resJSON.data.eventId) {
+            return resJSON;
         }
-        else console.log(resJSON);
+        else return resJSON;
     });
 }
