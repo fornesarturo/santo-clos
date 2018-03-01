@@ -2,7 +2,7 @@
 function createUser(name, email, username, password) {
     let data = {
         username: username,
-        password: password,
+        password: sha256(password),
         name: name,
         email: email
     };
@@ -33,7 +33,7 @@ function createUser(name, email, username, password) {
 function loginUser(username, password) {
     let data = {
         username: username,
-        password: password
+        password: sha256(password)
     };
     let options = {
         hostname: 'localhost',
