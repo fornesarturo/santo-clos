@@ -108,19 +108,103 @@ const hub = {
 };
 
 const createEvent = {
-  template: "<div class=\"mainContainer\"> \
-			<div class=\"mainWrapper\">\
+  template: "<div class=\"eventContainer\"> \
+			<div class=\"eventWrapper\">\
 				<form class=\"createEvent\">\
                     <span class=\"mainTitle\">\
                         <b>Create event</b>\
                     </span>\
-                   	<div id=\"usernameField\" class=\"loginAndRegister inputWrapper inputValidate\" data-validate=\"Username is required\">\
-                        <input class=\"inputLine\" type=\"text\" name=\"username\" placeholder=\"Username\">\
-                        <span class=\"inputFocus\"></span>\
+                    <div class=\"modal-body\">\
+                        <div class=\"container col-md-12\">\
+                            <div class=\"row\">\
+                                <div class=\"col-md-6\">\
+                                    <div id=\"eventNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Name cannot be empty\">\
+                                        <img class=\"glyphicon\" src=\"octicons/file-text.svg\" width=\"100%\" height=\"100%\">\
+                                        <input class=\"inputRight left-addon\" type=\"text\" name=\"eventName\" placeholder=\"Event's name\">\
+                                        <span class=\"inputFocus\"></span>\
+                                    </div>\
+                                 </div>\
+                                <div class=\"col-md-6\">\
+                                    <div id=\"dateField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Please select a date\">\
+                                        <img class=\"glyphicon \" src=\"octicons/calendar.svg\" width=\"100%\" height=\"100%\">\
+                                        <input class=\"inputRight left-addon\" type=\"date\" name=\"date\" placeholder=\"DD/MM/YY\">\
+                                        <span class=\"inputFocus\"></span>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class=\"row\">\
+                                <div class=\"col-md-6\">\
+                                    <div id=\"addressField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need a place for your event!\">\
+                                        <img class=\"glyphicon\" src=\"octicons/location.svg\" width=\"100%\" height=\"100%\">\
+                                        <input class=\"inputRight left-addon\" type=\"text\" name=\"address\" placeholder=\"Event's location\">\
+                                        <span class=\"inputFocus\"></span>\
+                                    </div>\
+                                 </div>\
+                                <div class=\"col-md-6\">\
+                                    <div id=\"maxAmountField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Please select an amount\">\
+                                         <img class=\"glyphicon\" src=\"octicons/ruby.svg\" width=\"100%\" height=\"100%\">\
+                                        <input class=\"inputRight left-addon\" type=\"text\" name=\"maxAmount\" placeholder=\"Maximum amount to spend\">\
+                                        <span class=\"inputFocus\"></span>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                                <span class=\"mainSubtitle\">\
+                                    <b>Participants</b>\
+                                </span>\
+                            <form id=\"eventData\">\
+                                <div class=\"row\">\
+                                    <div class=\"col-md-6\">\
+                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
+                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
+                                            <span class=\"inputFocus\"></span>\
+                                        </div>\
+                                     </div>\
+                                    <div class=\"col-md-6\">\
+                                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
+                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
+                                            <span class=\"inputFocus\"></span>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                                <div class=\"row\">\
+                                    <div class=\"col-md-6\">\
+                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
+                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
+                                            <span class=\"inputFocus\"></span>\
+                                        </div>\
+                                     </div>\
+                                    <div class=\"col-md-6\">\
+                                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
+                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
+                                            <span class=\"inputFocus\"></span>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </form>\
+                        </div>\
                     </div>\
                 </form>\
+                    <div class=\"row\">\
+                          <div class=\"col-md-6\">\
+                        </div>\
+                        <div class=\"col-md-6\">\
+                                <input type=\"button\" id=\"addParticipantButton\" value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                                <input type=\"button\" id=\"deleteParticipantButton\" value=\"Remove Participant\" class=\"loginOnly btn btn-lg btn-danger btn-block\">\
+                        </div>\
+                    </div>\
+                    <br><br><br>\
+                    <input type=\"button\" id=\"createEventButton\" value=\"Create Event\" class=\"loginOnly btn btn-lg btn-primary btn-block\" onclick=\"createEventRequestMain()\">\
             </div>\
-        </div>"
+        </div>",
+    methods: {
+        createEventRequest: function () {
+            
+        }
+    }
 };
 
 const settings = {
@@ -128,16 +212,55 @@ const settings = {
 			<div class=\"mainWrapper\">\
 				<form class=\"settings\">\
                     <span class=\"mainTitle\">\
-                        <b>Hello world</b>\
+                        <b>Settings</b>\
                     </span>\
-                   	<div id=\"usernameField\" class=\"loginAndRegister inputWrapper inputValidate\" data-validate=\"Username is required\">\
-                        <input class=\"inputLine\" type=\"text\" name=\"username\" placeholder=\"Username\">\
-                        <span class=\"inputFocus\"></span>\
+                    <div class=\"fields\">\
+                        <fieldset>\
+                            <div id=\"nameField\" class=\"inputWrapper inputValidate\" data-validate=\"Name cannot be empty\">\
+                                <input class=\"inputLine\" type=\"text\" name=\"newName\" placeholder=\"Name\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                           	<div id=\"newPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new passsword\">\
+                                <input class=\"inputLine\" type=\"password\" name=\"newPassword\" placeholder=\"New Password\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                            <div id=\"newPasswordConfirmationField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new password\">\
+                                <input class=\"inputLine\" type=\"password\" name=\"newConfirmPassword\" placeholder=\"Confirm New Password\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                            <div id=\"newEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Confirm new email\">\
+                                <input class=\"inputLine\" type=\"email\" name=\"newEmail\" placeholder=\"New email\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                            <div>\
+                              <input type=\"button\" id=\"confirmButton\" value=\"Confirm Changes\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                            </div>\
+                        </fieldset>\
                     </div>\
                 </form>\
             </div>\
         </div>"
 };
+
+const participants = {
+    template: "<div class=\"row\">\
+                    <div class=\"col-md-6\">\
+                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
+                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
+                            <span class=\"inputFocus\"></span>\
+                        </div>\
+                    </div>\
+                    <div class=\"col-md-6\">\
+                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
+                            <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
+                            <span class=\"inputFocus\"></span>\
+                        </div>\
+                    </div>\
+                </div>"
+};
+
 
 const routes = [
     { path: "/", component: hub },
@@ -184,3 +307,84 @@ $(".inputLine").each((index, element) => {
         }
     })
 });
+
+// VALIDATE PASSWORDS
+
+// When Create Event  is clicked
+$("#createEventButton").click(() => {
+    // let oldPassword = $(".passwordValidate input[name='newPassword']").val();
+    // let newPassword = $(".passwordValidate input[name='newConfirmPassword']").val();
+    // let name = $(".inputValidate input[name='newName']").val();
+    // let email = $(".inputValidate input[name='newEmail']").val();
+
+    // let checkPassed = true;
+
+    // if(name && name.trim() == ""){
+    //     showValidate(name);
+    //     checkPassed=false;
+    // }
+    // if(email && email.trim() == ""){
+    //     showValidate(email);
+    //     checkPassed=false;
+    // }
+    // if(oldPassword && oldPassword.trim() == ""){
+    //     showValidate(oldPassword);
+    //     checkPassed=false;
+    // }
+    // if(newPassword && newPassword.trim() == ""){
+    //     showValidate(newPassword);
+    //     checkPassed=false;
+    // }
+    // if(oldPassword && oldPassword != $(newPassword).val()){
+    //     showValidate(newPassword);
+    //     checkPassed=false;
+    // }
+    // if(checkPassed) {
+    //     //sasve changes to database
+    // }
+    // else {
+    //     console.log("No can do baby doll (PASSWORDS NO MATCHERINO)");
+    // }
+});
+
+
+function createEventRequestMain(){
+    var participants = $("#eventData").serializeArray();
+    $.each(participants, function(index, value){
+        console.log(index +  ": " + value.participantName);
+    });
+    let name = $("#eventNameField input[name='eventName']").val();
+    let address = $("#addressField input[name='address'").val();
+    let amount = $("#maxAmountField input[name='maxAmount']").val();
+    let date = $("#dateField input[name='date']").val();
+
+    console.log(name, address, amount, date);
+
+    let data = {
+        name: name,
+        date: date,
+        address: address,
+        amount: amount
+    };
+    let options = {
+        hostname: 'localhost',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "/api/json/event";
+
+    fetch(fullURL, options)
+    .then(res => res.json())
+    .then(resJSON => {
+        if(resJSON.data.eventId) {
+            console.log("Add participants");
+        }
+        else console.log(resJSON);
+    });
+};

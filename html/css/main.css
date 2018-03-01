@@ -99,3 +99,71 @@ p b{
 .resource {
   margin: 20px 0;
 }
+
+/*---------------------------------------------
+Create Event Container */
+.eventContainer {
+    width: 100%;  
+    min-height: 100vh;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.6);
+  }
+/*---------------------------------------------
+Cards Holder*/
+.eventWrapper {
+    width: 700px;
+    background: #0D5901;
+    background: -webkit-linear-gradient(45deg, #0D5901, #00B32C);
+    background: -o-linear-gradient(45deg, #0D5901, #00B32C);
+    background: -moz-linear-gradient(45deg, #0D5901, #00B32C);
+    background: linear-gradient(45deg, #0D5901, #00B32C);
+    border-radius: 10px;
+    margin: 10px;
+    overflow: hidden;
+    padding: 72px 55px 65px 55px;
+}
+
+/*
+    ICONS
+*/
+/* enable absolute positioning */
+.inner-addon { 
+    position: absolute; 
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  -110px;}
+.right-addon .glyphicon { right: -60px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  35px; }
+.right-addon input { padding-right: 35px; }
+
+/*---------------------------------------------
+Input Line*/
+input.inputRight {
+    height: 45px;
+    display: block;
+    width: 100%;
+    background: transparent;
+    font-family: Poppins-Regular;
+    font-size: 15px;
+    color: #fff;
+    line-height: 1.2;
+    padding: 10 5px;
+}

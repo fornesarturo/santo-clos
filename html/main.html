@@ -46,6 +46,16 @@
 						<li class="nav-item active">
 							<a href="#" id="settings" v-on:click="setSettingsActive()">
 								<router-link to="/settings">Settings</router-link>
+									<script language='javascript' type='text/javascript'>
+								    	function check(input) {
+								        	if (input.value != document.getElementById('password').value) {
+								           	 input.setCustomValidity('Password Must be Matching.');
+								        } else {
+								            // input is valid -- reset the error message
+								            input.setCustomValidity('');
+								        }
+								    }
+									</script>
 							</a>
 						</li>
 					</ul>
@@ -53,6 +63,7 @@
 			</nav>
 			<router-view></router-view>
   </div>
+
 <!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.3.1.js"></script>
 	<script src="vendor/bootstrap/js/popper.js"></script>
@@ -64,5 +75,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.min.js"></script>
 	<script src="js/vue-router.js"></script>
 	<script src="js/main.js"></script>
+
 </body>
 </html>
