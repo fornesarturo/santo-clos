@@ -1,5 +1,5 @@
 // Create EVENT in DB
-function createEvent(name, date, address, amount) {
+function createEventRequest(name, date, address, amount) {
     let data = {
         name: name,
         date: date,
@@ -30,7 +30,7 @@ function createEvent(name, date, address, amount) {
 }
 
 // Get EVENTS where the user is participant
-function getJoinedEvents(eventId) {
+function getJoinedEventsRequest(eventId) {
     let data = "?eventId=" + eventId;
     let options = {
         hostname: 'localhost',
@@ -55,7 +55,7 @@ function getJoinedEvents(eventId) {
 }
 
 // Get EVENTS where the user is admin
-function getEventsAdmin() {
+function getEventsAdminRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
