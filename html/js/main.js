@@ -143,7 +143,7 @@ const createEvent = {
                                 <div class=\"col-md-6\">\
                                     <div id=\"maxAmountField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Please select an amount\">\
                                          <img class=\"glyphicon\" src=\"octicons/ruby.svg\" width=\"100%\" height=\"100%\">\
-                                        <input class=\"inputRight left-addon\" type=\"text\" name=\"date\" placeholder=\"Maximum amount to spend\">\
+                                        <input class=\"inputRight left-addon\" type=\"text\" name=\"maxAmount\" placeholder=\"Maximum amount to spend\">\
                                         <span class=\"inputFocus\"></span>\
                                     </div>\
                                 </div>\
@@ -197,9 +197,14 @@ const createEvent = {
                         </div>\
                     </div>\
                     <br><br><br>\
-                    <input type=\"button\" id=\"createEventButton\" value=\"Create Event\" class=\"loginOnly btn btn-lg btn-primary btn-block\" onclick=\"getParticipants()\">\
+                    <input type=\"button\" id=\"createEventButton\" value=\"Create Event\" class=\"loginOnly btn btn-lg btn-primary btn-block\" onclick=\"createEventRequestMain()\">\
             </div>\
-        </div>"
+        </div>",
+    methods: {
+        createEventRequest: function () {
+            
+        }
+    }
 };
 
 const settings = {
@@ -307,45 +312,79 @@ $(".inputLine").each((index, element) => {
 
 // When Create Event  is clicked
 $("#createEventButton").click(() => {
-    let oldPassword = $(".passwordValidate input[name='newPassword']");
-    let newPassword = $(".passwordValidate input[name='newConfirmPassword']");
-    let name = $(".inputValidate input[name='newName']");
-    let email = $(".inputValidate input[name='newEmail']");
+    // let oldPassword = $(".passwordValidate input[name='newPassword']").val();
+    // let newPassword = $(".passwordValidate input[name='newConfirmPassword']").val();
+    // let name = $(".inputValidate input[name='newName']").val();
+    // let email = $(".inputValidate input[name='newEmail']").val();
 
-    let checkPassed = true;
+    // let checkPassed = true;
 
-    if($(name).val().trim() == ""){
-        showValidate(name);
-        checkPassed=false;
-    }
-    if($(email).val().trim() == ""){
-        showValidate(email);
-        checkPassed=false;
-    }
-    if($(oldPassword).val().trim() == ""){
-        showValidate(oldPassword);
-        checkPassed=false;
-    }
-    if($(newPassword).val().trim() == ""){
-        showValidate(newPassword);
-        checkPassed=false;
-    }
-    if($(oldPassword).val() != $(newPassword).val()){
-        showValidate(newPassword);
-        checkPassed=false;
-    }
-    if(checkPassed) {
-        //sasve changes to database
-    }
-    else {
-        console.log("No can do baby doll (PASSWORDS NO MATCHERINO)");
-    }
+    // if(name && name.trim() == ""){
+    //     showValidate(name);
+    //     checkPassed=false;
+    // }
+    // if(email && email.trim() == ""){
+    //     showValidate(email);
+    //     checkPassed=false;
+    // }
+    // if(oldPassword && oldPassword.trim() == ""){
+    //     showValidate(oldPassword);
+    //     checkPassed=false;
+    // }
+    // if(newPassword && newPassword.trim() == ""){
+    //     showValidate(newPassword);
+    //     checkPassed=false;
+    // }
+    // if(oldPassword && oldPassword != $(newPassword).val()){
+    //     showValidate(newPassword);
+    //     checkPassed=false;
+    // }
+    // if(checkPassed) {
+    //     //sasve changes to database
+    // }
+    // else {
+    //     console.log("No can do baby doll (PASSWORDS NO MATCHERINO)");
+    // }
 });
 
 
-function getParticipants(){
+function createEventRequestMain(){
     var participants = $("#eventData").serializeArray();
     $.each(participants, function(index, value){
         console.log(index +  ": " + value.participantName);
+    });
+    let name = $("#eventNameField input[name='eventName']").val();
+    let address = $("#addressField input[name='address'").val();
+    let amount = $("#maxAmountField input[name='maxAmount']").val();
+    let date = $("#dateField input[name='date']").val();
+
+    console.log(name, address, amount, date);
+
+    let data = {
+        name: name,
+        date: date,
+        address: address,
+        amount: amount
+    };
+    let options = {
+        hostname: 'localhost',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "/api/json/event";
+
+    fetch(fullURL, options)
+    .then(res => res.json())
+    .then(resJSON => {
+        if(resJSON.data.eventId) {
+            console.log("Add participants");
+        }
+        else console.log(resJSON);
     });
 };
