@@ -30,8 +30,7 @@ function createEventRequest(name, date, address, amount) {
 }
 
 // Get EVENTS where the user is participant
-function getJoinedEventsRequest(eventId) {
-    let data = "?eventId=" + eventId;
+function getJoinedEventsRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
@@ -42,12 +41,12 @@ function getJoinedEventsRequest(eventId) {
         },
         method: 'GET',
     };
-    let fullURL = "/api/json/user/joinedEvents" + data;
+    let fullURL = "/api/json/user/joinedEvents";
 
     fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
-        if(resJSON.data.eventId) {
+        if(resJSON.data) {
             console.log(resJSON);
         }
         else console.log(resJSON);
