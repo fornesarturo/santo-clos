@@ -96,7 +96,7 @@ apiRouter.route("/event")
             mariadb.query("INSERT INTO event(admin, name, eventDate, address, amount) VALUES(:admin, :name, :eventDate, :address, :amount)", 
             {
                 admin: req.body.authUsername, name: req.body.name,
-                eventDate: req.body.eventDate, address: req.body.address,
+                eventDate: req.body.date, address: req.body.address,
                 amount: req.body.amount
             }, (err, rows) => {
                 if (err) throw err;
