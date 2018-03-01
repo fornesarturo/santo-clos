@@ -40,7 +40,7 @@ $(".inputLine").each((index, element) => {
 
 const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
 const usernameRegex = new RegExp('^[a-zA-Z0-9_-]{3,16}');
-const passwordStrengthRegex = new RegExp('((?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,15})/gm');
+const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\-_!@#\$%\^&\*])(?=.{8,})");
 
 // When login is clicked
 $("#loginButton").click(() => {
@@ -75,6 +75,7 @@ $("#registerButton").click(() => {
         checkPassed=false;
     }
     if($(password).val().trim() == "" || !passwordStrengthRegex.test($(password).val().trim())) {
+    //if($(password).val().trim() == "" ) {
         showValidate(password);
         checkPassed=false;
     }
