@@ -72,8 +72,8 @@ function getEventsAdminRequest() {
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
-            console.log(resJSON);
+            return resJSON;
         }
-        else console.log(resJSON);
+        else return resJSON;
     });
 }

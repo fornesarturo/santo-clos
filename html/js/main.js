@@ -1,3 +1,31 @@
+Vue.component('hosted-event', {
+    props: ['name', 'date'],
+    template: "<div>{{ name }} {{ date }}</div>",
+});
+
+var hubData = {admined: []};
+
+const hub = {
+    template: "<div class=\"mainContainer\">\
+            <div class=\"hubWrapper\">\
+            <span class=\"mainTitle\"><b>Events I Host</b></span>\
+            <hosted-event v-for=\"event in admined\" v-bind:name=\"name\" v-bind:date=\"eventDate\"></hosted-event>\
+            </div>\
+            <div class=\"hubWrapper\">\
+            <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
+            </div>\
+        </div>",
+    created: function() {
+        let admined = getEventsAdminRequest();
+        if (!admined.error) {
+            hubData.admined = admined;
+        }
+    },
+    data: function() {
+        return hubData;
+    }
+};
+
 const createEvent = {
   template: "<div class=\"mainContainer\"> \
 			<div class=\"mainWrapper\">\
@@ -30,17 +58,6 @@ const settings = {
         </div>"
 };
 
-const hub = {
-    template: "<div class=\"mainContainer\">\
-            <div class=\"hubWrapper\">\
-            <span class=\"mainTitle\"><b>Events I Host</b></span>\
-            </div>\
-            <div class=\"hubWrapper\">\
-            <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
-            </div>\
-        </div>"
-};
-
 const routes = [
     { path: "/", component: hub },
     { path: "/settings", component: settings },
@@ -55,7 +72,8 @@ var main = new Vue({
     router: router,
     el: '#main',
     data: {
-  	    activeView: 'hub'
+          activeView: 'hub',
+          adminedEvents: {}
     },
     methods: {
         setHubActive: function() {
@@ -71,7 +89,6 @@ var main = new Vue({
 		    this.activeView = "services";
         }
     }
-
 })
 
 //==================================================================
