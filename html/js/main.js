@@ -32,8 +32,11 @@ const settings = {
 
 const hub = {
     template: "<div class=\"mainContainer\">\
-            <div class=\"mainWrapper\">\
-            <h1>HUB</h1>\
+            <div class=\"hubWrapper\">\
+            <span class=\"mainTitle\"><b>Events I Host</b></span>\
+            </div>\
+            <div class=\"hubWrapper\">\
+            <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
             </div>\
         </div>"
 };
