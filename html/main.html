@@ -23,7 +23,7 @@
 	<div class="pageBG" id="main">
 			<nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark" v-bind:id="activeView" v-on:click.prevent>
 				<a class="navbar-brand" v-on:click="setHubActive()">
-					<router-link to="/hub">
+					<router-link to="/">
 						<img src="images/santo_clos.png" width="50" height="50" alt="Santo Clos">
 					</router-link>
 				</a>
@@ -34,7 +34,7 @@
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item active">
 							<a href="#" id="hub" v-on:click="setHubActive()">
-								<router-link to="/hub">Home</router-link>
+								<router-link to="/">Home</router-link>
 							</a>
 						</li>
 						<li class="nav-item active">

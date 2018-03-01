@@ -42,7 +42,7 @@ const hub = {
 };
 
 const routes = [
-    { path: "/hub", component: hub },
+    { path: "/", component: hub },
     { path: "/settings", component: settings },
     { path: "/create-event", component: createEvent }
 ];
