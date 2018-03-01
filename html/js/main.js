@@ -21,9 +21,23 @@ Vue.component('create-event', {
                     <span class=\"mainTitle\">\
                         <b>Create event</b>\
                     </span>\
-                   	<div id=\"usernameField\" class=\"loginAndRegister inputWrapper inputValidate\" data-validate=\"Username is required\">\
-                        <input class=\"inputLine\" type=\"text\" name=\"username\" placeholder=\"Username\">\
-                        <span class=\"inputFocus\"></span>\
+                    <div class=\"col-md-6\">\
+	                	<div>\
+	                	</div>\
+                    </div>\
+                   	<div class=\"modal-body row\">\
+                        <div class=\"col-md-6\">\
+                            <div class=\"wrap-input3\">\
+                                <input class=\"input3\" type=\"text\" name=\"eventDate\" placeholder=\"Event Name\">\
+                                <span class=\"focus-input3\"></span>\
+                            </div>\
+                        </div>\
+                        <div class=\"col-md-6\">\
+                            <div class=\"wrap-input3\">\
+                                <input class=\"input3\" type=\"text\" name=\"eventDate\" placeholder=\"DD/MM/YYYY\">\
+                                <span class=\"focus-input3\"></span>\
+                            </div>\
+                        </div>\
                     </div>\
                 </form>\
             </div>\
