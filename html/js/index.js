@@ -38,28 +38,28 @@ $(".inputLine").each((index, element) => {
 //==================================================================
 // INPUT VALIDATION
 
+const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
+const usernameRegex = new RegExp('^[a-zA-Z0-9_-]{3,16}');
+const passwordStrengthRegex = new RegExp('((?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,15})/gm');
+
 // When login is clicked
 $("#loginButton").click(() => {
     let username = $(".inputValidate input[name='username']");
     let password = $(".inputValidate input[name='password']");
 
     let checkPassed = true;
-    if($(username).val().trim() == ""){
+    if($(username).val().trim() == "" || !usernameRegex.test($(username).val())) {
         showValidate(username);
         checkPassed=false;
     }
-    if($(password).val().trim() == ""){
+    if($(password).val().trim() == "") {
         showValidate(password);
         checkPassed=false;
     }
-
     if(checkPassed) {
         let usernameVal = $(username).val().trim();
         let passwordVal = $(password).val().trim();
         loginUser(usernameVal, passwordVal);
-    }
-    else {
-        console.log("No can do baby doll (LOGIN)");
     }
 });
 // When register is clicked
@@ -68,17 +68,17 @@ $("#registerButton").click(() => {
     let username = $(".inputValidate input[name='username']");
     let password = $(".inputValidate input[name='password']");
     let email = $(".inputValidate input[name='email']");
-
+    
     let checkPassed = true;
-    if($(username).val().trim() == ""){
+    if($(username).val().trim() == "" || !usernameRegex.test($(username).val().trim())) {
         showValidate(username);
         checkPassed=false;
     }
-    if($(password).val().trim() == ""){
+    if($(password).val().trim() == "" || !passwordStrengthRegex.test($(password).val().trim())) {
         showValidate(password);
         checkPassed=false;
     }
-    if($(email).val().trim() == ""){
+    if($(email).val().trim() == "" || !emailRegex.test($(email).val().trim())) {
         showValidate(email);
         checkPassed=false;
     }
@@ -93,9 +93,6 @@ $("#registerButton").click(() => {
         let usernameVal = $(username).val().trim();
         let passwordVal = $(password).val().trim();
         createUser(nameVal, emailVal, usernameVal, passwordVal);
-    }
-    else {
-        console.log("No can do baby doll (SIGNUP)");
     }
 });
 // Remove validation error on clicked input

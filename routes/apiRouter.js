@@ -44,6 +44,39 @@ apiRouter.route("/user")
                 });
     });
 
+apiRouter.route("/user/events")
+    .get(cache(20), (req, res, next) => {
+        let user = req.body.authUsername || false;
+        if (user)
+            mariadb.query("SELECT * FROM event WHERE admin = :user",
+                { user: user }, (err, rows) => {
+                    if (err) throw err;
+                    if (rows.info.numRows > 0) {
+                        let data = util.process(rows);
+                        req.body.data = data;
+                        next();
+                    }
+                });
+    });
+
+apiRouter.route("/user/joinedEvents")
+    .get(cache(20), (req, res, next) => {
+        let user = req.body.authUsername || false;
+        if (user)
+            mariadb.query("SELECT * FROM event WHERE eventId IN (SELECT eventId FROM participant WHERE username = :user)",
+                { user: user}, (err, rows) => {
+                    if (err) throw err;
+                    if (rows.info.numRows > 0) {
+                        let data = util.process(rows);
+                        req.body.data = data;
+                        next();
+                    }
+                    else {
+                        res.json(req.body);
+                    }
+                });
+    });
+
 apiRouter.route("/event")
     .get(cache(20), (req, res, next) => {
         let user = req.query["user"] || false;
@@ -62,13 +95,16 @@ apiRouter.route("/event")
         if (req.body)
             mariadb.query("INSERT INTO event(admin, name, eventDate, address, amount) VALUES(:admin, :name, :eventDate, :address, :amount)", 
             {
-                admin: req.body.admin, name: req.body.name,
+                admin: req.body.authUsername, name: req.body.name,
                 eventDate: req.body.eventDate, address: req.body.address,
                 amount: req.body.amount
             }, (err, rows) => {
                 if (err) throw err;
-                console.dir(rows);
-                res.json(req.body);
+                let request = req.body;
+                req.body = {};
+                req.body.data = request;
+                req.body.data.eventId = rows.info.insertId;
+                next();
             })
         else
             res.json(req.body);

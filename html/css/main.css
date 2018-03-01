@@ -56,15 +56,29 @@ nav a:last-child{
     border-radius:0 2px 2px 0;
 }
 
-nav.createEvent .createEvent,
-nav.settings .settings,
-nav.services .services,
-nav.contact .contact{
+nav#create-event #create-event,
+nav#settings #settings,
+nav#services #services,
+nav#contact #contact,
+nav#hub #hub{
     background-color:#2A8FBD;
     background: -webkit-linear-gradient(45deg, #2A8FBD, #00B32C);
     background: -o-linear-gradient(45deg, #2A8FBD, #00B32C);
     background: -moz-linear-gradient(45deg, #2A8FBD, #00B32C);
     background: linear-gradient(45deg, #2A8FBD, #00B32C);
+}
+
+@media only screen and (max-width: 575px) {
+    #hub, #settings, #services, #create-event {
+        width: 100%;
+    }
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: rgb(255, 255, 255);
+}
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
 p{
