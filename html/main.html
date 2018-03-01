@@ -10,33 +10,59 @@
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
 	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/switch.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <!--===============================================================================================-->
-<!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/setup.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/setup.css">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
 <!--===============================================================================================-->
 </head>
 <body>
-
-	<div class="pageBG">
-		<div id="main">
-		  <nav v-bind:class="active" v-on:click.prevent>
-		    <a href="#" class="createEvent" v-on:click="setCreateEventActive()" >Create Event</a>
-		    <a href="#" class="settings" v-on:click="setSettingsActive()" > Settings</a>
-		    <a href="#" class="services" v-on:click="setServicesActive()">Services</a>
-		    <a href="#" class="contact" v-on:click="setContactActive()">Contact</a>
-		  </nav>
-		  
-		  <create-event v-if="createEventActive"></create-event>
-		  <settings v-if="settingsActive"></settings>
-
-		</div>
-    </div>
-	
+	<div class="pageBG" id="main">
+			<nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark" v-bind:id="activeView" v-on:click.prevent>
+				<a class="navbar-brand" v-on:click="setHubActive()">
+					<router-link to="/">
+						<img src="images/santo_clos.png" width="50" height="50" alt="Santo Clos">
+					</router-link>
+				</a>
+				<button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerSantoClos" aria-controls="navbarTogglerSantoClos" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarTogglerSantoClos">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active">
+							<a href="#" id="hub" v-on:click="setHubActive()">
+								<router-link to="/">Home</router-link>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a href="#" id="create-event" v-on:click="setCreateEventActive()">
+								<router-link to="/create-event">Create Event</router-link>
+							</a>
+						</li>
+						<li class="nav-item active">
+							<a href="#" id="settings" v-on:click="setSettingsActive()">
+								<router-link to="/settings">Settings</router-link>
+									<script language='javascript' type='text/javascript'>
+								    	function check(input) {
+								        	if (input.value != document.getElementById('password').value) {
+								           	 input.setCustomValidity('Password Must be Matching.');
+								        } else {
+								            // input is valid -- reset the error message
+								            input.setCustomValidity('');
+								        }
+								    }
+									</script>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<router-view></router-view>
+  </div>
 
 <!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.3.1.js"></script>
@@ -44,11 +70,11 @@
 	<script src="vendor/bootstrap/js/bootstrap.js"></script>
 <!--===============================================================================================-->
 	<script src="js/index.js"></script>
-    <script src="js/requests_event.js"></script>
+  <script src="js/requests_main.js"></script>
 <!--===============================================================================================-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.min.js"></script>
+	<script src="js/vue-router.js"></script>
 	<script src="js/main.js"></script>
-	<script
-      src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.min.js">
-    </script>
+
 </body>
 </html>

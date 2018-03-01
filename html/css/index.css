@@ -58,8 +58,75 @@ Cards Holder*/
     background: -moz-linear-gradient(45deg, #0D5901, #00B32C);
     background: linear-gradient(45deg, #0D5901, #00B32C);
     border-radius: 10px;
+    margin: 10px;
     overflow: hidden;
     padding: 72px 55px 65px 55px;
+}
+
+.hubWrapper {
+    width: 600px;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    background: #0D5901;
+    background: -webkit-linear-gradient(45deg, #0D5901, #00B32C);
+    background: -o-linear-gradient(45deg, #0D5901, #00B32C);
+    background: -moz-linear-gradient(45deg, #0D5901, #00B32C);
+    background: linear-gradient(45deg, #0D5901, #00B32C);
+    border-radius: 10px;
+    margin: 10px;
+    overflow: hidden;
+    padding: 72px 55px 65px 55px;
+}
+
+.santoClosEvent {
+    width: 100%;
+    background: rgb(3, 41, 12);
+    font-size: 20px;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 30px 15px 30px 15px;
+    overflow: hidden;
+}
+
+.santoClosEvent .name {
+    font-size: 20px;
+    color: white;
+    text-align: left;
+    display: inline-block;
+}
+
+.santoClosEvent .date {
+    font-size: 20px;
+    align-self: flex-end;
+    color: white;
+    float: right;
+}
+
+.santoClosEvent .admin {
+    font-size: 20px;
+    align-self: flex-end;
+    color: white;
+    margin-top: 20px;
+}
+
+.createEventButton {
+    font-size: 40px;
+    width: 100px;
+    color: white;
+    text-align: center;
+    background: rgb(114, 13, 13);
+    border-radius: 10px;
+    padding: 1px 1px 1px 1px;
+}
+
+@media only screen and (max-width: 575px) {
+    .mainWrapper {
+        width: 100%;
+    }
+    .hubWrapper {
+        width: 100%;
+    }
 }
 
 /*//////////////////////////////////////////////////////////////////
@@ -188,7 +255,7 @@ Show text box on hover*/
 Show text box always if screen is smaller (Possible mobile and can't hover)*/
 @media (max-width: 992px) {
     .alertValidation::before {
-    visibility: visible;
-    opacity: 1;
+        visibility: visible;
+        opacity: 1;
     }
 }
