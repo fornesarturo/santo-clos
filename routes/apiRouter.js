@@ -67,8 +67,6 @@ apiRouter.route("/user/joinedEvents")
             mariadb.query("SELECT * FROM participant WHERE username = :user AND eventID = :id",
                 { user: user, id: eventId }, (err, rows) => {
                     if (err) throw err;
-                    console.log(user, " ", eventId, " ", user && eventId);
-
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
@@ -104,7 +102,6 @@ apiRouter.route("/event")
             }, (err, rows) => {
                 if (err) throw err;
                 let request = req.body;
-                // req.body.data = request;
                 req.body = {};
                 req.body.data = request;
                 req.body.data.eventId = rows.info.insertId;
