@@ -82,6 +82,14 @@ API JSON Router
             name: "Name McNamey",
             email: "user@emailprovider.com"
         }
+# POST /api/json/event
+    Request Body:
+        {
+            name: "EVENT NAME",
+            date: "EVENT DATE",
+            address: "EVENT ADDRESS",
+            amount: AMOUNT_NUMBER
+        }
 
 # GET /api/json/event/users?id={eventId}
     Response:

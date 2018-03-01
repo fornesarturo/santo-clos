@@ -1,74 +1,113 @@
-"use strict";
+//==================================================================
+// INPUT FIELDS
 
-// LOGIN
-$("#registerFields").click(function(){
-    $('.insertName').slideDown(300);
-    $('.insertEmail').slideDown(300);
-    $('.loginButton').slideUp(300);
-    $('.pleaseLogin').slideUp(300);
-    $('.registerAccount').slideDown(300);
-    $('.registerText').slideUp(300);
-    $('.registerButton').slideDown(300);
-    $('.goBackText').slideDown(300);
+// Function to change input fields to show according to mode
+login = 0;
+register = 1;
+
+let currentMode = login
+let buttonMode = $("#changeMode");
+buttonMode.click(() => {
+    if(currentMode == login) {
+        buttonMode.val("I already have and account");
+        $(".registerOnly").slideDown(300);
+        $(".loginOnly").slideUp(300);
+        currentMode = register;
+    }
+    else if (currentMode == register) {
+        buttonMode.val("I don't have an account");
+        $(".loginOnly").slideDown(300);
+        $(".registerOnly").slideUp(300);
+        currentMode = login;
+    }
 });
-
-$("#loginFields").click(function(){
-    $('.insertName').slideUp(300);
-    $('.insertEmail').slideUp(300);
-    $('.loginButton').slideDown(300);
-    $('.pleaseSignIn').slideDown(300);
-    $('.registerAccount').slideUp(300);
-    $('.registerButton').slideUp(300);
-    $('.goBackText').slideUp(300);
-    $('.registerText').slideDown(300);
-})
-
-/*==================================================================
-[ Focus ]*/
-$('.input3').each(function(){
-    $(this).on('blur', function(){
-        if($(this).val().trim() != "") {
-            $(this).addClass('has-val');
+//==================================================================
+// FOCUS WHEN INPUT HAS CONTENT
+$(".inputLine").each((index, element) => {
+    $(element).on("blur", () => {
+        if($(element).val().trim() != "") {
+            $(element).addClass("has-val");
         }
         else {
-            $(this).removeClass('has-val');
+            $(element).removeClass("has-val");
         }
     })    
 });    
 
 
-/*==================================================================
-[ Validate ]*/
-var name = $('.validate-input input[name="name"]');
-var username = $('.validate-input input[name="username"]');
-var password = $('.validate-input input[name="password"]');
-var email = $('.validate-input input[name="email"]');
+//==================================================================
+// INPUT VALIDATION
 
+const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
+const usernameRegex = new RegExp('^[a-zA-Z0-9_-]{3,16}');
+const passwordStrengthRegex = new RegExp('((?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,15})/gm');
 
-$('.validate-form').on('submit',function(){
-    var check = true;
+// When login is clicked
+$("#loginButton").click(() => {
+    let username = $(".inputValidate input[name='username']");
+    let password = $(".inputValidate input[name='password']");
 
-    if($(name).val().trim() == '' || $(username).val().trim() == '' || $(password).val().trim() == '' || $(email).val().trim() == ''){
-        showValidate(name);
-        check=false;
+    let checkPassed = true;
+    if($(username).val().trim() == "" || !usernameRegex.test($(username).val())) {
+        showValidate(username);
+        checkPassed=false;
+    }
+    if($(password).val().trim() == "") {
+        showValidate(password);
+        checkPassed=false;
+    }
+    if(checkPassed) {
+        let usernameVal = $(username).val().trim();
+        let passwordVal = $(password).val().trim();
+        loginUser(usernameVal, passwordVal);
     }
 });
+// When register is clicked
+$("#registerButton").click(() => {
+    let name = $(".inputValidate input[name='name']");
+    let username = $(".inputValidate input[name='username']");
+    let password = $(".inputValidate input[name='password']");
+    let email = $(".inputValidate input[name='email']");
+    
+    let checkPassed = true;
+    if($(username).val().trim() == "" || !usernameRegex.test($(username).val().trim())) {
+        showValidate(username);
+        checkPassed=false;
+    }
+    if($(password).val().trim() == "" || !passwordStrengthRegex.test($(password).val().trim())) {
+        showValidate(password);
+        checkPassed=false;
+    }
+    if($(email).val().trim() == "" || !emailRegex.test($(email).val().trim())) {
+        showValidate(email);
+        checkPassed=false;
+    }
+    if($(name).val().trim() == ""){
+        showValidate(name);
+        checkPassed=false;
+    }
 
-
-$('.validate-form .input3').each(function(){
-    $(this).focus(function(){
-        hideValidate(this);
+    if(checkPassed) {
+        let nameVal = $(name).val().trim();
+        let emailVal = $(email).val().trim();
+        let usernameVal = $(username).val().trim();
+        let passwordVal = $(password).val().trim();
+        createUser(nameVal, emailVal, usernameVal, passwordVal);
+    }
+});
+// Remove validation error on clicked input
+$(".mainForm .inputLine").each((index, element) => {
+    $(element).focus(() => {
+        hideValidate(element);
     });
 });
-
+// Show validation error
 function showValidate(input) {
-    var thisAlert = $(input).parent();
-
-    $(thisAlert).addClass('alert-validate');
+    let thisAlert = $(input).parent();
+    $(thisAlert).addClass("alertValidation");
 }
-
+// Remove validation error
 function hideValidate(input) {
-    var thisAlert = $(input).parent();
-
-    $(thisAlert).removeClass('alert-validate');
+    let thisAlert = $(input).parent();
+    $(thisAlert).removeClass("alertValidation");
 }

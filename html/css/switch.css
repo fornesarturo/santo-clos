@@ -1,3 +1,14 @@
+.contact3-form-title-switch {
+    display: block;
+    font-family: Poppins-Bold;
+    font-size: 39px;
+    color: #fff;
+    line-height: 0.0;
+    text-align: center;
+    text-transform: uppercase;
+    padding-bottom: 25px;
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
