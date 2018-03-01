@@ -62,10 +62,9 @@ apiRouter.route("/user/events")
 apiRouter.route("/user/joinedEvents")
     .get(cache(20), (req, res, next) => {
         let user = req.body.authUsername || false;
-        let eventId = req.query["eventId"] || false;
-        if (user && eventId)
-            mariadb.query("SELECT * FROM participant WHERE username = :user AND eventID = :id",
-                { user: user, id: eventId }, (err, rows) => {
+        if (user)
+            mariadb.query("SELECT * FROM event WHERE eventId IN (SELECT eventId FROM participant WHERE username = :user)",
+                { user: user}, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
