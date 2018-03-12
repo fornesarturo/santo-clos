@@ -26,7 +26,7 @@ Vue.component('joined-event', {
     
 });
 
-var joinedEventsData = {joined: []};
+//var joinedEventsData = {joined: []};
 
 Vue.component('joined-hub', {
     template: "<div class=\"hubWrapper\">\
@@ -34,7 +34,7 @@ Vue.component('joined-hub', {
             <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:admin=\"event.admin\"></joined-event>\
             </div>",
     data: function() {
-        return joinedEventsData;
+        return { joined: [] };
     },
     created: function() {
         let options = {
@@ -60,7 +60,7 @@ Vue.component('joined-hub', {
     }
 });
 
-var hostedEventsData = {admined: []};
+// var hostedEventsData = {admined: []};
 
 Vue.component('hosted-hub', {
     template: "<div class=\"hubWrapper\">\
@@ -70,7 +70,7 @@ Vue.component('hosted-hub', {
             </div>",
     methods: {
         createNewEvent: function () {
-            location.href = "main#/create-event";
+            this.$emit('new-event');
         }
     },
     created: function () {
@@ -96,15 +96,21 @@ Vue.component('hosted-hub', {
             });
     },
     data: function () {
-        return hostedEventsData;
+        return {admined: []};
     }
 });
 
 const hub = {
     template: "<div class=\"mainContainer\">\
-                <hosted-hub></hosted-hub>\
+                <hosted-hub v-on:new-event=\"newEvent\"></hosted-hub>\
                 <joined-hub></joined-hub>\
-            </div>"
+            </div>",
+    methods: {
+        newEvent: function() {
+            this.$emit('change-to-event');
+            location.href = "main#/create-event";
+        }
+    }
 };
 
 const createEvent = {
