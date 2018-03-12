@@ -89,6 +89,7 @@ Vue.component('hosted-hub', {
         fetch(fullURL, options)
             .then(res => res.json())
             .then(resJSON => {
+                console.log("HELLO EVENTS");
                 if (resJSON.data) {
                     this.admined = resJSON.data;
                 }

@@ -56,6 +56,9 @@ apiRouter.route("/user/events")
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        res.json(req.body);
+                    }
                 });
     });
 
