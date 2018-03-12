@@ -9,7 +9,7 @@ let currentMode = login
 let buttonMode = $("#changeMode");
 buttonMode.click(() => {
     if(currentMode == login) {
-        buttonMode.val("I already have and account");
+        buttonMode.val("I already have an account");
         $(".registerOnly").slideDown(300);
         $(".loginOnly").slideUp(300);
         currentMode = register;

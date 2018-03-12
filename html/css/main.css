@@ -23,11 +23,11 @@ section, footer, header, aside, nav{
 nav{
     display:inline-block;
     width: 100%;
-    background-color:#0D5901;
-    background: -webkit-linear-gradient(60deg, #0D5901, #00B32C);
-    background: -o-linear-gradient(60deg, #0D5901, #00B32C);
-    background: -moz-linear-gradient(60deg, #0D5901, #00B32C);
-    background: linear-gradient(60deg, #0D5901, #00B32C);
+    background-color:rgb(7, 75, 104);
+    background: -webkit-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -o-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -moz-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
     box-shadow:0 1px 1px #ccc;
     border-radius:2px;
 }
@@ -62,10 +62,10 @@ nav#services #services,
 nav#contact #contact,
 nav#hub #hub{
     background-color:#2A8FBD;
-    background: -webkit-linear-gradient(45deg, #2A8FBD, #00B32C);
-    background: -o-linear-gradient(45deg, #2A8FBD, #00B32C);
-    background: -moz-linear-gradient(45deg, #2A8FBD, #00B32C);
-    background: linear-gradient(45deg, #2A8FBD, #00B32C);
+    background: -webkit-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: -o-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: -moz-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
 }
 
 @media only screen and (max-width: 575px) {
@@ -120,11 +120,11 @@ Create Event Container */
 Cards Holder*/
 .eventWrapper {
     width: 700px;
-    background: #0D5901;
-    background: -webkit-linear-gradient(45deg, #0D5901, #00B32C);
-    background: -o-linear-gradient(45deg, #0D5901, #00B32C);
-    background: -moz-linear-gradient(45deg, #0D5901, #00B32C);
-    background: linear-gradient(45deg, #0D5901, #00B32C);
+    background: rgb(7, 75, 104);
+    background: -webkit-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -o-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -moz-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
     border-radius: 10px;
     margin: 10px;
     overflow: hidden;
