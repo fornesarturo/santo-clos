@@ -17,7 +17,7 @@ function createUser(name, email, username, password) {
         method: 'POST',
         body: JSON.stringify(data)
     };
-    let fullURL = "/api/json/user";
+    let fullURL = "/api/user";
 
     fetch(fullURL, options)
     .then(res => res.json())
