@@ -55,13 +55,13 @@ apiRouter.route("/user")
         let user = req.body.authUsername || false;
         if (user) {
             let toChange = [];
-            if (req.body.name) toChange.push("name = " + req.body.name);
-            if (req.body.password) toChange.push("password = " + req.body.password);
-            if (req.body.email) toChange.push("email = " + req.body.email);
+            if (req.body.name) toChange.push("name = '" + req.body.name + "'");
+            if (req.body.password) toChange.push("password = '" + req.body.password + "'");
+            if (req.body.email) toChange.push("email = '" + req.body.email + "'");
             let change = toChange.join(",");
+            let query = "UPDATE user SET " + change + " WHERE username = '" + user + "'";
             if (change)
-                mariadb.query("UPDATE user SET :change WHERE username = :username", 
-                    {change: change, username: user}, (err, rows) => {
+                mariadb.query(query, (err, rows) => {
                         if (err) {
                             util.sendError(res, 500, err);
                             return;
