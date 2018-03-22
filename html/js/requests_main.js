@@ -102,7 +102,6 @@ async function passwordValidationRequest(username, password) {
     let response = await fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
-        console.log(resJSON.success);
         if(resJSON.success) {
             return resJSON.success;
         }
@@ -124,7 +123,7 @@ async function updateDataRequest(data) {
         method: 'PUT',
         body: JSON.stringify(data)
     };
-    let fullURL = "/auth/authPassword";
+    let fullURL = "/api/user";
 
     let response = await fetch(fullURL, options)
     .then(res => res.json());

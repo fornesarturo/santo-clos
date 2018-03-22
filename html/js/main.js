@@ -393,7 +393,7 @@ function hideValidate(input) {
 
 // When Confirm Changes Name is Clicked
 $("#confirmButtonName").click(() => {
-    let newName = $(".passwordValidate input[name='newName']");
+    let newName = $(".inputValidate input[name='newName']");
     let newNameVal = $(newName).val().trim();
 
     let checkPassed = true;
@@ -414,7 +414,7 @@ $("#confirmButtonName").click(() => {
 
 // When Confirm Changes Email is Clicked
 $("#confirmButtonEmail").click(() => {
-    let newEmail = $(".passwordValidate input[name='newEmail']");
+    let newEmail = $(".inputValidate input[name='newEmail']");
     let newEmailVal = $(newEmail).val().trim();
 
     let checkPassed = true;
@@ -425,7 +425,7 @@ $("#confirmButtonEmail").click(() => {
 
     if(checkPassed) {
         let data = {
-            email: newEmail
+            email: newEmailVal
         };
         updateDataRequest(data).then((res) => {
             console.log(res);
@@ -465,9 +465,8 @@ $("#confirmButtonPassword").click(() => {
     if(checkPassed) {
         passwordValidationRequest(Cookies.get("current_user"), oldPasswordVal).then((passwordSuccess) => {
             if(passwordSuccess == 1) {
-                console.log("No problem with passwords. Change is accepted");
                 let data = {
-                    password: newPasswordVal
+                    password: sha256(newPasswordVal)
                 };
                 updateDataRequest(data).then((res) => {
                     console.log(res);
