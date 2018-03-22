@@ -20,8 +20,7 @@ authRouter.route("/whoami")
             clockTimestamp: Date.now() / 1000
         }, function(err, decoded) {
         if (err) {
-            res.status(401);
-            res.json({"error":err, "code": 401});
+            util.sendError(res, 401, err);
         } else {
             let user = decoded.name;
             res.json({ username: user });

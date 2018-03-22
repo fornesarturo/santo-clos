@@ -17,7 +17,7 @@ function createEventRequest(name, date, address, amount) {
         method: 'POST',
         body: JSON.stringify(data)
     };
-    let fullURL = "/api/json/event";
+    let fullURL = "/api/event";
 
     fetch(fullURL, options)
     .then(res => res.json())
@@ -41,7 +41,7 @@ function getJoinedEventsRequest() {
         },
         method: 'GET',
     };
-    let fullURL = "/api/json/user/joinedEvents";
+    let fullURL = "/api/user/joinedEvents";
 
     fetch(fullURL, options)
     .then(res => res.json())
@@ -65,7 +65,7 @@ function getEventsAdminRequest() {
         },
         method: 'GET',
     };
-    let fullURL = "/api/json/user/events";
+    let fullURL = "/api/user/events";
 
     fetch(fullURL, options)
     .then(res => res.json())

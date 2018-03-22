@@ -47,7 +47,7 @@ Vue.component('joined-hub', {
             },
             method: 'GET',
         };
-        let fullURL = "/api/json/user/joinedEvents";
+        let fullURL = "/api/user/joinedEvents";
 
         fetch(fullURL, options)
             .then(res => res.json())
@@ -84,7 +84,7 @@ Vue.component('hosted-hub', {
             },
             method: 'GET',
         };
-        let fullURL = "/api/json/user/events";
+        let fullURL = "/api/user/events";
 
         fetch(fullURL, options)
             .then(res => res.json())
