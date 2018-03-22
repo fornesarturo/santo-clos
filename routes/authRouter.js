@@ -60,4 +60,28 @@ authRouter.route("/token")
     }
 });
 
+authRouter.route("/authPassword")
+.post((req, res, next) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    if (username) {
+        mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
+            {id: username, pass: password}, (err, rows) => {
+                if (err) throw err;
+                if (rows.info.numRows > 0) {
+                    data = {
+                        success: 1,
+                    }
+                    res.json(data);
+                } 
+                else {
+                    data = {
+                        success: -1,
+                    }
+                    res.json(data);
+                }
+            });
+    }
+});
+
 module.exports = authRouter;

@@ -89,7 +89,6 @@ Vue.component('hosted-hub', {
         fetch(fullURL, options)
             .then(res => res.json())
             .then(resJSON => {
-                console.log("HELLO EVENTS");
                 if (resJSON.data) {
                     this.admined = resJSON.data;
                 }
@@ -224,23 +223,35 @@ const settings = {
                     <div class=\"fields\">\
                         <fieldset>\
                             <div id=\"nameField\" class=\"inputWrapper inputValidate\" data-validate=\"Name cannot be empty\">\
-                                <input class=\"inputLine\" type=\"text\" name=\"newName\" placeholder=\"Name\">\
+                                <input class=\"inputLine\" type=\"text\" name=\"newName\" placeholder=\"New Name\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                           	<div id=\"newPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new passsword\">\
+                            <div>\
+                              <input type=\"button\" id=\"confirmButtonName\" value=\"Save New Name\" class=\"btn btn-lg btn-primary btn-block\">\
+                            </div>\
+                            <br>\
+                            <div id=\"oldPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Must type old password\">\
+                                <input class=\"inputLine\" type=\"password\" name=\"oldPassword\" placeholder=\"Old Password\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                           	<div id=\"newPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Minimum of 8 characters, at least one uppercase, one lowercase, one digit and one special\">\
                                 <input class=\"inputLine\" type=\"password\" name=\"newPassword\" placeholder=\"New Password\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                            <div id=\"newPasswordConfirmationField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new password\">\
+                            <div id=\"newPasswordConfirmationField\" class=\"inputWrapper passwordValidate\" data-validate=\"Passwords must match\">\
                                 <input class=\"inputLine\" type=\"password\" name=\"newConfirmPassword\" placeholder=\"Confirm New Password\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                            <div id=\"newEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Confirm new email\">\
+                            <div>\
+                              <input type=\"button\" id=\"confirmButtonPassword\" value=\"Save New Password\" class=\"btn btn-lg btn-primary btn-block\">\
+                            </div>\
+                            <br>\
+                            <div id=\"newEmailField\" class=\"inputWrapper inputValidate\" data-validate = \"Valid email is required: ex@abc.xyz\">\
                                 <input class=\"inputLine\" type=\"email\" name=\"newEmail\" placeholder=\"New email\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
                             <div>\
-                              <input type=\"button\" id=\"confirmButton\" value=\"Confirm Changes\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                              <input type=\"button\" id=\"confirmButtonEmail\" value=\"Save New Email\" class=\"btn btn-lg btn-primary btn-block\">\
                             </div>\
                         </fieldset>\
                     </div>\
@@ -315,46 +326,73 @@ $(".inputLine").each((index, element) => {
     })
 });
 
+//==================================================================
+// INPUT VALIDATION
+
+const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
+const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\-_!@#$%^&*/])(?=.{8,})");
+
+// Remove validation error on clicked input
+$(".settings .inputLine").each((index, element) => {
+    $(element).focus(() => {
+        hideValidate(element);
+    });
+});
+// Show validation error
+function showValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).addClass("alertValidation");
+}
+// Remove validation error
+function hideValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).removeClass("alertValidation");
+}
+
 // VALIDATE PASSWORDS
+// When Confirm Changes Password is Clicked
+$("#confirmButtonPassword").click(() => {
+    let oldPassword = $(".passwordValidate input[name='oldPassword']");
+    let oldPasswordVal = $(oldPassword).val().trim();
+    let newPassword = $(".passwordValidate input[name='newPassword']");
+    let newPasswordVal = $(newPassword).val().trim();
+    let newConfirmPassword = $(".passwordValidate input[name='newConfirmPassword']");
+    let newConfirmPasswordVal = $(newConfirmPassword).val().trim();
 
-// When Create Event  is clicked
-$("#createEventButton").click(() => {
-    // let oldPassword = $(".passwordValidate input[name='newPassword']").val();
-    // let newPassword = $(".passwordValidate input[name='newConfirmPassword']").val();
-    // let name = $(".inputValidate input[name='newName']").val();
-    // let email = $(".inputValidate input[name='newEmail']").val();
+    let checkPassed = true;
+    if(oldPasswordVal == "") {
+        showValidate(oldPassword);
+        checkPassed = false;
+    }
+    if(newPasswordVal == "" || !passwordStrengthRegex.test($(newPassword).val().trim())) {
+        showValidate(newPassword);
+        checkPassed = false;
+    }
+    if(newConfirmPasswordVal == "" || !passwordStrengthRegex.test($(newConfirmPassword).val().trim())) {
+        showValidate(newConfirmPassword);
+        checkPassed = false;
+    }
+    if(newConfirmPasswordVal != newConfirmPasswordVal) {
+        showValidate(newConfirmPassword);
+        showValidate(newPassword);
+        checkPassed = false;
+    }
 
-    // let checkPassed = true;
-
-    // if(name && name.trim() == ""){
-    //     showValidate(name);
-    //     checkPassed=false;
-    // }
-    // if(email && email.trim() == ""){
-    //     showValidate(email);
-    //     checkPassed=false;
-    // }
-    // if(oldPassword && oldPassword.trim() == ""){
-    //     showValidate(oldPassword);
-    //     checkPassed=false;
-    // }
-    // if(newPassword && newPassword.trim() == ""){
-    //     showValidate(newPassword);
-    //     checkPassed=false;
-    // }
-    // if(oldPassword && oldPassword != $(newPassword).val()){
-    //     showValidate(newPassword);
-    //     checkPassed=false;
-    // }
-    // if(checkPassed) {
-    //     //sasve changes to database
-    // }
-    // else {
-    //     console.log("No can do baby doll (PASSWORDS NO MATCHERINO)");
-    // }
+    if(checkPassed) {
+        passwordValidationRequest(Cookies.get("current_user"), oldPasswordVal).then((passwordSuccess) => {
+            if(passwordSuccess == 1) {
+                console.log("No problem with passwords. Change is accepted");
+            }
+            else {
+                console.log(passwordSuccess);
+                console.log("Problem with passwords. Change isn't accepted");
+                showValidate(oldPassword);
+            }
+        });
+    }
 });
 
-
+// CREATE EVENTS
 function createEventRequestMain(){
     var participants = $("#eventData").serializeArray();
     $.each(participants, function(index, value){
@@ -384,7 +422,7 @@ function createEventRequestMain(){
         method: 'POST',
         body: JSON.stringify(data)
     };
-    let fullURL = "/api/json/event";
+    let fullURL = "/api/event";
 
     fetch(fullURL, options)
     .then(res => res.json())

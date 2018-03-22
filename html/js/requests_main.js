@@ -76,3 +76,34 @@ function getEventsAdminRequest() {
         else return resJSON;
     });
 }
+
+// Check if password is valid
+async function passwordValidationRequest(username, password) {
+    let data = {
+        username: username,
+        password: sha256(password)
+    };
+    let options = {
+        hostname: 'localhost',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "/auth/authPassword";
+
+    let response = await fetch(fullURL, options)
+    .then(res => res.json())
+    .then(resJSON => {
+        console.log(resJSON.success);
+        if(resJSON.success) {
+            return resJSON.success;
+        }
+        else return resJSON;
+    });
+    return response;
+}
