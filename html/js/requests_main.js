@@ -1,5 +1,5 @@
 // Create EVENT in DB
-function createEventRequest(name, date, address, amount) {
+async function createEventRequest(name, date, address, amount) {
     let data = {
         name: name,
         date: date,
@@ -19,7 +19,7 @@ function createEventRequest(name, date, address, amount) {
     };
     let fullURL = "/api/event";
 
-    fetch(fullURL, options)
+    let response = await fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
@@ -27,10 +27,11 @@ function createEventRequest(name, date, address, amount) {
         }
         else console.log(resJSON);
     });
+    return response;
 }
 
 // Get EVENTS where the user is participant
-function getJoinedEventsRequest() {
+async function getJoinedEventsRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
@@ -43,7 +44,7 @@ function getJoinedEventsRequest() {
     };
     let fullURL = "/api/user/joinedEvents";
 
-    fetch(fullURL, options)
+    let response = await fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data) {
@@ -51,10 +52,11 @@ function getJoinedEventsRequest() {
         }
         else console.log(resJSON);
     });
+    return response;
 }
 
 // Get EVENTS where the user is admin
-function getEventsAdminRequest() {
+async function getEventsAdminRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
@@ -67,7 +69,7 @@ function getEventsAdminRequest() {
     };
     let fullURL = "/api/user/events";
 
-    fetch(fullURL, options)
+    let response = await fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
@@ -75,6 +77,7 @@ function getEventsAdminRequest() {
         }
         else return resJSON;
     });
+    return response;
 }
 
 // Check if password is valid
@@ -105,5 +108,25 @@ async function passwordValidationRequest(username, password) {
         }
         else return resJSON;
     });
+    return response;
+}
+
+// Update user data using PUT
+async function updateDataRequest(data) {
+    let options = {
+        hostname: 'localhost',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'PUT',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "/auth/authPassword";
+
+    let response = await fetch(fullURL, options)
+    .then(res => res.json());
     return response;
 }
