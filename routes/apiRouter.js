@@ -44,10 +44,42 @@ apiRouter.route("/user")
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
-    });
+    })
+    .put((req, res, next) => {
+        let user = req.body.authUsername || false;
+        if (user) {
+            let toChange = [];
+            if (req.body.name) toChange.push("name = " + req.body.name);
+            if (req.body.password) toChange.push("password = " + req.body.password);
+            if (req.body.email) toChange.push("email = " + req.body.email);
+            let change = toChange.join(",");
+            if (change)
+                mariadb.query("UPDATE user SET :change WHERE username = :username", 
+                    {change: change, username: user}, (err, rows) => {
+                        if (err) {
+                            util.sendError(res, 500, err);
+                            return;
+                        }
+                        if (rows.info.affectedRows > 0) {
+                            util.correctPost(req, res, null);
+                            return;
+                        }
+                        else {
+                            util.sendError(res, 404, "Not found in DB.");
+                        }
+                    });
+            else
+                util.sendError(res, 400, "Some data was missing.");
+        }
+    }
+
+    );
 
 apiRouter.route("/user/events")
     .get(cache(20), (req, res, next) => {
@@ -56,7 +88,7 @@ apiRouter.route("/user/events")
             mariadb.query("SELECT * FROM event WHERE admin = :user",
                 { user: user }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
@@ -65,7 +97,7 @@ apiRouter.route("/user/events")
                         next();
                     }
                     else {
-                        res.json(req.body);
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
@@ -79,7 +111,7 @@ apiRouter.route("/user/joinedEvents")
             mariadb.query("SELECT * FROM event JOIN participant WHERE event.eventId = participant.eventId AND participant.username = :user AND event.admin != :user",
                 { user: user}, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
@@ -88,7 +120,7 @@ apiRouter.route("/user/joinedEvents")
                         next();
                     }
                     else {
-                        res.json(req.body);
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
@@ -102,13 +134,16 @@ apiRouter.route("/event")
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
                 { id: eventId }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
@@ -123,13 +158,16 @@ apiRouter.route("/event")
                 amount: req.body.amount
             }, (err, rows) => {
                 if (err) {
-                    res.json({ error: err });
+                    util.sendError(res, 500, err);
                     return;
                 }
                 if (rows.info.affectedRows > 0) {
                     req.body.eventId = rows.info.insertId;
                     util.correctPost(req, res, rows.info.insertId);
                     return;
+                }
+                else {
+                    util.sendError(res, 404, "Not found in DB.");
                 }
             })
         else
@@ -143,13 +181,16 @@ apiRouter.route("/event/users")
             mariadb.query("SELECT * FROM participant WHERE eventId = :id",
                 { id: event }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
@@ -164,7 +205,7 @@ apiRouter.route("/event/wishlist")
             mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
@@ -188,12 +229,15 @@ apiRouter.route("/event/wishlist")
             mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
                 { id: event, username: user, wishText: wish }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.affectedRows > 0) {
                         util.correctPost(req, res, null);
                         return
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
@@ -208,13 +252,16 @@ apiRouter.route("/event/giftee")
             mariadb.query("SELECT giftee FROM participant WHERE eventId = :id AND username = :username",
                 { id: event, username: user }, (err, rows) => {
                     if (err) {
-                        res.json({ error: err });
+                        util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
         else
