@@ -129,7 +129,7 @@ apiRouter.route("/user/joinedEvents")
 
 apiRouter.route("/event")
     .get(cache(20), (req, res, next) => {
-        let user = req.query["user"] || false;
+        let eventId = req.query["id"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
                 { id: eventId }, (err, rows) => {

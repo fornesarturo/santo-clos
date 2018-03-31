@@ -82,6 +82,43 @@ API Router
             name: "Name McNamey",
             email: "user@emailprovider.com"
         }
+
+# GET /api/user/events
+    # Returns the events hosted by the user.
+    Response Body:
+        {
+            "data": [
+                {
+                    "eventId": "AN EVENT ID",
+                    "admin": "EVENT ADMIN",
+                    "name": "EVENT NAME",
+                    "eventDate": "EVENT DATE YYYY-MM-DD",
+                    "address": "EVENT ADDRESS",
+                    "amount": "EVENT SUGGESTED AMOUNT"
+                },
+                ...
+            ],
+            "user": "USERNAME LOGGED IN FOR THIS REQUEST"
+        }
+
+# GET /api/user/joinedEvents
+    # Returns the events the user has joined.
+    Response Body:
+        {
+            "data": [
+                {
+                    "eventId": "AN EVENT ID",
+                    "admin": "EVENT ADMIN",
+                    "name": "EVENT NAME",
+                    "eventDate": "EVENT DATE YYYY-MM-DD",
+                    "address": "EVENT ADDRESS",
+                    "amount": "EVENT SUGGESTED AMOUNT"
+                },
+                ...
+            ],
+            "user": "USERNAME LOGGED IN FOR THIS REQUEST"
+        }
+
 # POST /api/event
     Request Body:
         {
@@ -89,6 +126,12 @@ API Router
             date: "EVENT DATE",
             address: "EVENT ADDRESS",
             amount: AMOUNT_NUMBER
+        }
+
+# GET /api/event?id={eventId}
+    Response Body:
+        {
+            
         }
 
 # GET /api/event/users?id={eventId}
@@ -156,28 +199,4 @@ API Router
             ],
             "user": "watsalacanoa"
         }
-```
-
-API XML Router
-```javascript
-// Each route returns the same that its quasi-namesake in api/json does.
-
-# GET /api/xml/user
-
-# GET /api/xml/event/users?id={eventId}
-
-# GET /api/xml/event/wishlist?id={eventId}&user={username}
-
-# GET /api/xml/event/giftee?id={eventId}&user={username}
-```
-
-In case of any error the response is the following:
-```javascript
-{
-    "error": {
-        "name": "ERROR NAME",
-        "message": "ERROR DESCRIPTION"
-    },
-    "code": ERROR_CODE_NUMBER
-}
 ```
