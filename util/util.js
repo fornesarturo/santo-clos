@@ -1,5 +1,6 @@
 const express = require('express');
 const o2x = require('object-to-xml');
+const mail = require('./mailModule');
 
 function processQueryResult(rows) {
     let data = [];
@@ -46,6 +47,15 @@ function correctInsertResult(req, res, eventId) {
     }
 }
 
+function sendEmailInvite(participant) {
+    console.log("Sending email invite to: ", participant);
+    mail.sendMail(
+        participant,
+        "You've been invited to a SantoClos event!",
+        "Follow this link to log in or sign up to join the event."
+    );
+}
+
 function xml(data, res) {
     res.set('Content-Type', 'text/xml');
     res.send(o2x({
@@ -60,5 +70,6 @@ module.exports =
     xml: xml, 
     correctPost: correctInsertResult, 
     emptyWishlist: sendEmptyWishlist, 
-    sendError: sendErrorJSON
+    sendError: sendErrorJSON,
+    sendEmailInvite: sendEmailInvite
 };

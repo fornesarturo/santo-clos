@@ -195,6 +195,31 @@ apiRouter.route("/event/users")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    })
+    .post((req, res, next) => {
+        if (req.body.eventId) {
+            let participants = req.body.participants.slice();
+            while (participants.length > 0) {
+                let participant = participants.pop();
+                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant}, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.numRows > 0) {
+                        // Send invite through SantoClos.
+                        console.log("User exists in DB!");
+                    }
+                    else {
+                        // This particular email isn't in our DB, so we send them an email invite.
+                        util.sendEmailInvite(participant);
+                    }
+                });
+            }
+            util.correctPost(req, res, null);
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/wishlist")

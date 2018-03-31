@@ -59,9 +59,9 @@ Authentication Router
         }
 ```
 
-API JSON Router
+API Router
 ```javascript
-# GET /api/json/user?user={username}
+# GET /api/user?user={username}
     Response:
         {
             "data": [
@@ -74,7 +74,7 @@ API JSON Router
             "user": "USERNAME OF THE TOKEN"
         }
 
-+ POST /api/json/user
++ POST /api/user
     Request Body:
         {
             username: "USERNAME",
@@ -82,7 +82,7 @@ API JSON Router
             name: "Name McNamey",
             email: "user@emailprovider.com"
         }
-# POST /api/json/event
+# POST /api/event
     Request Body:
         {
             name: "EVENT NAME",
@@ -91,7 +91,7 @@ API JSON Router
             amount: AMOUNT_NUMBER
         }
 
-# GET /api/json/event/users?id={eventId}
+# GET /api/event/users?id={eventId}
     Response:
         {
             "data": [
@@ -105,7 +105,29 @@ API JSON Router
             "user": "USERNAME OF THE TOKEN"
         }
 
-# GET /api/json/event/wishlist?id={eventId}&user={username}
+# POST /api/event/users
+    Request:
+        {
+            "eventId": "THIS EVENT ID",
+            "participants": [
+                "INVITED@HOST.EXT",
+                ...
+            ]
+        }
+    Response:
+        {
+            "inserted": {
+                "eventId": "THIS EVENT ID",
+                "participants": [
+                    "INVITED@HOST.EXT",
+                    ...
+                ],
+                "authUsername": "USERNAME OF LOGGED IN USER"
+            },
+            "status": 200
+        }
+
+# GET /api/event/wishlist?id={eventId}&user={username}
     Response:
         {
             "data": [
@@ -124,7 +146,7 @@ API JSON Router
             "user": "USER OF THE TOKEN"
         }
 
-# GET /api/json/event/giftee?id={eventId}&user={username}
+# GET /api/event/giftee?id={eventId}&user={username}
     Response:
         {
             "data": [
