@@ -268,6 +268,47 @@ const participants = {
                 </div>"
 };
 
+const eventInformation = {
+    props: ['eventName', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
+    template: "<div class=\"eventInformationContainer\">\
+                    <div class=\"eventWrapper\">\
+                        <span class=\"mainTitle\">\
+                            <b>{{ eventName }}</b>\
+                        </span>\
+                        <span class=\"mainSubtitle\">\
+                            <b>Hosted by {{ hostName }} </b>\ 
+                        </span>\
+                        <div class=\"row\">\
+                            <div class=\"container col-md-6\">\
+                                <b> {{ location }} </b>\
+                                <b> {{ maxAmount }} </b>\
+                                <button> My Wishlist </button>\
+                                <b> You're buying a gift for {{ userYouGive }} ! </b>\
+                                <b> Check {{ userYouGive }}\'s checkclist> </b>\
+                            </div>\
+                            <div class=\"container col-md-6\">\
+                                <li v-for=\"participant in participants\">\
+                                   <b> {{ participant }} </b> \
+                                </li>\
+                            </div>\
+                        </div>\
+                    </div>\
+               </div>"
+};
+
+Vue.component('participants-wishlist', {
+    props: ['participants'],
+    template: " <li v-for=\"participant in participants\">\
+                    <div class=\"row\"<\
+                        <div class=\"col-md-8\">\
+                            <b> {{ participant.name }} </b>\
+                        </div>\
+                        <div class=\"col-md-4\">\
+                            <button> See Wishlist\
+                        </div>\
+                    </div>\
+                </li>"
+});
 
 const routes = [
     { path: "/", component: hub },
