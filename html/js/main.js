@@ -319,6 +319,7 @@ Vue.component('participants-wishlist', {
                         </div>\
                     </div>\
                 </li>"
+                //// aaaa
 });
 
 const routes = [
