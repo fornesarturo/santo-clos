@@ -539,3 +539,4 @@ $("#confirmButtonPassword").click(() => {
 });
 
 // <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+
