@@ -4,7 +4,7 @@ const cache = require('../util/cache.js');
 const mariadb = require('../util/mariadb.js');
 const auth = require('../util/authenticate.js');
 
-var apiRouter = express.Router();  
+var apiRouter = express.Router();
 
 apiRouter.route("/user")
 .post((req, res, next) => {
@@ -15,7 +15,7 @@ apiRouter.route("/user")
                 name: req.body.name, email: req.body.email
             }, (err, rows) => {
                 if (err) {
-                    res.json({error: err});
+                    util.sendError(res, 500, err)
                     return;
                 }
                 else {
@@ -23,7 +23,7 @@ apiRouter.route("/user")
                 }
             });
     else
-        res.json(req.body);
+        util.sendError(res, 400, "Some data was missing.");
 });
 
 // The following requests must be authenticated.
@@ -35,14 +35,51 @@ apiRouter.route("/user")
         if (user)
             mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
                 { id: user }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        res.json({ error: err });
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
                 });
-    });
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    })
+    .put((req, res, next) => {
+        let user = req.body.authUsername || false;
+        if (user) {
+            let toChange = [];
+            if (req.body.name) toChange.push("name = '" + req.body.name + "'");
+            if (req.body.password) toChange.push("password = '" + req.body.password + "'");
+            if (req.body.email) toChange.push("email = '" + req.body.email + "'");
+            let change = toChange.join(",");
+            let query = "UPDATE user SET " + change + " WHERE username = '" + user + "'";
+            if (change)
+                mariadb.query(query, (err, rows) => {
+                        if (err) {
+                            util.sendError(res, 500, err);
+                            return;
+                        }
+                        if (rows.info.affectedRows > 0) {
+                            util.correctPost(req, res, null);
+                            return;
+                        }
+                        else {
+                            util.sendError(res, 404, "Not found in DB.");
+                        }
+                    });
+            else
+                util.sendError(res, 400, "Some data was missing.");
+        }
+    }
+
+    );
 
 apiRouter.route("/user/events")
     .get(cache(20), (req, res, next) => {
@@ -50,50 +87,67 @@ apiRouter.route("/user/events")
         if (user)
             mariadb.query("SELECT * FROM event WHERE admin = :user",
                 { user: user }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
                     else {
-                        res.json(req.body);
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/user/joinedEvents")
     .get(cache(20), (req, res, next) => {
         let user = req.body.authUsername || false;
         if (user)
-
             mariadb.query("SELECT * FROM event JOIN participant WHERE event.eventId = participant.eventId AND participant.username = :user AND event.admin != :user",
                 { user: user}, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
                     else {
-                        res.json(req.body);
+                        util.sendError(res, 404, "Not found in DB.");
                     }
                 });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event")
     .get(cache(20), (req, res, next) => {
-        let user = req.query["user"] || false;
+        let eventId = req.query["id"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
                 { id: eventId }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
                 });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     })  
     .post((req, res, next) => {
         if (req.body)
@@ -103,15 +157,21 @@ apiRouter.route("/event")
                 eventDate: req.body.date, address: req.body.address,
                 amount: req.body.amount
             }, (err, rows) => {
-                if (err) throw err;
-                let request = req.body;
-                req.body = {};
-                req.body.data = request;
-                req.body.data.eventId = rows.info.insertId;
-                next();
+                if (err) {
+                    util.sendError(res, 500, err);
+                    return;
+                }
+                if (rows.info.affectedRows > 0) {
+                    req.body.eventId = rows.info.insertId;
+                    util.correctPost(req, res, rows.info.insertId);
+                    return;
+                }
+                else {
+                    util.sendError(res, 404, "Not found in DB.");
+                }
             })
         else
-            res.json(req.body);
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/users")
@@ -120,30 +180,93 @@ apiRouter.route("/event/users")
         if (event)
             mariadb.query("SELECT * FROM participant WHERE eventId = :id",
                 { id: event }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
                 });
-
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    })
+    .post((req, res, next) => {
+        if (req.body.eventId) {
+            let participants = req.body.participants.slice();
+            while (participants.length > 0) {
+                let participant = participants.pop();
+                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant}, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.numRows > 0) {
+                        // Send invite through SantoClos.
+                        console.log("User exists in DB!");
+                    }
+                    else {
+                        // This particular email isn't in our DB, so we send them an email invite.
+                        util.sendEmailInvite(participant);
+                    }
+                });
+            }
+            util.correctPost(req, res, null);
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        let user = req.query["user"] || false;
+        let user = req.body.authUsername || false;
         let event = req.query["id"] || false;
-        if (user && event)
-            mariadb.query("SELECT * FROM event JOIN wish ON event.eventId = wish.eventId AND wish.username = :username AND wish.eventId = :id",
+        if (user && event) {
+            mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.emptyWishlist(res);
+                    }
                 });
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    })
+    .post((req, res, next) => {
+        let user = req.body.authUsername || false;
+        let event = req.body.eventId || false;
+        let wish = req.body.wish || false;
+        if (user && event && wish)
+            mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
+                { id: event, username: user, wishText: wish }, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.affectedRows > 0) {
+                        util.correctPost(req, res, null);
+                        return
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
+                });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/giftee")
@@ -153,13 +276,21 @@ apiRouter.route("/event/giftee")
         if (user && event)
             mariadb.query("SELECT giftee FROM participant WHERE eventId = :id AND username = :username",
                 { id: event, username: user }, (err, rows) => {
-                    if (err) throw err;
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
                         next();
                     }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
                 });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 // Only expect to use this on GET requests.

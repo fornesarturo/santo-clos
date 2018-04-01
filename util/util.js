@@ -1,5 +1,6 @@
 const express = require('express');
 const o2x = require('object-to-xml');
+const mail = require('./mailModule');
 
 function processQueryResult(rows) {
     let data = [];
@@ -7,6 +8,52 @@ function processQueryResult(rows) {
         data.push(element);
     });
     return data;
+}
+
+function sendEmptyWishlist(res) {
+    let JSONResponse = 
+    {
+        data: [],
+        status: 200
+    }
+    res.json(JSONResponse);
+}
+
+function sendErrorJSON(res, errorCode, err) {
+    let JSONResponse =
+    {
+        error: err || "No description",
+        status: errorCode
+    }
+    res.status(errorCode);
+    res.json(JSONResponse);
+}
+
+function correctInsertResult(req, res, eventId) {
+    if (eventId) {
+        let JSONResponse = 
+        {
+            data: req.body,
+            status: 200
+        }
+        res.json(JSONResponse);
+    }
+    else {
+        let JSONResponse = {
+            inserted: req.body,
+            status: 200
+        }
+        res.json(JSONResponse);
+    }
+}
+
+function sendEmailInvite(participant) {
+    console.log("Sending email invite to: ", participant);
+    mail.sendMail(
+        participant,
+        "You've been invited to a SantoClos event!",
+        "Follow this link to log in or sign up to join the event."
+    );
 }
 
 function xml(data, res) {
@@ -17,4 +64,12 @@ function xml(data, res) {
     }));
 }
 
-module.exports = {process: processQueryResult, xml: xml};
+module.exports = 
+{
+    process: processQueryResult, 
+    xml: xml, 
+    correctPost: correctInsertResult, 
+    emptyWishlist: sendEmptyWishlist, 
+    sendError: sendErrorJSON,
+    sendEmailInvite: sendEmailInvite
+};
