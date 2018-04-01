@@ -148,11 +148,11 @@ Cards Holder*/
 
 /* align icon */
 .left-addon .glyphicon  { left:  -110px;}
-.right-addon .glyphicon { right: -60px;}
+.right-addon .glyphicon { right: -100px;}
 
 /* add padding  */
 .left-addon input  { padding-left:  35px; }
-.right-addon input { padding-right: 35px; }
+.right-addon input { padding-right: 50px; }
 
 /*---------------------------------------------
 Input Line*/
