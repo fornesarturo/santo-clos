@@ -201,7 +201,7 @@ apiRouter.route("/event/users")
             let participants = req.body.participants;
             while (participants.length > 0) {
                 let participant = participants.pop();
-                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant.email}, (err, rowsParts) => {
+                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant.email}, (err, rowsParticipants) => {
                     if (err) {
                         util.sendError(res, 500, err);
                         return;
@@ -214,8 +214,8 @@ apiRouter.route("/event/users")
                                 return;
                             }
                             participant.adminName = util.process(rows)[0].name;
-                            if (rowsParts.info.numRows > 0) {
-                                console.log("User exists in DB!");
+                            if (rowsParticipants.info.numRows > 0) {
+                                util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
                             }
                             else {
                                 // This particular email isn't in our DB, so we send them an email invite.

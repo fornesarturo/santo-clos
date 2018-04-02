@@ -119,22 +119,6 @@ function addUserToEvent(username, eventId, giftee) {
     });
 }
 
-async function getEmailFromUser(username) {
-    let res = await mariadb.query("SELECT email FROM user WHERE username = :username", { username: username }, 
-    (err, rows) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        else {
-            console.log("INN:", rows)
-            return rows
-        }
-    });
-    console.log("HERE: ", res);
-    return res;
-}
-
 module.exports = 
 {
     process: processQueryResult, 
@@ -144,5 +128,4 @@ module.exports =
     sendError: sendErrorJSON,
     sendEmailInvite: sendEmailInvite,
     addUserToEvent: addUserToEvent,
-    getEmailFromUser: getEmailFromUser
 };
