@@ -1,3 +1,4 @@
+
 Vue.component('hosted-event', {
     props: ['name', 'date', 'id'],
     template: "<div v-on:click=\"clickedEvent\" class=\"santoClosEvent\">\
@@ -114,7 +115,13 @@ const hub = {
 };
 
 const createEvent = {
-  template: "<div class=\"eventContainer\"> \
+    data: function() {
+        return {
+            n: 0,
+            items: []
+         }
+    },
+    template: "<div class=\"eventContainer\"> \
 			<div class=\"eventWrapper\">\
 				<form class=\"createEvent\">\
                     <span class=\"mainTitle\">\
@@ -159,37 +166,22 @@ const createEvent = {
                                 </span>\
                             <form id=\"eventData\">\
                                 <div class=\"row\">\
-                                    <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
-                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                                            <span class=\"inputFocus\"></span>\
-                                        </div>\
-                                     </div>\
-                                    <div class=\"col-md-6\">\
+                                    <div class=\"col-md-12\">\
                                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
                                             <span class=\"inputFocus\"></span>\
                                         </div>\
                                     </div>\
                                 </div>\
                                 <div class=\"row\">\
-                                    <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
-                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                                            <span class=\"inputFocus\"></span>\
-                                        </div>\
-                                     </div>\
-                                    <div class=\"col-md-6\">\
+                                    <div class=\"col-md-12\">\
                                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
                                             <span class=\"inputFocus\"></span>\
                                         </div>\
                                     </div>\
                                 </div>\
+                                <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.email\" v-on:remove-item=\"remove($event)\"></new-participant>\
                             </form>\
                         </div>\
                     </div>\
@@ -198,8 +190,7 @@ const createEvent = {
                           <div class=\"col-md-6\">\
                         </div>\
                         <div class=\"col-md-6\">\
-                                <input type=\"button\" id=\"addParticipantButton\" value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
-                                <input type=\"button\" id=\"deleteParticipantButton\" value=\"Remove Participant\" class=\"loginOnly btn btn-lg btn-danger btn-block\">\
+                                <input type=\"button\" id=\"addParticipantButton\" v-on:click=\'add()\' value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
                         </div>\
                     </div>\
                     <br><br><br>\
@@ -209,9 +200,43 @@ const createEvent = {
     methods: {
         createEventRequest: function () {
             
-        }
+        },
+        add: function() {
+            console.log(this.n);
+            this.items.push({id: this.n++, email: ""});
+        },
+        remove: function(id) {
+            for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].id == id) {
+                    this.items.splice(i, 1);
+                }
+            }
+        },
     }
 };
+
+Vue.component("new-participant", {
+    props: ["id", "email"],
+    template: "<div class=\"row\">\
+                    <div class=\"col-md-11\">\
+                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Participant's email required\">\
+                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
+                            <span class=\"inputFocus\"></span>\
+                        </div>\
+                    </div>\
+                    <div class=\"col-md-1\">\
+                        <button v-on:click='remove'>x</button>\
+                    </div>\
+                </div>",
+    methods: {
+        remove: function() {
+            this.$emit('remove-item', this.id);
+        },
+        updateValue: function(value) {
+            this.$emit('input', value);
+        }
+    }
+})
 
 const settings = {
   template: "<div class=\"mainContainer\">\
@@ -260,30 +285,53 @@ const settings = {
         </div>"
 };
 
-const participantsRaw = {
-    template: "<div class=\"row\">\
-                    <div class=\"col-md-6\">\
-                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
-                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                            <span class=\"inputFocus\"></span>\
+/*
+const eventInformation = {
+    props: ['eventName', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
+    template: "<div class=\"eventWrapper\">\
+                    <span class=\"mainTitle\">\
+                        <b>{{ eventName }}</b>\
+                    </span>\
+                    <span class=\"mainSubtitle\">\
+                        <b>Hosted by {{ hostName }} </b>\ 
+                    </span>\
+                    <div class=\"row\">\
+                        <div class=\"container col-md-6\">\
+                            <b> {{ location }} </b>\
+                            <b> {{ maxAmount }} </b>\
+                            <button> My Wishlist </button>\
+                            <b> You're buying a gift for {{ userYouGive }} ! </b>\
+                            <b> Check {{ userYouGive }}\'s checkclist> </b>\
+                        </div>\
+                        <div class=\"container col-md-6\">\
+                            <participants-wishlist-container>\
                         </div>\
                     </div>\
-                    <div class=\"col-md-6\">\
-                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                            <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
-                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
-                            <span class=\"inputFocus\"></span>\
-                        </div>\
-                    </div>\
-                </div>"
+               </div>"
 };
+*/
 
+Vue.component('participants-wishlist', {
+    props: ['participants'],
+    template: "<div class=\"participants-wishlist-container\">\
+                    <li v-for=\"participant in participants\">\
+                        <div class=\"row\"<\
+                            <div class=\"col-md-8\">\
+                                <b> {{ participant.name }} </b>\
+                            </div>\
+                            <div class=\"col-md-4\">\
+                                <button> See Wishlist\
+                            </div>\
+                        </div>\
+                    </li>\
+                </div>"
+});
 
 const routes = [
     { path: "/", component: hub },
     { path: "/settings", component: settings },
     { path: "/create-event", component: createEvent }
+    //{ path: "/eventInformation", component: eventInformation}
 ];
 
 const router = new VueRouter({
@@ -295,7 +343,9 @@ var main = new Vue({
     el: '#main',
     data: {
           activeView: 'hub',
-          adminedEvents: {}
+          adminedEvents: {},
+          n: 0,
+          items: []
     },
     methods: {
         setHubActive: function() {
@@ -309,7 +359,15 @@ var main = new Vue({
         },
         setServicesActive: function() {
 		    this.activeView = "services";
+        },
+        setEventInformationActive: function(){
+            this.activeView = "eventInformation";
         }
+        /*,
+        setEventInformationActive: function(){
+            this.activeView = "eventInformation";
+        }
+        */
     }
 })
 
@@ -317,13 +375,12 @@ var main = new Vue({
 function createEventRequestMain(){
     var participantsRaw = $("#eventData").serializeArray();
     let participantsArray = [];
-    for(let i = 0, j = 0; i < participantsRaw.length; i += 2, j++) {
-        if(participantsRaw[i].value == "" || participantsRaw[i+1].value == "") {
-            j--;
+    for(let i = 0; i < participantsRaw.length; i++) {
+        if(participantsRaw[i].value == "") {
             continue;
         } 
         else {
-            participantsArray[j] = {name: participantsRaw[i].value, email: participantsRaw[i+1].value};
+            participantsArray.push({email: participantsRaw[i].value});
         }
     }
     let name = $("#eventNameField input[name='eventName']").val();
@@ -483,3 +540,6 @@ $("#confirmButtonPassword").click(() => {
         });
     }
 });
+
+// <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+

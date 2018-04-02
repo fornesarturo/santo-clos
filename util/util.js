@@ -89,10 +89,10 @@ function sendEmailInvite(participant, token) {
         mail.sendMail(
             participant.email,
             "You've been invited to a SantoClos event!",
-            "<h1>Hello " + participant.name +"</h1>\
+            "<h1>Hello!</h1>\
             <h2>" + participant.adminName + " invited you to an event!</h1>\
             <h2>Follow this link to sign up and join the event.</h2>\
-            <a href=\"" + urlS + "\">Sign In!</a>\
+            <a href=\"" + urlS + "\">Sign Up!</a>\
             <p>If you can't follow the previous link, please copy and paste the following address: </p>\
             <p> " + urlS + " </p>"
     

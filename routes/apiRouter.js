@@ -215,10 +215,12 @@ apiRouter.route("/event/users")
                             }
                             participant.adminName = util.process(rows)[0].name;
                             if (rowsParticipants.info.numRows > 0) {
+                                // console.log("Already in DB");
                                 util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
                             }
                             else {
                                 // This particular email isn't in our DB, so we send them an email invite.
+                                // console.log("Not in DB");
                                 util.sendEmailInvite(participant, auth.signJWTInvite(req.body.eventId, participant.email));
                             }
                         });
