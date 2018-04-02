@@ -227,7 +227,7 @@ Vue.component("new-participant", {
                         </div>\
                     </div>\
                     <div class=\"col-md-1\">\
-                        <span><button v-on:click=\'remove\'>x</button></span>\
+                        <input type=\"button\" v-on:click=remove value=\"X\" class=\"btn btn-danger\">\
                     </div>\
                 </div>",
     methods: {
