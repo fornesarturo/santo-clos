@@ -26,6 +26,36 @@ async function createEventRequest(name, date, address, amount) {
             console.log("Add participants");
         }
         else console.log(resJSON);
+        return resJSON
+    });
+    return response;
+}
+
+async function postEventParticipants(participants, eventId) {
+    let data = {
+        eventId: eventId,
+        participants: participants
+    };
+    let options = {
+        hostname: 'localhost',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "/api/event/users";
+
+    let response = await fetch(fullURL, options)
+    .then(res => res.json())
+    .then(resJSON => {
+        if(!resJSON.inserted) {
+            console.log("Error on postEventParticipants");
+        }
+        return resJSON;
     });
     return response;
 }
@@ -51,6 +81,7 @@ async function getJoinedEventsRequest() {
             console.log(resJSON);
         }
         else console.log(resJSON);
+        return resJSON;
     });
     return response;
 }

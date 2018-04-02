@@ -428,16 +428,20 @@ var main = new Vue({
 
 // CREATE EVENTS
 function createEventRequestMain(){
-    var participants = $("#eventData").serializeArray();
-    $.each(participants, function(index, value){
-        console.log(index +  ": " + value.participantName);
-    });
+    var participantsRaw = $("#eventData").serializeArray();
+    let participantsArray = [];
+    for(let i = 0; i < participantsRaw.length; i++) {
+        if(participantsRaw[i].value == "") {
+            continue;
+        } 
+        else {
+            participantsArray.push({email: participantsRaw[i].value});
+        }
+    }
     let name = $("#eventNameField input[name='eventName']").val();
     let address = $("#addressField input[name='address'").val();
     let amount = $("#maxAmountField input[name='maxAmount']").val();
     let date = $("#dateField input[name='date']").val();
-
-    console.log(name, address, amount, date);
 
     let data = {
         name: name,
@@ -462,7 +466,7 @@ function createEventRequestMain(){
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
-            console.log("Add participants");
+            postEventParticipants(participantsArray, resJSON.data.eventId);
         }
         else console.log(resJSON);
     });
