@@ -160,7 +160,7 @@ const createEvent = {
                             <form id=\"eventData\">\
                                 <div class=\"row\">\
                                     <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
                                             <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
                                             <span class=\"inputFocus\"></span>\
@@ -176,7 +176,7 @@ const createEvent = {
                                 </div>\
                                 <div class=\"row\">\
                                     <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
                                             <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
                                             <span class=\"inputFocus\"></span>\
@@ -260,10 +260,10 @@ const settings = {
         </div>"
 };
 
-const participants = {
+const participantsRaw = {
     template: "<div class=\"row\">\
                     <div class=\"col-md-6\">\
-                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
+                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participantsRaw!\">\
                             <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
                             <span class=\"inputFocus\"></span>\
@@ -315,16 +315,21 @@ var main = new Vue({
 
 // CREATE EVENTS
 function createEventRequestMain(){
-    var participants = $("#eventData").serializeArray();
-    $.each(participants, function(index, value){
-        console.log(index +  ": " + value.participantName);
-    });
+    var participantsRaw = $("#eventData").serializeArray();
+    let participantsArray = [];
+    for(let i = 0, j = 0; i < participantsRaw.length; i += 2, j++) {
+        if(participantsRaw[i].value == "" || participantsRaw[i+1].value == "") {
+            j--;
+            continue;
+        } 
+        else {
+            participantsArray[j] = {name: participantsRaw[i].value, email: participantsRaw[i+1].value};
+        }
+    }
     let name = $("#eventNameField input[name='eventName']").val();
     let address = $("#addressField input[name='address'").val();
     let amount = $("#maxAmountField input[name='maxAmount']").val();
     let date = $("#dateField input[name='date']").val();
-
-    console.log(name, address, amount, date);
 
     let data = {
         name: name,
@@ -349,7 +354,7 @@ function createEventRequestMain(){
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
-            console.log("Add participants");
+            postEventParticipants(participantsArray, resJSON.data.eventId);
         }
         else console.log(resJSON);
     });

@@ -198,21 +198,30 @@ apiRouter.route("/event/users")
     })
     .post((req, res, next) => {
         if (req.body.eventId) {
-            let participants = req.body.participants.slice();
+            let participants = req.body.participants;
             while (participants.length > 0) {
                 let participant = participants.pop();
-                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant}, (err, rows) => {
+                mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant.email}, (err, rowsParts) => {
                     if (err) {
                         util.sendError(res, 500, err);
                         return;
                     }
-                    if (rows.info.numRows > 0) {
-                        // Send invite through SantoClos.
-                        console.log("User exists in DB!");
-                    }
                     else {
-                        // This particular email isn't in our DB, so we send them an email invite.
-                        util.sendEmailInvite(participant);
+                        mariadb.query("SELECT user.name FROM user JOIN event WHERE username = admin and eventId = :evId",
+                        {evId: req.body.eventId}, (err, rows) => {
+                            if (err) {
+                                util.sendError(res, 500, err);
+                                return;
+                            }
+                            participant.adminName = util.process(rows)[0].name;
+                            if (rowsParts.info.numRows > 0) {
+                                console.log("User exists in DB!");
+                            }
+                            else {
+                                // This particular email isn't in our DB, so we send them an email invite.
+                                util.sendEmailInvite(participant, auth.signJWTInvite(req.body.eventId, participant.email));
+                            }
+                        });
                     }
                 });
             }
