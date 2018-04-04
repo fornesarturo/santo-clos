@@ -21,6 +21,16 @@ BASIC CLASSES*/
     padding-bottom: 30px;
 }
 
+.mainB{
+    display: block;
+    font-family: Poppins-Bold;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: 30px;s
+}
+
 /*//////////////////////////////////////////////////////////////////
 PAGE SETUP*/
 /*---------------------------------------------

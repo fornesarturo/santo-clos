@@ -181,7 +181,9 @@ const createEvent = {
                                         </div>\
                                     </div>\
                                 </div>\
-                                <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.email\" v-on:remove-item=\"remove($event)\"></new-participant>\
+                                <div>\
+                                    <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.email\" v-on:remove-item=\'remove($event)\'></new-participant>\
+                                </div>\
                             </form>\
                         </div>\
                     </div>\
@@ -220,12 +222,12 @@ Vue.component("new-participant", {
     template: "<div class=\"row\">\
                     <div class=\"col-md-11\">\
                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Participant's email required\">\
-                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
+                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\" v-on:input=\'updateValue($event.target.value)\'>\
                             <span class=\"inputFocus\"></span>\
                         </div>\
                     </div>\
                     <div class=\"col-md-1\">\
-                        <button v-on:click='remove'>x</button>\
+                        <input type=\"button\" v-on:click=remove value=\"X\" class=\"btn btn-danger\">\
                     </div>\
                 </div>",
     methods: {
@@ -285,6 +287,75 @@ const settings = {
         </div>"
 };
 
+const eventInformation = {
+    props: ['evtName', 'evtLocation', 'evtHostName', 'evtUserYouGive', 'evtMaxAmount'],
+    /*
+    data: function() {
+        return {
+            evtName: "Viernes Trade",
+            evtHostName: "Elver",
+            evtLocation: "Mi casita",
+            evtUserYouGive: "Juanch",
+            evtMaxAmount: "100 pesitos"
+         }
+    },
+    */
+    template: "<div class=\"mainContainer\">\
+            <div class=\"mainWrapper\">\
+                <form class=\"settings\">\
+                    <span class=\"mainTitle\">\
+                        <b> {{ evtName }}  </b>\
+                    </span>\
+                    <span class=\"mainSubtitle\">\
+                        <b> Hosted by {{ evtHostName }}</b>\
+                    </span>\
+                    <div class=\"row\">\
+                        <div class=\"container col-md-6\">\
+                            <b class=\"mainB\"> Location: {{ evtLocation }} </b>\
+                            <b class=\"mainB\"> Max Amount: {{ evtMaxAmount }} </b>\
+                            <button> My Wishlist </button>\
+                            <b class=\"mainB\"> You're buying a gift for {{ evtUserYouGive }} ! </b>\
+                        </div>\
+                        <div class=\"container col-md-6\">\
+                            <participants-wishlist-container>\
+                        </div>\
+                    </div>\
+                </form>\
+            </div>\
+        </div>"
+};
+
+Vue.component('participants-wishlist', {
+    props: ['participants'],
+    /*
+    data: function() {
+        return {
+            participants: [
+                {name: 'Juanito'},
+                {name: 'Pepito'},
+                {name: 'Gol'}
+            ]
+         }
+    },*/
+    template: "<div>\
+                    <li v-for=\"participant in participants\">\
+                        <div class=\"row\"<\
+                            <div class=\"col-md-8\">\
+                                <b class=\"mainB\"> {{ participant.name }} </b>\
+                            </div>\
+                            <div class=\"col-md-4\">\
+                                <input type=\"button\" id=\"checkParticipantWishlist\" v-on:click=\'loadWishlist()\' value=\"View Checklist\">\
+                            </div>\
+                        </div>\
+                    </li>\
+                </div>",
+    methods: {
+        loadWishlist: function(){
+            // wat to do?
+        }
+    }
+});
+
 /*
 const eventInformation = {
     props: ['eventName', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
@@ -310,22 +381,6 @@ const eventInformation = {
                </div>"
 };
 */
-
-Vue.component('participants-wishlist', {
-    props: ['participants'],
-    template: "<div class=\"participants-wishlist-container\">\
-                    <li v-for=\"participant in participants\">\
-                        <div class=\"row\"<\
-                            <div class=\"col-md-8\">\
-                                <b> {{ participant.name }} </b>\
-                            </div>\
-                            <div class=\"col-md-4\">\
-                                <button> See Wishlist\
-                            </div>\
-                        </div>\
-                    </li>\
-                </div>"
-});
 
 const routes = [
     { path: "/", component: hub },
