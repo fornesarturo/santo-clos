@@ -59,9 +59,9 @@ Authentication Router
         }
 ```
 
-API JSON Router
+API Router
 ```javascript
-# GET /api/json/user?user={username}
+# GET /api/user?user={username}
     Response:
         {
             "data": [
@@ -74,7 +74,7 @@ API JSON Router
             "user": "USERNAME OF THE TOKEN"
         }
 
-+ POST /api/json/user
++ POST /api/user
     Request Body:
         {
             username: "USERNAME",
@@ -82,7 +82,44 @@ API JSON Router
             name: "Name McNamey",
             email: "user@emailprovider.com"
         }
-# POST /api/json/event
+
+# GET /api/user/events
+    # Returns the events hosted by the user.
+    Response Body:
+        {
+            "data": [
+                {
+                    "eventId": "AN EVENT ID",
+                    "admin": "EVENT ADMIN",
+                    "name": "EVENT NAME",
+                    "eventDate": "EVENT DATE YYYY-MM-DD",
+                    "address": "EVENT ADDRESS",
+                    "amount": "EVENT SUGGESTED AMOUNT"
+                },
+                ...
+            ],
+            "user": "USERNAME LOGGED IN FOR THIS REQUEST"
+        }
+
+# GET /api/user/joinedEvents
+    # Returns the events the user has joined.
+    Response Body:
+        {
+            "data": [
+                {
+                    "eventId": "AN EVENT ID",
+                    "admin": "EVENT ADMIN",
+                    "name": "EVENT NAME",
+                    "eventDate": "EVENT DATE YYYY-MM-DD",
+                    "address": "EVENT ADDRESS",
+                    "amount": "EVENT SUGGESTED AMOUNT"
+                },
+                ...
+            ],
+            "user": "USERNAME LOGGED IN FOR THIS REQUEST"
+        }
+
+# POST /api/event
     Request Body:
         {
             name: "EVENT NAME",
@@ -91,7 +128,13 @@ API JSON Router
             amount: AMOUNT_NUMBER
         }
 
-# GET /api/json/event/users?id={eventId}
+# GET /api/event?id={eventId}
+    Response Body:
+        {
+            
+        }
+
+# GET /api/event/users?id={eventId}
     Response:
         {
             "data": [
@@ -105,7 +148,29 @@ API JSON Router
             "user": "USERNAME OF THE TOKEN"
         }
 
-# GET /api/json/event/wishlist?id={eventId}&user={username}
+# POST /api/event/users
+    Request:
+        {
+            "eventId": "THIS EVENT ID",
+            "participants": [
+                "INVITED@HOST.EXT",
+                ...
+            ]
+        }
+    Response:
+        {
+            "inserted": {
+                "eventId": "THIS EVENT ID",
+                "participants": [
+                    "INVITED@HOST.EXT",
+                    ...
+                ],
+                "authUsername": "USERNAME OF LOGGED IN USER"
+            },
+            "status": 200
+        }
+
+# GET /api/event/wishlist?id={eventId}&user={username}
     Response:
         {
             "data": [
@@ -124,7 +189,7 @@ API JSON Router
             "user": "USER OF THE TOKEN"
         }
 
-# GET /api/json/event/giftee?id={eventId}&user={username}
+# GET /api/event/giftee?id={eventId}&user={username}
     Response:
         {
             "data": [
@@ -134,28 +199,4 @@ API JSON Router
             ],
             "user": "watsalacanoa"
         }
-```
-
-API XML Router
-```javascript
-// Each route returns the same that its quasi-namesake in api/json does.
-
-# GET /api/xml/user
-
-# GET /api/xml/event/users?id={eventId}
-
-# GET /api/xml/event/wishlist?id={eventId}&user={username}
-
-# GET /api/xml/event/giftee?id={eventId}&user={username}
-```
-
-In case of any error the response is the following:
-```javascript
-{
-    "error": {
-        "name": "ERROR NAME",
-        "message": "ERROR DESCRIPTION"
-    },
-    "code": ERROR_CODE_NUMBER
-}
 ```

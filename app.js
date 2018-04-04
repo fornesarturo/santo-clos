@@ -16,8 +16,8 @@ app.use(logger);
 
 app.use('/', require('./routes/staticRouter.js'));
 app.use('/auth', require('./routes/authRouter.js'));
-app.use('/api/json', require('./routes/apiRouter.js'));
-app.use('/api/xml', require('./routes/xmlRouter.js'));
+app.use('/api', require('./routes/apiRouter.js'));
+// app.use('/api/xml', require('./routes/xmlRouter.js'));
 
 app.use(express.static( __dirname + '/html'));
 

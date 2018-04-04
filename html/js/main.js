@@ -1,3 +1,4 @@
+
 Vue.component('hosted-event', {
     props: ['name', 'date', 'id'],
     template: "<div v-on:click=\"clickedEvent\" class=\"santoClosEvent\">\
@@ -26,7 +27,7 @@ Vue.component('joined-event', {
     
 });
 
-var joinedEventsData = {joined: []};
+//var joinedEventsData = {joined: []};
 
 Vue.component('joined-hub', {
     template: "<div class=\"hubWrapper\">\
@@ -34,7 +35,7 @@ Vue.component('joined-hub', {
             <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:admin=\"event.admin\"></joined-event>\
             </div>",
     data: function() {
-        return joinedEventsData;
+        return { joined: [] };
     },
     created: function() {
         let options = {
@@ -47,7 +48,7 @@ Vue.component('joined-hub', {
             },
             method: 'GET',
         };
-        let fullURL = "/api/json/user/joinedEvents";
+        let fullURL = "/api/user/joinedEvents";
 
         fetch(fullURL, options)
             .then(res => res.json())
@@ -60,7 +61,7 @@ Vue.component('joined-hub', {
     }
 });
 
-var hostedEventsData = {admined: []};
+// var hostedEventsData = {admined: []};
 
 Vue.component('hosted-hub', {
     template: "<div class=\"hubWrapper\">\
@@ -70,7 +71,7 @@ Vue.component('hosted-hub', {
             </div>",
     methods: {
         createNewEvent: function () {
-            location.href = "main#/create-event";
+            this.$emit('new-event');
         }
     },
     created: function () {
@@ -84,7 +85,7 @@ Vue.component('hosted-hub', {
             },
             method: 'GET',
         };
-        let fullURL = "/api/json/user/events";
+        let fullURL = "/api/user/events";
 
         fetch(fullURL, options)
             .then(res => res.json())
@@ -96,19 +97,31 @@ Vue.component('hosted-hub', {
             });
     },
     data: function () {
-        return hostedEventsData;
+        return {admined: []};
     }
 });
 
 const hub = {
     template: "<div class=\"mainContainer\">\
-                <hosted-hub></hosted-hub>\
+                <hosted-hub v-on:new-event=\"newEvent\"></hosted-hub>\
                 <joined-hub></joined-hub>\
-            </div>"
+            </div>",
+    methods: {
+        newEvent: function() {
+            this.$emit('change-to-event');
+            location.href = "main#/create-event";
+        }
+    }
 };
 
 const createEvent = {
-  template: "<div class=\"eventContainer\"> \
+    data: function() {
+        return {
+            n: 0,
+            items: []
+         }
+    },
+    template: "<div class=\"eventContainer\"> \
 			<div class=\"eventWrapper\">\
 				<form class=\"createEvent\">\
                     <span class=\"mainTitle\">\
@@ -153,36 +166,23 @@ const createEvent = {
                                 </span>\
                             <form id=\"eventData\">\
                                 <div class=\"row\">\
-                                    <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
-                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                                            <span class=\"inputFocus\"></span>\
-                                        </div>\
-                                     </div>\
-                                    <div class=\"col-md-6\">\
+                                    <div class=\"col-md-12\">\
                                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
                                             <span class=\"inputFocus\"></span>\
                                         </div>\
                                     </div>\
                                 </div>\
                                 <div class=\"row\">\
-                                    <div class=\"col-md-6\">\
-                                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
-                                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                                            <span class=\"inputFocus\"></span>\
-                                        </div>\
-                                     </div>\
-                                    <div class=\"col-md-6\">\
+                                    <div class=\"col-md-12\">\
                                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                                             <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
                                             <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
                                             <span class=\"inputFocus\"></span>\
                                         </div>\
                                     </div>\
+                                </div>\
+                                <div>\
+                                    <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.email\" v-on:remove-item=\'remove($event)\'></new-participant>\
                                 </div>\
                             </form>\
                         </div>\
@@ -192,8 +192,7 @@ const createEvent = {
                           <div class=\"col-md-6\">\
                         </div>\
                         <div class=\"col-md-6\">\
-                                <input type=\"button\" id=\"addParticipantButton\" value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
-                                <input type=\"button\" id=\"deleteParticipantButton\" value=\"Remove Participant\" class=\"loginOnly btn btn-lg btn-danger btn-block\">\
+                                <input type=\"button\" id=\"addParticipantButton\" v-on:click=\'add()\' value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
                         </div>\
                     </div>\
                     <br><br><br>\
@@ -203,9 +202,43 @@ const createEvent = {
     methods: {
         createEventRequest: function () {
             
-        }
+        },
+        add: function() {
+            console.log(this.n);
+            this.items.push({id: this.n++, email: ""});
+        },
+        remove: function(id) {
+            for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].id == id) {
+                    this.items.splice(i, 1);
+                }
+            }
+        },
     }
 };
+
+Vue.component("new-participant", {
+    props: ["id", "email"],
+    template: "<div class=\"row\">\
+                    <div class=\"col-md-11\">\
+                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Participant's email required\">\
+                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\" v-on:input=\'updateValue($event.target.value)\'>\
+                            <span class=\"inputFocus\"></span>\
+                        </div>\
+                    </div>\
+                    <div class=\"col-md-1\">\
+                        <input type=\"button\" v-on:click=remove value=\"X\" class=\"btn btn-danger\">\
+                    </div>\
+                </div>",
+    methods: {
+        remove: function() {
+            this.$emit('remove-item', this.id);
+        },
+        updateValue: function(value) {
+            this.$emit('input', value);
+        }
+    }
+})
 
 const settings = {
   template: "<div class=\"mainContainer\">\
@@ -217,23 +250,35 @@ const settings = {
                     <div class=\"fields\">\
                         <fieldset>\
                             <div id=\"nameField\" class=\"inputWrapper inputValidate\" data-validate=\"Name cannot be empty\">\
-                                <input class=\"inputLine\" type=\"text\" name=\"newName\" placeholder=\"Name\">\
+                                <input class=\"inputLine\" type=\"text\" name=\"newName\" placeholder=\"New Name\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                           	<div id=\"newPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new passsword\">\
+                            <div>\
+                              <input type=\"button\" id=\"confirmButtonName\" value=\"Save New Name\" class=\"btn btn-lg btn-primary btn-block\">\
+                            </div>\
+                            <br>\
+                            <div id=\"oldPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Must type old password\">\
+                                <input class=\"inputLine\" type=\"password\" name=\"oldPassword\" placeholder=\"Old Password\">\
+                                <span class=\"inputFocus\"></span>\
+                            </div>\
+                           	<div id=\"newPasswordField\" class=\"inputWrapper passwordValidate\" data-validate=\"Minimum of 8 characters, at least one uppercase, one lowercase, one digit and one special\">\
                                 <input class=\"inputLine\" type=\"password\" name=\"newPassword\" placeholder=\"New Password\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                            <div id=\"newPasswordConfirmationField\" class=\"inputWrapper passwordValidate\" data-validate=\"Check new password\">\
+                            <div id=\"newPasswordConfirmationField\" class=\"inputWrapper passwordValidate\" data-validate=\"Passwords must match\">\
                                 <input class=\"inputLine\" type=\"password\" name=\"newConfirmPassword\" placeholder=\"Confirm New Password\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
-                            <div id=\"newEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Confirm new email\">\
+                            <div>\
+                              <input type=\"button\" id=\"confirmButtonPassword\" value=\"Save New Password\" class=\"btn btn-lg btn-primary btn-block\">\
+                            </div>\
+                            <br>\
+                            <div id=\"newEmailField\" class=\"inputWrapper inputValidate\" data-validate = \"Valid email is required: ex@abc.xyz\">\
                                 <input class=\"inputLine\" type=\"email\" name=\"newEmail\" placeholder=\"New email\">\
                                 <span class=\"inputFocus\"></span>\
                             </div>\
                             <div>\
-                              <input type=\"button\" id=\"confirmButton\" value=\"Confirm Changes\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                              <input type=\"button\" id=\"confirmButtonEmail\" value=\"Save New Email\" class=\"btn btn-lg btn-primary btn-block\">\
                             </div>\
                         </fieldset>\
                     </div>\
@@ -242,30 +287,106 @@ const settings = {
         </div>"
 };
 
-const participants = {
-    template: "<div class=\"row\">\
-                    <div class=\"col-md-6\">\
-                        <div id=\"participantNameField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"You need participants!\">\
-                            <img class=\"glyphicon\" src=\"octicons/person.svg\" width=\"100%\" height=\"100%\">\
-                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantName\" placeholder=\"Participant's name\">\
-                            <span class=\"inputFocus\"></span>\
+const eventInformation = {
+    props: ['evtName', 'evtLocation', 'evtHostName', 'evtUserYouGive', 'evtMaxAmount'],
+    /*
+    data: function() {
+        return {
+            evtName: "Viernes Trade",
+            evtHostName: "Elver",
+            evtLocation: "Mi casita",
+            evtUserYouGive: "Juanch",
+            evtMaxAmount: "100 pesitos"
+         }
+    },
+    */
+    template: "<div class=\"mainContainer\">\
+            <div class=\"mainWrapper\">\
+                <form class=\"settings\">\
+                    <span class=\"mainTitle\">\
+                        <b> {{ evtName }}  </b>\
+                    </span>\
+                    <span class=\"mainSubtitle\">\
+                        <b> Hosted by {{ evtHostName }}</b>\
+                    </span>\
+                    <div class=\"row\">\
+                        <div class=\"container col-md-6\">\
+                            <b class=\"mainB\"> Location: {{ evtLocation }} </b>\
+                            <b class=\"mainB\"> Max Amount: {{ evtMaxAmount }} </b>\
+                            <button> My Wishlist </button>\
+                            <b class=\"mainB\"> You're buying a gift for {{ evtUserYouGive }} ! </b>\
+                        </div>\
+                        <div class=\"container col-md-6\">\
+                            <participants-wishlist-container>\
                         </div>\
                     </div>\
-                    <div class=\"col-md-6\">\
-                        <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate inner-addon left-addon\" data-validate=\"Participant's email required\">\
-                            <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
-                            <input class=\"inputRight left-addon\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\">\
-                            <span class=\"inputFocus\"></span>\
-                        </div>\
-                    </div>\
-                </div>"
+                </form>\
+            </div>\
+        </div>"
 };
 
+Vue.component('participants-wishlist', {
+    props: ['participants'],
+    /*
+    data: function() {
+        return {
+            participants: [
+                {name: 'Juanito'},
+                {name: 'Pepito'},
+                {name: 'Gol'}
+            ]
+         }
+    },*/
+    template: "<div>\
+                    <li v-for=\"participant in participants\">\
+                        <div class=\"row\"<\
+                            <div class=\"col-md-8\">\
+                                <b class=\"mainB\"> {{ participant.name }} </b>\
+                            </div>\
+                            <div class=\"col-md-4\">\
+                                <input type=\"button\" id=\"checkParticipantWishlist\" v-on:click=\'loadWishlist()\' value=\"View Checklist\">\
+                            </div>\
+                        </div>\
+                    </li>\
+                </div>",
+    methods: {
+        loadWishlist: function(){
+            // wat to do?
+        }
+    }
+});
+
+/*
+const eventInformation = {
+    props: ['eventName', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
+    template: "<div class=\"eventWrapper\">\
+                    <span class=\"mainTitle\">\
+                        <b>{{ eventName }}</b>\
+                    </span>\
+                    <span class=\"mainSubtitle\">\
+                        <b>Hosted by {{ hostName }} </b>\ 
+                    </span>\
+                    <div class=\"row\">\
+                        <div class=\"container col-md-6\">\
+                            <b> {{ location }} </b>\
+                            <b> {{ maxAmount }} </b>\
+                            <button> My Wishlist </button>\
+                            <b> You're buying a gift for {{ userYouGive }} ! </b>\
+                            <b> Check {{ userYouGive }}\'s checkclist> </b>\
+                        </div>\
+                        <div class=\"container col-md-6\">\
+                            <participants-wishlist-container>\
+                        </div>\
+                    </div>\
+               </div>"
+};
+*/
 
 const routes = [
     { path: "/", component: hub },
     { path: "/settings", component: settings },
     { path: "/create-event", component: createEvent }
+    //{ path: "/eventInformation", component: eventInformation}
 ];
 
 const router = new VueRouter({
@@ -277,7 +398,9 @@ var main = new Vue({
     el: '#main',
     data: {
           activeView: 'hub',
-          adminedEvents: {}
+          adminedEvents: {},
+          n: 0,
+          items: []
     },
     methods: {
         setHubActive: function() {
@@ -291,74 +414,34 @@ var main = new Vue({
         },
         setServicesActive: function() {
 		    this.activeView = "services";
+        },
+        setEventInformationActive: function(){
+            this.activeView = "eventInformation";
         }
+        /*,
+        setEventInformationActive: function(){
+            this.activeView = "eventInformation";
+        }
+        */
     }
 })
 
-//==================================================================
-// FOCUS WHEN INPUT HAS CONTENT
-$(".inputLine").each((index, element) => {
-    $(element).on("blur", () => {
-        if($(element).val().trim() != "") {
-            $(element).addClass("has-val");
-        }
-        else {
-            $(element).removeClass("has-val");
-        }
-    })
-});
-
-// VALIDATE PASSWORDS
-
-// When Create Event  is clicked
-$("#createEventButton").click(() => {
-    // let oldPassword = $(".passwordValidate input[name='newPassword']").val();
-    // let newPassword = $(".passwordValidate input[name='newConfirmPassword']").val();
-    // let name = $(".inputValidate input[name='newName']").val();
-    // let email = $(".inputValidate input[name='newEmail']").val();
-
-    // let checkPassed = true;
-
-    // if(name && name.trim() == ""){
-    //     showValidate(name);
-    //     checkPassed=false;
-    // }
-    // if(email && email.trim() == ""){
-    //     showValidate(email);
-    //     checkPassed=false;
-    // }
-    // if(oldPassword && oldPassword.trim() == ""){
-    //     showValidate(oldPassword);
-    //     checkPassed=false;
-    // }
-    // if(newPassword && newPassword.trim() == ""){
-    //     showValidate(newPassword);
-    //     checkPassed=false;
-    // }
-    // if(oldPassword && oldPassword != $(newPassword).val()){
-    //     showValidate(newPassword);
-    //     checkPassed=false;
-    // }
-    // if(checkPassed) {
-    //     //sasve changes to database
-    // }
-    // else {
-    //     console.log("No can do baby doll (PASSWORDS NO MATCHERINO)");
-    // }
-});
-
-
+// CREATE EVENTS
 function createEventRequestMain(){
-    var participants = $("#eventData").serializeArray();
-    $.each(participants, function(index, value){
-        console.log(index +  ": " + value.participantName);
-    });
+    var participantsRaw = $("#eventData").serializeArray();
+    let participantsArray = [];
+    for(let i = 0; i < participantsRaw.length; i++) {
+        if(participantsRaw[i].value == "") {
+            continue;
+        } 
+        else {
+            participantsArray.push({email: participantsRaw[i].value});
+        }
+    }
     let name = $("#eventNameField input[name='eventName']").val();
     let address = $("#addressField input[name='address'").val();
     let amount = $("#maxAmountField input[name='maxAmount']").val();
     let date = $("#dateField input[name='date']").val();
-
-    console.log(name, address, amount, date);
 
     let data = {
         name: name,
@@ -377,14 +460,141 @@ function createEventRequestMain(){
         method: 'POST',
         body: JSON.stringify(data)
     };
-    let fullURL = "/api/json/event";
+    let fullURL = "/api/event";
 
     fetch(fullURL, options)
     .then(res => res.json())
     .then(resJSON => {
         if(resJSON.data.eventId) {
-            console.log("Add participants");
+            postEventParticipants(participantsArray, resJSON.data.eventId);
         }
         else console.log(resJSON);
     });
 };
+
+//==================================================================
+// FOCUS WHEN INPUT HAS CONTENT
+$(".inputLine").each((index, element) => {
+    $(element).on("blur", () => {
+        if($(element).val().trim() != "") {
+            $(element).addClass("has-val");
+        }
+        else {
+            $(element).removeClass("has-val");
+        }
+    })
+});
+
+//==================================================================
+// INPUT VALIDATION
+
+const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
+const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\-_!@#$%^&*/])(?=.{8,})");
+
+// Remove validation error on clicked input
+$(".settings .inputLine").each((index, element) => {
+    $(element).focus(() => {
+        hideValidate(element);
+    });
+});
+// Show validation error
+function showValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).addClass("alertValidation");
+}
+// Remove validation error
+function hideValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).removeClass("alertValidation");
+}
+
+// When Confirm Changes Name is Clicked
+$("#confirmButtonName").click(() => {
+    let newName = $(".inputValidate input[name='newName']");
+    let newNameVal = $(newName).val().trim();
+
+    let checkPassed = true;
+    if(newNameVal == "") {
+        showValidate(newName);
+        checkPassed = false;
+    }
+
+    if(checkPassed) {
+        let data = {
+            name: newNameVal
+        };
+        updateDataRequest(data).then((res) => {
+            console.log(res);
+        });
+    }
+});
+
+// When Confirm Changes Email is Clicked
+$("#confirmButtonEmail").click(() => {
+    let newEmail = $(".inputValidate input[name='newEmail']");
+    let newEmailVal = $(newEmail).val().trim();
+
+    let checkPassed = true;
+    if(newEmailVal == "" || !emailRegex.test(newEmailVal)) {
+        showValidate(newName);
+        checkPassed = false;
+    }
+
+    if(checkPassed) {
+        let data = {
+            email: newEmailVal
+        };
+        updateDataRequest(data).then((res) => {
+            console.log(res);
+        });
+    }
+});
+
+// VALIDATE PASSWORDS
+// When Confirm Changes Password is Clicked
+$("#confirmButtonPassword").click(() => {
+    let oldPassword = $(".passwordValidate input[name='oldPassword']");
+    let oldPasswordVal = $(oldPassword).val().trim();
+    let newPassword = $(".passwordValidate input[name='newPassword']");
+    let newPasswordVal = $(newPassword).val().trim();
+    let newConfirmPassword = $(".passwordValidate input[name='newConfirmPassword']");
+    let newConfirmPasswordVal = $(newConfirmPassword).val().trim();
+
+    let checkPassed = true;
+    if(oldPasswordVal == "") {
+        showValidate(oldPassword);
+        checkPassed = false;
+    }
+    if(newPasswordVal == "" || !passwordStrengthRegex.test($(newPassword).val().trim())) {
+        showValidate(newPassword);
+        checkPassed = false;
+    }
+    if(newConfirmPasswordVal == "" || !passwordStrengthRegex.test($(newConfirmPassword).val().trim())) {
+        showValidate(newConfirmPassword);
+        checkPassed = false;
+    }
+    if(newConfirmPasswordVal != newConfirmPasswordVal) {
+        showValidate(newConfirmPassword);
+        showValidate(newPassword);
+        checkPassed = false;
+    }
+
+    if(checkPassed) {
+        passwordValidationRequest(Cookies.get("current_user"), oldPasswordVal).then((passwordSuccess) => {
+            if(passwordSuccess == 1) {
+                let data = {
+                    password: sha256(newPasswordVal)
+                };
+                updateDataRequest(data).then((res) => {
+                    console.log(res);
+                });
+            }
+            else {
+                showValidate(oldPassword);
+            }
+        });
+    }
+});
+
+// <img class=\"glyphicon\" src=\"octicons/mail.svg\" width=\"100%\" height=\"100%\">\
+

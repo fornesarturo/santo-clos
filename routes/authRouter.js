@@ -20,8 +20,7 @@ authRouter.route("/whoami")
             clockTimestamp: Date.now() / 1000
         }, function(err, decoded) {
         if (err) {
-            res.status(401);
-            res.json({"error":err, "code": 401});
+            util.sendError(res, 401, err);
         } else {
             let user = decoded.name;
             res.json({ username: user });
@@ -55,6 +54,30 @@ authRouter.route("/token")
                     res.json(data);
                 } else {
                     res.json({});
+                }
+            });
+    }
+});
+
+authRouter.route("/authPassword")
+.post((req, res, next) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    if (username) {
+        mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
+            {id: username, pass: password}, (err, rows) => {
+                if (err) throw err;
+                if (rows.info.numRows > 0) {
+                    data = {
+                        success: 1,
+                    }
+                    res.json(data);
+                } 
+                else {
+                    data = {
+                        success: -1,
+                    }
+                    res.json(data);
                 }
             });
     }

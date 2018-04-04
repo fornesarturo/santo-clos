@@ -24,13 +24,15 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "http": "0.0.0",
     "https": "^1.0.0",
-    "jsonwebtoken": "^8.1.1",
+    "jsonwebtoken": "^8.2.0",
     "mariasql": "^0.2.6",
     "memory-cache": "^0.2.0",
     "mysql": "^2.15.0",
+    "node-fetch": "^2.1.2",
+    "nodemailer": "^4.6.4",
     "object-to-xml": "^1.1.0"
   }
 }

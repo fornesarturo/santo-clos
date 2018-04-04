@@ -9,7 +9,7 @@ let currentMode = login
 let buttonMode = $("#changeMode");
 buttonMode.click(() => {
     if(currentMode == login) {
-        buttonMode.val("I already have and account");
+        buttonMode.val("I already have an account");
         $(".registerOnly").slideDown(300);
         $(".loginOnly").slideUp(300);
         currentMode = register;
@@ -40,7 +40,7 @@ $(".inputLine").each((index, element) => {
 
 const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
 const usernameRegex = new RegExp('^[a-zA-Z0-9_-]{3,16}');
-const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\-_!@#\$%\^&\*])(?=.{8,})");
+const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\-_!@#$%^&*/])(?=.{8,})");
 
 // When login is clicked
 $("#loginButton").click(() => {
