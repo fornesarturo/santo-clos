@@ -216,7 +216,7 @@ const createEvent = {
                                     </div>\
                                 </div>\
                                 <div>\
-                                    <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.email\" v-on:remove-item=\'remove($event)\'></new-participant>\
+                                    <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.value\" v-on:remove-item=\'remove($event)\'></new-participant>\
                                 </div>\
                             </form>\
                         </div>\
@@ -239,7 +239,7 @@ const createEvent = {
         },
         add: function() {
             console.log(this.n);
-            this.items.push({id: this.n++, email: ""});
+            this.items.push({id: this.n++, value: ""});
         },
         remove: function(id) {
             for (let i = 0; i < this.items.length; i++) {
@@ -252,11 +252,11 @@ const createEvent = {
 };
 
 Vue.component("new-participant", {
-    props: ["id", "email"],
+    props: ["id", "value"],
     template: "<div class=\"row\">\
                     <div class=\"col-md-11\">\
                         <div id=\"particicpantEmailField\" class=\"inputWrapper inputValidate\" data-validate=\"Participant's email required\">\
-                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\" v-on:input=\'updateValue($event.target.value)\'>\
+                            <input class=\"inputRight\" type=\"text\" name=\"participantEmail\" placeholder=\"Participant's email\" v-bind:value=\'value\' v-on:input=\'updateValue($event.target.value)\'>\
                             <span class=\"inputFocus\"></span>\
                         </div>\
                     </div>\
