@@ -56,6 +56,7 @@ Vue.component('joined-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
         }
     }
     
