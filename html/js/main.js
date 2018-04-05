@@ -1,61 +1,61 @@
 Vue.component('modal', {
     props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
-    // template: " <transition name=\"modal\">\
-    //             <div class=\"modal-mask\">\
-    //                 <div class=\"modal-wrapper\">\
-    //                 <div class=\"modal-container\">\
-    //                     <div class=\"modal-header\">\
-    //                         <h3 slot=\"header\" name=\"header\">\
-    //                             {{ name }}\
-    //                         </h3>\
-    //                     </div>\
-    //                     <div class=\"modal-body\">\
-    //                         <slot name=\"body\">\
-    //                             Date: {{ date }}\
-    //                         </slot>\
-    //                     </div>\
-    //                     <div class=\"modal-footer\">\
-    //                         <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-    //                             Cerrar\
-    //                         </button>\
-    //                     </div>\
-    //                 </div>\
-    //                 </div>\
-    //             </div>\
-    //             </transition>"
     template: " <transition name=\"modal\">\
-                    <div class=\"modal-mask\">\
+                <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
-                        <div class=\"eventWrapper\">\
-                            <span class=\"mainTitle\">\
-                                <b>{{ name }}</b>\
-                            </span>\
-                            <span class=\"mainSubtitle\">\
-                                <b>Hosted by {{ hostName }} hostedName </b>\
-                            </span>\
-                            <div class=\"row\">\
-                                <div class=\"container col-md-6\">\
-                                    <b> {{ location }} </b>\
-                                    <b> {{ maxAmount }} </b>\
-                                    <button> My Wishlist </button>\
-                                    <br>\
-                                    <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
-                                    <br>\
-                                    <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
-                                </div>\
-                                <div class=\"container col-md-6\">\
-                                    <participants-wishlist-container>\
-                                </div>\
-                            </div>\
-                            <div class=\"modal-footer\">\
-                                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                    Cerrar\
-                                </button>\
-                            </div>\
+                    <div class=\"modal-container\">\
+                        <div class=\"modal-header\">\
+                            <h3 slot=\"header\" name=\"header\">\
+                                {{ name }}\
+                            </h3>\
+                        </div>\
+                        <div class=\"modal-body\">\
+                            <slot name=\"body\">\
+                                Date: {{ date }}\
+                            </slot>\
+                        </div>\
+                        <div class=\"modal-footer\">\
+                            <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                Cerrar\
+                            </button>\
                         </div>\
                     </div>\
                     </div>\
+                </div>\
                 </transition>"
+    // template: " <transition name=\"modal\">\
+    //                 <div class=\"modal-mask\">\
+    //                 <div class=\"modal-wrapper\">\
+    //                     <div class=\"eventWrapper\">\
+    //                         <span class=\"mainTitle\">\
+    //                             <b>{{ name }}</b>\
+    //                         </span>\
+    //                         <span class=\"mainSubtitle\">\
+    //                             <b>Hosted by {{ hostName }} hostedName </b>\
+    //                         </span>\
+    //                         <div class=\"row\">\
+    //                             <div class=\"container col-md-6\">\
+    //                                 <b> {{ location }} </b>\
+    //                                 <b> {{ maxAmount }} </b>\
+    //                                 <button> My Wishlist </button>\
+    //                                 <br>\
+    //                                 <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
+    //                                 <br>\
+    //                                 <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
+    //                             </div>\
+    //                             <div class=\"container col-md-6\">\
+    //                                 <participants-wishlist-container>\
+    //                             </div>\
+    //                         </div>\
+    //                         <div class=\"modal-footer\">\
+    //                             <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+    //                                 Cerrar\
+    //                             </button>\
+    //                         </div>\
+    //                     </div>\
+    //                 </div>\
+    //                 </div>\
+    //             </transition>"
 });
 
 Vue.component('hosted-event', {
