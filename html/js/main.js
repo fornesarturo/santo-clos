@@ -1,20 +1,27 @@
+Vue.component('modal', {
+    template: '#modal-template'
+});
 
 Vue.component('hosted-event', {
     props: ['name', 'date', 'id'],
-    template: "<div v-on:click=\"clickedEvent\" class=\"santoClosEvent\">\
-                    <div class=\"name\">{{ name }}</div>\
-                    <div class=\"date\">{{ date }}</div>\
-                </div>",
     methods: {
         clickedEvent: function() {
             console.log(this.id);
+        },
+        showModalFunct: function() {
+            this.$parent.$parent.$parent.showModal = true;
         }
-    }
+    },
+    template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
+                    <div class=\"name\">{{ name }}</div>\
+                    <div class=\"date\">{{ date }}</div>\
+                </div>"
 });
+  
 
 Vue.component('joined-event', {
     props: ['name', 'date', 'admin', 'id'],
-    template: "<div v-on:click=\"clickedEvent\" class=\"santoClosEvent\">\
+    template: "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
                     <div class=\"name\">{{ name }}</div>\
                     <div class=\"date\">{{ date }}</div>\
                     <div class=\"admin\">Hosted by:&nbsp&nbsp{{ admin }}</div>\
@@ -22,6 +29,9 @@ Vue.component('joined-event', {
     methods: {
         clickedEvent: function () {
             console.log(this.id, this.admin);
+        },
+        showModalFunct: function() {
+            this.$parent.$parent.$parent.showModal = true;
         }
     }
     
@@ -400,7 +410,8 @@ var main = new Vue({
           activeView: 'hub',
           adminedEvents: {},
           n: 0,
-          items: []
+          items: [],
+          showModal: false
     },
     methods: {
         setHubActive: function() {
