@@ -119,7 +119,7 @@ Create Event Container */
 /*---------------------------------------------
 Cards Holder*/
 .eventWrapper {
-    width: 700px;
+    width: 500px;
     background: rgb(7, 75, 104);
     background: -webkit-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
     background: -o-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
@@ -129,6 +129,8 @@ Cards Holder*/
     margin: 10px;
     overflow: hidden;
     padding: 72px 55px 65px 55px;
+    transition: all .3s ease;
+
 }
 
 /*
