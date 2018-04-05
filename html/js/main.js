@@ -1,69 +1,27 @@
 Vue.component('modal', {
-    template: '#modal-template',
-    methods: {
-        showModalClose: function() {
-            this.$parent.showModal = false;
-            console.log(this.$parent.showModal);
-        }
-    }
-  });
+    template: '#modal-template'
+});
 
 Vue.component('hosted-event', {
     props: ['name', 'date', 'id'],
-    data: function() {
-        return {
-            showModal: false
-        }
-    },
     methods: {
         clickedEvent: function() {
             console.log(this.id);
         },
         showModalFunct: function() {
-            this.showModal = true;
-        },
-        showModalClose: function() {
-            this.$set(this, "showModal", false);
-            console.log("CLOSING");
+            this.$parent.$parent.$parent.showModal = true;
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
-                    <script type=\"text/x-template\" id=\"modal-template\">\
-                        <transition name=\"modal\">\
-                        <div class=\"modal-mask\">\
-                            <div class=\"modal-wrapper\">\
-                            <div class=\"modal-container\">\
-                                <div class=\"modal-header\">\
-                                    <slot name=\"header\">\
-                                        default header\
-                                    </slot>\
-                                </div>\
-                                <div class=\"modal-body\">\
-                                    <slot name=\"body\">\
-                                        default body\
-                                    </slot>\
-                                </div>\
-                                <div class=\"modal-footer\">\
-                                    <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                        OK\
-                                    </button>\
-                                </div>\
-                            </div>\
-                            </div>\
-                        </div>\
-                        </transition>\
-                    </script>\
                     <div class=\"name\">{{ name }}</div>\
                     <div class=\"date\">{{ date }}</div>\
-                    <modal v-if=\"showModal\" @close=\"showModalClose\">\
-                    </modal>\
                 </div>"
 });
   
 
 Vue.component('joined-event', {
     props: ['name', 'date', 'admin', 'id'],
-    template: "<div v-on:click=\"clickedEvent\" class=\"santoClosEvent\">\
+    template: "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
                     <div class=\"name\">{{ name }}</div>\
                     <div class=\"date\">{{ date }}</div>\
                     <div class=\"admin\">Hosted by:&nbsp&nbsp{{ admin }}</div>\
@@ -71,6 +29,9 @@ Vue.component('joined-event', {
     methods: {
         clickedEvent: function () {
             console.log(this.id, this.admin);
+        },
+        showModalFunct: function() {
+            this.$parent.$parent.$parent.showModal = true;
         }
     }
     
@@ -449,7 +410,8 @@ var main = new Vue({
           activeView: 'hub',
           adminedEvents: {},
           n: 0,
-          items: []
+          items: [],
+          showModal: false
     },
     methods: {
         setHubActive: function() {
