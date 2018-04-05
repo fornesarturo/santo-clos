@@ -1,5 +1,28 @@
 Vue.component('modal', {
-    template: '#modal-template'
+    props: ['name', 'date', 'amount', 'place'],
+    template: " <transition name=\"modal\">\
+                <div class=\"modal-mask\">\
+                    <div class=\"modal-wrapper\">\
+                    <div class=\"modal-container\">\
+                        <div class=\"modal-header\">\
+                            <h3 slot=\"header\" name=\"header\">\
+                                {{ name }}\
+                            </h3>\
+                        </div>\
+                        <div class=\"modal-body\">\
+                            <slot name=\"body\">\
+                                Date: {{ date }}\
+                            </slot>\
+                        </div>\
+                        <div class=\"modal-footer\">\
+                            <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                Cerrar\
+                            </button>\
+                        </div>\
+                    </div>\
+                    </div>\
+                </div>\
+                </transition>"
 });
 
 Vue.component('hosted-event', {
@@ -10,6 +33,7 @@ Vue.component('hosted-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -411,7 +435,8 @@ var main = new Vue({
           adminedEvents: {},
           n: 0,
           items: [],
-          showModal: false
+          showModal: false,
+          eventModal: {}
     },
     methods: {
         setHubActive: function() {
@@ -428,6 +453,9 @@ var main = new Vue({
         },
         setEventInformationActive: function(){
             this.activeView = "eventInformation";
+        },
+        modalData: function(data) {
+            this.eventModal = data;
         }
         /*,
         setEventInformationActive: function(){
