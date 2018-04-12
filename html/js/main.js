@@ -1,5 +1,5 @@
 Vue.component('modal', {
-    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
+    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'eventId'],
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
@@ -16,8 +16,10 @@ Vue.component('modal', {
                             \
                             <div class=\"modal-body\">\
                                 <div class=\"container col-md-10\">\
-                                    <b> {{ location }} </b>\
-                                    <b> {{ maxAmount }} </b>\
+                                    <b> {{ date }} </b>\
+                                    <b> {{ location }} location </b>\
+                                    <b> {{ maxAmount }} maxAmount </b>\
+                                    <br>\
                                     <button> My Wishlist </button>\
                                     <br>\
                                     <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
@@ -82,7 +84,7 @@ Vue.component('hosted-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "", hostName: "", userYouGive: "", maxAmount: "", eventId: this.eventId });
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -105,7 +107,7 @@ Vue.component('joined-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, });
         }
     }
     
