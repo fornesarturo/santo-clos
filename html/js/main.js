@@ -3,23 +3,39 @@ Vue.component('modal', {
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
-                    <div class=\"modal-container\">\
-                        <div class=\"modal-header\">\
-                            <h3 slot=\"header\" name=\"header\">\
-                                {{ name }}\
-                            </h3>\
+                        <div class=\"modal-container\">\
+                            \
+                            <div class=\"modal-header\">\
+                                <span class=\"mainTitle\">\
+                                    <b>{{ name }}</b>\
+                                </span>\
+                                <span class=\"mainSubtitle\">\
+                                    <b>Hosted by {{ hostName }} hostName</b>\
+                                </span>\
+                            </div>\
+                            \
+                            <div class=\"modal-body\">\
+                                <div class=\"container col-md-10\">\
+                                    <b> {{ location }} </b>\
+                                    <b> {{ maxAmount }} </b>\
+                                    <button> My Wishlist </button>\
+                                    <br>\
+                                    <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
+                                    <br>\
+                                    <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
+                                </div>\
+                                <div class=\"container col-md-6\">\
+                                    <participants-wishlist-container>\
+                                </div>\
+                            </div>\
+                            \
+                            <div class=\"modal-footer\">\
+                                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                    Cerrar\
+                                </button>\
+                            </div>\
+                            \
                         </div>\
-                        <div class=\"modal-body\">\
-                            <slot name=\"body\">\
-                                Date: {{ date }}\
-                            </slot>\
-                        </div>\
-                        <div class=\"modal-footer\">\
-                            <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                Cerrar\
-                            </button>\
-                        </div>\
-                    </div>\
                     </div>\
                 </div>\
                 </transition>"
