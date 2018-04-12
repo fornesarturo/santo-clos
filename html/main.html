@@ -70,7 +70,7 @@
 			</div>
 
 		</nav>
-		<modal v-if="showModal" @close="showModal = false" v-bind:name="eventModal.name" v-bind:date="eventModal.date">
+		<modal v-if="showModal" @close="showModal = false" v-bind:name="eventModal.name" v-bind:date="eventModal.date" v-bind:location="eventModal.location" v-bind:hostName="eventModal.hostName" v-bind:userYougive="eventModal.userYouGive" v-bind:maxAmount="eventModal.maxAmount" v-bind:eventId="eventModal.eventId">
 				<!-- <h3 slot="header">custom header</h3> -->
 		</modal>
 		<router-view @change-to-event="setCreateEventActive()"></router-view>
