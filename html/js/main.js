@@ -11,7 +11,10 @@ Vue.component('modal', {
                         </div>\
                         <div class=\"modal-body\">\
                             <slot name=\"body\">\
-                                Date: {{ date }}\
+                                Date: {{ date }} <br>\
+                                Location: {{ location }}<br>\
+                                Hosted By: {{ hostName }}<br>\
+                                Max Amount: {{ maxAmount }} \
                             </slot>\
                         </div>\
                         <div class=\"modal-footer\">\
@@ -59,14 +62,14 @@ Vue.component('modal', {
 });
 
 Vue.component('hosted-event', {
-    props: ['name', 'date', 'id'],
+    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount'],
     methods: {
         clickedEvent: function() {
             console.log(this.id);
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100"});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -134,7 +137,7 @@ Vue.component('joined-hub', {
 Vue.component('hosted-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I Host</b></span>\
-            <hosted-event v-for=\"event in admined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
+            <hosted-event v-for=\"event in admined\" v-bind:maxAmount=\"event.maxAmount\" v-bind:hostName=\"event.hostName\" v-bind:location=\"event.location\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
             <div class=\"createEventButton\" v-on:click=\"createNewEvent\"><i class=\"fas fa - plus\"></i></div>\
             </div>",
     methods: {
