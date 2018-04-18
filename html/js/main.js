@@ -79,7 +79,7 @@ Vue.component('modal', {
 });
 
 Vue.component('hosted-event', {
-    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount'],
+    props: ['name', 'date', 'id', 'location', 'hostname', 'maxamount'],
     methods: {
         clickedEvent: function() {
             console.log(this.id);
@@ -87,7 +87,7 @@ Vue.component('hosted-event', {
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
             this.$parent.$parent.$parent.setEventInformationActive();
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump"});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: this.location, hostName: this.hostname, maxAmount: this.maxamount, eventId: this.eventId, userYouGive: "Mr. Trump"});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -121,7 +121,7 @@ Vue.component('joined-event', {
 Vue.component('joined-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
-            <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:admin=\"event.admin\"></joined-event>\
+            <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:hostname=\"event.admin\"></joined-event>\
             </div>",
     data: function() {
         return { joined: [] };
@@ -155,7 +155,7 @@ Vue.component('joined-hub', {
 Vue.component('hosted-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I Host</b></span>\
-            <hosted-event v-for=\"event in admined\" v-bind:maxAmount=\"event.maxAmount\" v-bind:hostName=\"event.hostName\" v-bind:location=\"event.location\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
+            <hosted-event v-for=\"event in admined\" v-bind:maxamount=\"event.amount\" v-bind:hostname=\"event.admin\" v-bind:location=\"event.address\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
             <div class=\"createEventButton\" v-on:click=\"createNewEvent\"><i class=\"fas fa - plus\"></i></div>\
             </div>",
     methods: {
