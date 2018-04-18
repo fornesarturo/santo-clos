@@ -1,5 +1,11 @@
 Vue.component('modal', {
-    props: ['name', 'date', 'location', 'hostname', 'useryougive', 'maxamount', 'eventid'],
+    props: ['name', 'date', 'location', 'hostname', 'useryougive', 'maxamount', 'eventid', 'wishlist'],
+    data: function() {
+        return {
+            n: 0,
+            items: []
+         }
+    },
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
@@ -27,6 +33,17 @@ Vue.component('modal', {
                                     <b> You're buying a gift for {{ useryougive }} ! </b>\
                                     <br>\
                                     <b> Check {{ useryougive }}\'s checklist </b>\
+                                    <span class=\"mainSubtitle\">\
+                                        <b> Your wishlist </b>\
+                                    </span>\
+                                    <b> {{ wishlist }}</b>\
+                                    <br><br>\
+                                    <div class=\"col-md-12\">\
+                                        <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.value\" v-on:remove-item=\'remove($event)\'></new-participant>\
+                                    </div>\
+                                    <div class=\"col-md-12\">\
+                                        <input type=\"button\" id=\"addParticipantButton\" v-on:click=\'add()\' value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                                    </div>\
                                 </div>\
                                 <div class=\"container col-md-6\">\
                                     <participants-wishlist-container>\
@@ -34,15 +51,34 @@ Vue.component('modal', {
                             </div>\
                             \
                             <div class=\"modal-footer\">\
-                                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                    Cerrar\
-                                </button>\
+                                <input type=\"button\" @click=\"$emit('close')\" value=\"Close\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
                             </div>\
                             \
                         </div>\
                     </div>\
                 </div>\
-                </transition>"
+                </transition>",
+                /*
+                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                    Close\
+                                </button>\
+                */
+    methods: {
+        createEventRequest: function () {
+            
+        },
+        add: function() {
+            console.log(this.n);
+            this.items.push({id: this.n++, value: ""});
+        },
+        remove: function(id) {
+            for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].id == id) {
+                    this.items.splice(i, 1);
+                }
+            }
+        },
+    }
     // template: " <transition name=\"modal\">\
     //                 <div class=\"modal-mask\">\
     //                 <div class=\"modal-wrapper\">\
@@ -79,7 +115,7 @@ Vue.component('modal', {
 });
 
 Vue.component('hosted-event', {
-    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount'],
+    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist'],
     methods: {
         clickedEvent: function() {
             console.log(this.id);
@@ -87,7 +123,7 @@ Vue.component('hosted-event', {
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
             this.$parent.$parent.$parent.setEventInformationActive();
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump"});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "John Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump", wishlist: "Condones, google.com/imagen=penesenormes"});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
