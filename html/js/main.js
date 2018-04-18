@@ -1,5 +1,5 @@
 Vue.component('modal', {
-    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'eventId'],
+    props: ['name', 'date', 'location', 'hostname', 'useryougive', 'maxamount', 'eventid'],
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
@@ -10,21 +10,23 @@ Vue.component('modal', {
                                     <b>{{ name }}</b>\
                                 </span>\
                                 <span class=\"mainSubtitle\">\
-                                    <b>Hosted by {{ hostName }} hostName</b>\
+                                    <b>Hosted by {{ hostname }}</b>\
                                 </span>\
                             </div>\
                             \
                             <div class=\"modal-body\">\
                                 <div class=\"container col-md-10\">\
                                     <b> {{ date }} </b>\
-                                    <b> {{ location }} location </b>\
-                                    <b> {{ maxAmount }} maxAmount </b>\
+                                    <br>\
+                                    <b> {{ location }}</b>\
+                                    <br>\
+                                    <b> {{ maxamount }}</b>\
                                     <br>\
                                     <button> My Wishlist </button>\
                                     <br>\
-                                    <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
+                                    <b> You're buying a gift for {{ useryougive }} ! </b>\
                                     <br>\
-                                    <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
+                                    <b> Check {{ useryougive }}\'s checklist </b>\
                                 </div>\
                                 <div class=\"container col-md-6\">\
                                     <participants-wishlist-container>\
@@ -84,7 +86,7 @@ Vue.component('hosted-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump"});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -508,6 +510,9 @@ var main = new Vue({
         },
         modalData: function(data) {
             this.eventModal = data;
+            this.activeView = "settings";
+            location.href = "main#/settings";
+            console.log(this.eventModal.maxAmount);
         }
         /*,
         setEventInformationActive: function(){
