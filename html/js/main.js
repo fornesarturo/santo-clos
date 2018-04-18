@@ -98,11 +98,11 @@ Vue.component('hosted-event', {
   
 
 Vue.component('joined-event', {
-    props: ['name', 'date', 'admin', 'id'],
+    props: ['name', 'date', 'id', 'location', 'hostname', 'maxamount'],
     template: "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
                     <div class=\"name\">{{ name }}</div>\
                     <div class=\"date\">{{ date }}</div>\
-                    <div class=\"admin\">Hosted by:&nbsp&nbsp{{ admin }}</div>\
+                    <div class=\"admin\">Hosted by:&nbsp&nbsp{{ hostname }}</div>\
                 </div>",
     methods: {
         clickedEvent: function () {
@@ -110,7 +110,8 @@ Vue.component('joined-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, });
+            this.$parent.$parent.$parent.setEventInformationActive();
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: this.location, hostName: this.hostname, maxAmount: this.maxamount, eventId: this.eventId, userYouGive: "Mr. Trump"});
         }
     }
     
@@ -121,7 +122,7 @@ Vue.component('joined-event', {
 Vue.component('joined-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
-            <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:hostname=\"event.admin\"></joined-event>\
+            <joined-event v-for=\"event in joined\" v-bind:maxamount=\"event.amount\" v-bind:hostname=\"event.admin\" v-bind:location=\"event.address\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></joined-event>\
             </div>",
     data: function() {
         return { joined: [] };
