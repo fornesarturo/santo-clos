@@ -86,6 +86,7 @@ Vue.component('hosted-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
+            this.$parent.$parent.$parent.setEventInformationActive();
             this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump"});
         }
     },
@@ -473,8 +474,8 @@ const eventInformation = {
 const routes = [
     { path: "/", component: hub },
     { path: "/settings", component: settings },
-    { path: "/create-event", component: createEvent }
-    //{ path: "/eventInformation", component: eventInformation}
+    { path: "/create-event", component: createEvent },
+    { path: "/eventInformation", component: eventInformation}
 ];
 
 const router = new VueRouter({
@@ -507,11 +508,10 @@ var main = new Vue({
         },
         setEventInformationActive: function(){
             this.activeView = "eventInformation";
+            location.href = "main#/eventInformation";
         },
         modalData: function(data) {
             this.eventModal = data;
-            this.activeView = "settings";
-            location.href = "main#/settings";
             console.log(this.eventModal.maxAmount);
         }
         /*,
