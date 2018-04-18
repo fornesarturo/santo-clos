@@ -1,28 +1,43 @@
 Vue.component('modal', {
-    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'participants'],
+    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'eventId'],
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
-                    <div class=\"modal-container\">\
-                        <div class=\"modal-header\">\
-                            <h3 slot=\"header\" name=\"header\">\
-                                {{ name }}\
-                            </h3>\
+                        <div class=\"modal-container\">\
+                            \
+                            <div class=\"modal-header\">\
+                                <span class=\"mainTitle\">\
+                                    <b>{{ name }}</b>\
+                                </span>\
+                                <span class=\"mainSubtitle\">\
+                                    <b>Hosted by {{ hostName }} hostName</b>\
+                                </span>\
+                            </div>\
+                            \
+                            <div class=\"modal-body\">\
+                                <div class=\"container col-md-10\">\
+                                    <b> {{ date }} </b>\
+                                    <b> {{ location }} location </b>\
+                                    <b> {{ maxAmount }} maxAmount </b>\
+                                    <br>\
+                                    <button> My Wishlist </button>\
+                                    <br>\
+                                    <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
+                                    <br>\
+                                    <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
+                                </div>\
+                                <div class=\"container col-md-6\">\
+                                    <participants-wishlist-container>\
+                                </div>\
+                            </div>\
+                            \
+                            <div class=\"modal-footer\">\
+                                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                    Cerrar\
+                                </button>\
+                            </div>\
+                            \
                         </div>\
-                        <div class=\"modal-body\">\
-                            <slot name=\"body\">\
-                                Date: {{ date }} <br>\
-                                Location: {{ location }}<br>\
-                                Hosted By: {{ hostName }}<br>\
-                                Max Amount: {{ maxAmount }} \
-                            </slot>\
-                        </div>\
-                        <div class=\"modal-footer\">\
-                            <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                Cerrar\
-                            </button>\
-                        </div>\
-                    </div>\
                     </div>\
                 </div>\
                 </transition>"
@@ -69,7 +84,7 @@ Vue.component('hosted-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100"});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "Jhon Cena", maxAmount: "100", eventId: this.eventId});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -92,7 +107,7 @@ Vue.component('joined-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, });
         }
     }
     
