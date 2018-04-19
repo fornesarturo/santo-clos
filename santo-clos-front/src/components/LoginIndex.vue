@@ -46,7 +46,7 @@
 
 <script>
 import './../assets/vendor/sha256/sha256.js'
-const request = require('./../requests_index')
+const request = require('./requests/requests_index')
 const $ = require('jquery')
 /* eslint-disable */
 
