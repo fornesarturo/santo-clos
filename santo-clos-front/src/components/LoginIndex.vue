@@ -53,23 +53,12 @@ const $ = require('jquery')
 
 // Login USER
 async function loginUser(username, password) {
-    let data = {
-        username: username,
-        password: sha256(password)
-	};
-	
-    let options = {
-        hostname: '/api',
-        port: 8080,
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "http://localhost:8080/auth/token";
+  let data = {
+    username: username,
+    password: sha256(password)
+	}
+  
+  let fullURL = "http://localhost:8080/auth/token";
 	
 	// axios.post(fullURL, {
 	// 	body: JSON.stringify(data)
@@ -78,7 +67,7 @@ async function loginUser(username, password) {
 	// 	(res) => {console.log(res);}
 	// );
 	axios({
-		method: 'post',
+		method: 'POST',
 		url: fullURL,
 		headers: {
             'Accept': 'application/json',
@@ -92,16 +81,7 @@ async function loginUser(username, password) {
 	})
 	.catch((err) => {
 		console.log(err);
-	});
-	// fetch(fullURL, options)
-    // .then(res => console.log(res));
-    // .then(resJSON => {
-    //     if(resJSON.access_token && resJSON.type == "Bearer") {
-	// 		console.log("loadMain()");
-    //         //loadMain();
-    //     }
-    //     else console.log(resJSON);
-    // });
+	})
 }
 
 let login = 0;

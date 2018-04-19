@@ -16,8 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger);
 
 var cors = require('cors');    
-app.use(cors({credentials: true, origin: ['http://localhost:8081', 'http://localhost:8080']}));
-// app.use(cors({credentials: true, origin: '*'}));
+app.use(cors({ credentials: true, origin: ['http://localhost:8081', 'http://localhost:8080']}));
 
 app.use('/', require('./routes/staticRouter.js'));
 app.use('/auth', require('./routes/authRouter.js'));

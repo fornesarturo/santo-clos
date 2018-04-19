@@ -11,17 +11,20 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/api': {
-      //   target: 'http://localhost:8080',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/api': ''
-      //   }
-      // },
-      // '/images': {
-      //   target: 'http://localhost:8080',
-      //   changeOrigin: true
-      // },
+      '/api': {
+        target: 'http://localhost:8080/api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      },
+      '/auth': {
+        target: 'http://localhost:8080/auth',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/auth': ''
+        }
+      }
     },
 
     // Various Dev Server settings
