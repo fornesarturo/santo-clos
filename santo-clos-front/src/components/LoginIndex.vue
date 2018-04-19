@@ -45,60 +45,121 @@
 </template>
 
 <script>
+
 import './../assets/vendor/sha256/sha256.js'
+import axios from 'axios'
 const $ = require('jquery')
 /* eslint-disable */
-let login = 0
-let register = 1
+
+// Login USER
+async function loginUser(username, password) {
+    let data = {
+        username: username,
+        password: sha256(password)
+	};
+	
+    let options = {
+        hostname: '/api',
+        port: 8080,
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    let fullURL = "http://localhost:8080/auth/token";
+	
+	// axios.post(fullURL, {
+	// 	body: JSON.stringify(data)
+	// })
+	// .then(
+	// 	(res) => {console.log(res);}
+	// );
+	axios({
+		method: 'post',
+		url: fullURL,
+		headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+		},
+		withCredentials: true,
+		data: data
+	})
+	.then((res) => {
+		console.log(res);
+	})
+	.catch((err) => {
+		console.log(err);
+	});
+	// fetch(fullURL, options)
+    // .then(res => console.log(res));
+    // .then(resJSON => {
+    //     if(resJSON.access_token && resJSON.type == "Bearer") {
+	// 		console.log("loadMain()");
+    //         //loadMain();
+    //     }
+    //     else console.log(resJSON);
+    // });
+}
+
+let login = 0;
+let register = 1;
 
 export default {
-  name: 'LoginIndex',
+  name: "LoginIndex",
   data: () => {
     return {
       mode: 0,
       modeText: "I don't have an account",
-      name: '',
-      email: '',
-      username: '',
-      password: ''
-    }
+      name: "",
+      email: "",
+      username: "",
+      password: ""
+    };
   },
   created: () => {
-    this.mode = 0
-    this.modeText = "I don't have an account"
+    this.mode = 0;
+    this.modeText = "I don't have an account";
   },
   methods: {
-    modeChange: () => {
-      let button = $('#changeMode')
-      let name = $('#nameField')
-      let email = $('#emailField')
-      if (this.mode === login) {
-        this.modeText = 'I already have an account'
-        this.mode = register
-        name.slideToggle('slow')
-        email.slideToggle('slow')
-      } else {
-        this.modeText = 'I don\'t have an account'
-        this.mode = login
-        name.slideToggle('slow')
-        email.slideToggle('slow')
-      }
-      button.val(this.modeText)
-    },
-    request: () => {
-      if (this.mode === login) {
-        console.log('Login: ', this.username, ', ', this.password)
-      }
-    }
-  }
-}
+		modeChange: () => {
+			let button = $("#changeMode");
+			let name = $("#nameField");
+			let email = $("#emailField");
+			if (this.mode === login) {
+				this.modeText = "I already have an account";
+				this.mode = register;
+				name.slideToggle("slow");
+				email.slideToggle("slow");
+			} 
+			else {
+				this.modeText = "I don't have an account";
+				this.mode = login;
+				name.slideToggle("slow");
+				email.slideToggle("slow");
+			}
+			button.val(this.modeText);
+		},
+		request: () => {
+			if (this.mode === login) {
+				console.log("Login: ", this.username, ", ", this.password);
+				let tempUsername = "Osoazul1_1";
+				let tempPassword = "Wl151@&w3xK3"
+				console.log("Testing Login with: ", tempUsername, ", ", tempPassword);
+				loginUser(tempUsername, tempPassword);
+			} 
+			else if (this.mode === register) {
+				console.log("Register: ", this.username, ", ", this.password);
+			}
+		}
+	}
+};
 </script>
 
 <style scoped>
 .copyright {
-    font-family: Arial,
-         "Helvetica Neue",
-         Helvetica,
-         sans-serif;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 </style>
