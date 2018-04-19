@@ -53,21 +53,16 @@ const $ = require('jquery')
 
 // Login USER
 async function loginUser(username, password) {
-  let data = {
-    username: username,
-    password: sha256(password)
-	}
-  
-  let fullURL = "http://localhost:8080/auth/token";
-	
-	// axios.post(fullURL, {
-	// 	body: JSON.stringify(data)
-	// })
-	// .then(
-	// 	(res) => {console.log(res);}
-	// );
-	axios({
-		method: 'POST',
+
+	let data = {
+        username: username,
+        password: sha256(password)
+    };
+    	
+    let fullURL = "http://localhost:8080/auth/token";
+
+	let response = await axios({
+		method: 'post',
 		url: fullURL,
 		headers: {
             'Accept': 'application/json',
@@ -77,11 +72,21 @@ async function loginUser(username, password) {
 		data: data
 	})
 	.then((res) => {
-		console.log(res);
+		let resJSON = res.data;
+		if(resJSON.access_token && resJSON.type == "Bearer") {
+			return true;
+        }
+        else {
+			console.log(resJSON);
+			return false;
+		} 
 	})
 	.catch((err) => {
 		console.log(err);
-	})
+		return false;
+	});
+
+	return response;
 }
 
 let login = 0;
@@ -128,7 +133,12 @@ export default {
 				let tempUsername = "Osoazul1_1";
 				let tempPassword = "Wl151@&w3xK3"
 				console.log("Testing Login with: ", tempUsername, ", ", tempPassword);
-				loginUser(tempUsername, tempPassword);
+				loginUser(tempUsername, tempPassword).then((next) => {
+					if(next) {
+						console.log("LOAD MAIN");
+					}
+				})
+				
 			} 
 			else if (this.mode === register) {
 				console.log("Register: ", this.username, ", ", this.password);
