@@ -38,6 +38,7 @@ function correctInsertResult(req, res, eventId) {
             data: req.body,
             status: 200
         }
+
         res.json(JSONResponse);
     }
     else {
@@ -45,6 +46,7 @@ function correctInsertResult(req, res, eventId) {
             inserted: req.body,
             status: 200
         }
+
         res.json(JSONResponse);
     }
 }

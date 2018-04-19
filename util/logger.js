@@ -11,7 +11,9 @@ function mySubstr(str) {
 
 function logger(req, res, next) {
     let url = (req.originalUrl || req.url)
-    if(mySubstr(url) != "") console.log(req.method, " ", url);
+    if(mySubstr(url) != "") {
+        console.log(req.method, " ", url);
+    };
     next();
 }
 
