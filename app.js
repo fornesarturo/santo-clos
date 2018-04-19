@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('./util/logger.js');
 const dotenv = require('dotenv').config();
 
-
 const PORT = process.env.PORT || 8080;
 
 var app = express();
@@ -15,8 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(logger);
 
-var cors = require('cors');    
-app.use(cors({credentials: true, origin: ['http://localhost:8081', 'http://localhost:8080']}));
+const cors = require('cors');    
+app.use(cors({credentials: true, origin: ['http://localhost:8081', 'http://localhost:8080', 'http://localhost:' + PORT]}));
 // app.use(cors({credentials: true, origin: '*'}));
 
 app.use('/', require('./routes/staticRouter.js'));
