@@ -24,11 +24,11 @@ import './assets/css/main.css'
 import './assets/css/modal.css'
 import './assets/css/setup.css'
 
-import './assets/js/index.js'
-import './assets/js/main.js'
-import './assets/js/logout.js'
-import './assets/js/requests_index.js'
-import './assets/js/requests_main.js'
+// import './assets/js/index.js'
+// import './assets/js/main.js'
+// import './assets/js/logout.js'
+// import './assets/js/requests_index.js'
+// import './assets/js/requests_main.js'
 
 Vue.config.productionTip = false
 

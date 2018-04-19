@@ -45,49 +45,10 @@
 </template>
 
 <script>
-
 import './../assets/vendor/sha256/sha256.js'
-import axios from 'axios'
+const request = require('./../requests_index')
 const $ = require('jquery')
 /* eslint-disable */
-
-// Login USER
-async function loginUser(username, password) {
-
-	let data = {
-        username: username,
-        password: sha256(password)
-    };
-    	
-    let fullURL = "http://localhost:8080/auth/token";
-
-	let response = await axios({
-		method: 'post',
-		url: fullURL,
-		headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-		},
-		withCredentials: true,
-		data: data
-	})
-	.then((res) => {
-		let resJSON = res.data;
-		if(resJSON.access_token && resJSON.type == "Bearer") {
-			return true;
-        }
-        else {
-			console.log(resJSON);
-			return false;
-		} 
-	})
-	.catch((err) => {
-		console.log(err);
-		return false;
-	});
-
-	return response;
-}
 
 let login = 0;
 let register = 1;
@@ -133,7 +94,7 @@ export default {
 				let tempUsername = "Osoazul1_1";
 				let tempPassword = "Wl151@&w3xK3"
 				console.log("Testing Login with: ", tempUsername, ", ", tempPassword);
-				loginUser(tempUsername, tempPassword).then((next) => {
+				request.loginUser(tempUsername, tempPassword).then((next) => {
 					if(next) {
 						console.log("LOAD MAIN");
 					}

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import axios from 'axios'
 const $ = require('jquery')
 window.jQuery = $
 window.Popper = require('popper.js')
@@ -36,34 +37,46 @@ function createUser(name, email, username, password) {
 }
 
 // Login USER
-function loginUser(username, password) {
-    let data = {
+async function loginUser(username, password) {
+
+	let data = {
         username: username,
         password: sha256(password)
     };
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    	
+    let fullURL = "http://localhost:8080/auth/token";
+
+	let response = await axios({
+		method: 'post',
+		url: fullURL,
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/auth/token";
-
-    fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.access_token && resJSON.type == "Bearer") {
-            loadMain();
+		},
+		withCredentials: true,
+		data: data
+	})
+	.then((res) => {
+		let resJSON = res.data;
+		if(resJSON.access_token && resJSON.type == "Bearer") {
+			return true;
         }
-        else console.log(resJSON);
-    });
+        else {
+			console.log(resJSON);
+			return false;
+		} 
+	})
+	.catch((err) => {
+		console.log(err);
+		return false;
+	});
+
+	return response;
 }
+
+export { loginUser };
 
 function loadMain() {
     location.href = "/main";
 }
+
