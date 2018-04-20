@@ -6,44 +6,49 @@ window.Popper = require('popper.js')
 require('bootstrap')
 
 // Create USER in DB
-function createUser(name, email, username, password) {
+async function registerUser(name, email, username, password) {
     let data = {
         username: username,
         password: sha256(password),
         name: name,
         email: email
     };
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    let fullURL = "http://localhost:8080/api/user";
+
+    let response = await axios({
+		method: 'post',
+		url: fullURL,
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/api/user";
-
-    fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.access_token && resJSON.type == "Bearer") {
-            loadMain();
+		},
+		withCredentials: true,
+		data: data
+	})
+	.then((res) => {
+		let resJSON = res.data;
+		if(resJSON.redirect = "/auth/token" && resJSON.username && resJSON.password) {
+			return loginUser(resJSON.username, resJSON.password);
         }
-        else console.log(resJSON);
-    });
+        else {
+			console.log(resJSON);
+			return false;
+		} 
+	})
+	.catch((err) => {
+		console.log(err);
+		return false;
+	});
+
+    return response;
 }
 
 // Login USER
 async function loginUser(username, password) {
-
 	let data = {
         username: username,
         password: sha256(password)
     };
-    	
     let fullURL = "http://localhost:8080/auth/token";
 
 	let response = await axios({
@@ -74,7 +79,7 @@ async function loginUser(username, password) {
 	return response;
 }
 
-export { loginUser };
+export { loginUser, registerUser };
 
 function loadMain() {
     location.href = "/main";
