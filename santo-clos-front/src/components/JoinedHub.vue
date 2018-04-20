@@ -10,6 +10,7 @@
 <script>
 /* eslint-disable */
 import JoinedEvent from "@/components/JoinedEvent";
+const request = require('./requests/requests_main');
 
 export default {
     name: 'JoinedHub',
@@ -17,26 +18,11 @@ export default {
         return { joined: [] };
     },
     created: function() {
-        let options = {
-            hostname: 'localhost',
-            port: 8080,
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'GET',
-        };
-        let fullURL = "/api/user/joinedEvents";
-
-        fetch(fullURL, options)
-            .then(res => res.json())
-            .then(resJSON => {
-                if (resJSON.data) {
-                    this.joined = resJSON.data;
-                }
-                else console.log(resJSON);
-            });
+        request.getJoinedEventsRequest().then(
+            (res) => {
+                this.joined = res;
+            }
+        )
     },
     components: {
         JoinedEvent

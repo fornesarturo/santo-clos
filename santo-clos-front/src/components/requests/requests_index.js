@@ -21,7 +21,6 @@ export async function createUser(name, email, username, password) {
         data: data
     }).then(res => {
         if (res.status == 200) {
-            console.log("Load HUB!")
             return true
         } else{
             console.log(res)

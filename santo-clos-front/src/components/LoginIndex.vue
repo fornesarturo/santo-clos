@@ -147,7 +147,6 @@ export default {
         if(checkPassed) {
           request.loginUser(usernameVal, passwordVal).then((next) => {
 					  if(next) {
-              console.log("LOAD MAIN")
               this.$emit('login-event')
               this.$router.push('/hub')
 					  }
@@ -188,7 +187,6 @@ export default {
             if (res) {
               request.loginUser(usernameVal, passwordVal).then((next) => {
 					      if(next) {
-                  console.log("LOAD MAIN")
                   this.$emit('login-event')
                   this.$router.push('/hub')
 					      }

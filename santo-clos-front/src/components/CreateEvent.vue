@@ -80,7 +80,7 @@
         </div>
       </div>
       <br><br><br>
-      <input type='button' id='createEventButton' value='Create Event' class='loginOnly btn btn-lg btn-primary btn-block' onclick='createEventRequestMain()'>
+      <input type='button' id='createEventButton' value='Create Event' class='loginOnly btn btn-lg btn-primary btn-block' v-on:click='createEventRequestMain()'>
     </div>
   </div>
 </template>
@@ -116,7 +116,7 @@ export default {
             }
     },
     methods: {
-        createEventRequest: function () {
+        createEventRequestMain: function () {
           var participantsRaw = $("#eventData").serializeArray()
           let participantsArray = []
           for(let i = 0; i < participantsRaw.length; i++) {
@@ -129,17 +129,18 @@ export default {
           let address = $("#addressField input[name='address'").val()
           let amount = $("#maxAmountField input[name='maxAmount']").val()
           let date = $("#dateField input[name='date']").val()
-          request.createEventRequest(name, date, address, amount)
-          .then(next => {
-            if (next) {
-              request.postEventParticipants(participantsArray, next.eventId)
-              .then(res => {
-                console.log(res)
-              })
-              this.$router.push('/hub')
+          request.createEventRequest(name, date, address, amount).then(
+            (next) => {
+              if(next) {
+                request.postEventParticipants(participantsArray, next.eventId).then(
+                  (res) => {
+                    if(!res.inserted) console.log(res);
+                  }
+                )
+                this.$router.push('/hub')
+              }
             }
-
-          })
+          )
         },
         add: function() {
             console.log(this.n);

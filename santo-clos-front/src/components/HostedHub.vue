@@ -11,6 +11,7 @@
 <script>
 /* eslint-disable */
 import HostedEvent from "@/components/HostedEvent";
+const request = require('./requests/requests_main');
 
 export default {
     name: 'HostedHub',
@@ -18,34 +19,19 @@ export default {
         HostedEvent
     },
     methods: {
-    createNewEvent: function () {
-        this.$emit('new-event');
-    }
+        createNewEvent: function () {
+            this.$emit('new-event');
+        }
     },
     created: function () {
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'GET',
-    };
-    let fullURL = "/api/user/events";
-
-    fetch(fullURL, options)
-        .then(res => res.json())
-        .then(resJSON => {
-            if (resJSON.data) {
-                this.admined = resJSON.data;
+        request.getEventsAdminRequest().then(
+            (res) => {
+                this.admined = res;
             }
-            else console.log(resJSON);
-        });
+        )
     },
     data: function () {
-    return {admined: []};
+        return {admined: []};
     }
 }
 </script>

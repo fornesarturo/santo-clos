@@ -1,4 +1,6 @@
 /* eslint-disable */
+import axios from 'axios'
+
 // Create EVENT in DB
 export async function createEventRequest(name, date, address, amount) {
     let data = {
@@ -7,28 +9,31 @@ export async function createEventRequest(name, date, address, amount) {
         address: address,
         amount: amount
     };
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
+
+    let response = await axios({
+        method: 'post',
+        url: 'http://localhost:8080/api/event',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/api/event";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.data.eventId) {
-            console.log("Add participants");
+        withCredentials: true,
+        data: data
+    })
+    .then(res => {
+        let resJSON = res.data;
+        if(res.status == 200) {
+            return resJSON.data;
+        } 
+        else {
+            return null;
         }
-        else console.log(resJSON);
-        return resJSON
-    });
+    })
+    .catch(err => {
+        console.log('Error', err);
+        return false;
+    })
+
     return response;
 }
 
@@ -37,77 +42,84 @@ export async function postEventParticipants(participants, eventId) {
         eventId: eventId,
         participants: participants
     };
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
+    let response = await axios({
+        method: 'post',
+        url: 'http://localhost:8080/api/event/users',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/api/event/users";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
+        withCredentials: true,
+        data: data
+    })
+    .then(res => {
+        let resJSON = res.data;
         if(!resJSON.inserted) {
             console.log("Error on postEventParticipants");
         }
         return resJSON;
-    });
+    })
+    .catch(err => {
+        console.log('Error', err);
+        return false;
+    })
+
     return response;
 }
 
 // Get EVENTS where the user is participant
 export async function getJoinedEventsRequest() {
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    
+    let response = await axios({
+		method: 'get',
+        url: "http://localhost:8080/api/user/joinedEvents",
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        method: 'GET',
-    };
-    let fullURL = "/api/user/joinedEvents";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.data) {
-            console.log(resJSON);
+		},
+		withCredentials: true
+    })
+    .then(res => {
+        let resJSON = res.data;
+        if (resJSON.data) {
+            return resJSON.data;
         }
-        else console.log(resJSON);
-        return resJSON;
+        else {
+            return null;
+        };
+    })
+    .catch(err => {
+        console.log('Error', err)
+        return false
     });
+
     return response;
 }
 
 // Get EVENTS where the user is admin
 export async function getEventsAdminRequest() {
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    let response = await axios({
+		method: 'get',
+        url: "http://localhost:8080/api/user/events",
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        },
-        method: 'GET',
-    };
-    let fullURL = "/api/user/events";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.data.eventId) {
-            return resJSON;
+		},
+		withCredentials: true
+    })
+    .then(res => {
+        let resJSON = res.data;
+        if (resJSON.data) {
+            return resJSON.data;
         }
-        else return resJSON;
+        else {
+            console.log(resJSON);
+            return null;
+        };
+    })
+    .catch(err => {
+        console.log('Error', err)
+        return false
     });
     return response;
 }
@@ -118,46 +130,44 @@ export async function passwordValidationRequest(username, password) {
         username: username,
         password: sha256(password)
     };
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    let response = await axios({
+		method: 'post',
+        url: "http://localhost:8080/auth/authPassword",
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/auth/authPassword";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
+        data: data,
+		withCredentials: true
+    })
+    .then(res => {
+        let resJSON = res.data;
         if(resJSON.success) {
             return resJSON.success;
         }
         else return resJSON;
+    })
+    .catch(err => {
+        console.log('Error', err)
+        return false
     });
+
     return response;
 }
 
 // Update user data using PUT
 export async function updateDataRequest(data) {
-    let options = {
-        hostname: 'localhost',
-        port: 8080,
-        credentials: 'include',
-        headers: {
+    let fullURL = "/api/user";
+    let response = await axios({
+		method: 'put',
+        url: "http://localhost:8080/api/user",
+		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        method: 'PUT',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "/api/user";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json());
+        data: data,
+		withCredentials: true
+    }).then(res => res.json());
+    
     return response;
 }

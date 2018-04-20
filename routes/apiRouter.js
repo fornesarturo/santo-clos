@@ -94,6 +94,7 @@ apiRouter.route("/user/events")
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
+                        res.status(200);
                         next();
                     }
                     else {

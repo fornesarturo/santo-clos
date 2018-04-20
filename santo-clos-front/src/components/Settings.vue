@@ -26,7 +26,7 @@
               <span class="inputFocus"></span>
             </div>
             <div>
-              <input type="button" id="confirmButtonPassword" value="Save New Password" class="btn btn-lg btn-primary btn-block">
+              <input type="button" id="confirmButtonPassword" value="Save New Password" class="btn btn-lg btn-primary btn-block" v-on:click="saveNewPassword()">
             </div>
             <br>
             <div id="newEmailField" class="inputWrapper inputValidate" data-validate = "Valid email is required: ex@abc.xyz">
@@ -127,7 +127,7 @@ export default {
         }
 
         if(checkPassed) {
-          passwordValidationRequest(Cookies.get("current_user"), oldPasswordVal).then((passwordSuccess) => {
+          request.passwordValidationRequest(Cookies.get("current_user"), oldPasswordVal).then((passwordSuccess) => {
             if(passwordSuccess == 1) {
                 let data = {
                     password: sha256(newPasswordVal)
