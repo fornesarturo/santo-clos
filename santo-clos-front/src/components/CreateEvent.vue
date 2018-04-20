@@ -6,33 +6,41 @@
           <div class='modal-body'>
             <div class='container col-md-12'>
               <div class='row'>
-                <div class='col-md-6'>
+                <div class='col-md-1'>
+                    <img class='glyphicon' src='./../assets/octicons/file-text.svg' width='100%' height='100%'>
+                </div>
+                <div class='col-md-5'>
                   <div id='eventNameField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='Name cannot be empty'>
-                    <img class='glyphicon' src='octicons/file-text.svg' width='100%' height='100%'>
-                    <input class='inputRight left-addon' type='text' name='eventName' placeholder='Event name'>
+                    <input class='inputLine inputRight left-addon' type='text' name='eventName' placeholder='Name'>
                     <span class='inputFocus'></span>
                   </div>
-                 </div>
-                <div class='col-md-6'>
+                </div>
+                <div class='col-md-1'>
+                    <img class='glyphicon' src='./../assets/octicons/calendar.svg' width='100%' height='100%'>
+                </div>
+                <div class='col-md-5'>
                   <div id='dateField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='Please select a date'>
-                    <img class='glyphicon ' src='octicons/calendar.svg' width='100%' height='100%'>
-                    <input class='inputRight left-addon' type='date' name='date' placeholder='DD/MM/YY'>
+                    <input class='inputLine inputRight left-addon' type='date' name='date' placeholder='DD/MM/YY'>
                     <span class='inputFocus'></span>
                   </div>
                 </div>
               </div>
               <div class='row'>
-                <div class='col-md-6'>
+                <div class='col-md-1'>
+                    <img class='glyphicon' src='./../assets/octicons/location.svg' width='100%' height='100%'>
+                </div>
+                <div class='col-md-5'>
                   <div id='addressField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='You need a place for your event!'>
-                    <img class='glyphicon' src='octicons/location.svg' width='100%' height='100%'>
-                    <input class='inputRight left-addon' type='text' name='address' placeholder='Event location'>
+                    <input class='inputLine inputRight left-addon' type='text' name='address' placeholder='Location'>
                     <span class='inputFocus'></span>
                   </div>
                  </div>
-                <div class='col-md-6'>
+                <div class='col-md-1'>
+                    <img class='glyphicon' src='./../assets/octicons/ruby.svg' width='100%' height='100%'>
+                </div>
+                <div class='col-md-5'>
                   <div id='maxAmountField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='Please select an amount'>
-                     <img class='glyphicon' src='octicons/ruby.svg' width='100%' height='100%'>
-                    <input class='inputRight left-addon' type='text' name='maxAmount' placeholder='Maximum amount to spend'>
+                    <input class='inputLine inputRight left-addon' type='text' name='maxAmount' placeholder='Spending Target'>
                     <span class='inputFocus'></span>
                   </div>
                 </div>
@@ -44,7 +52,7 @@
                 <div class='row'>
                   <div class='col-md-12'>
                     <div id='particicpantEmailField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='Participant email required'>
-                      <input class='inputRight left-addon' type='text' name='participantEmail' placeholder='Participant email'>
+                      <input class='inputLine inputRight left-addon' type='text' name='participantEmail' placeholder='Participant email'>
                       <span class='inputFocus'></span>
                     </div>
                   </div>
@@ -52,13 +60,13 @@
                 <div class='row'>
                   <div class='col-md-12'>
                     <div id='particicpantEmailField' class='inputWrapper inputValidate inner-addon left-addon' data-validate='Participant email required'>
-                      <input class='inputRight left-addon' type='text' name='participantEmail' placeholder='Participant email'>
+                      <input class='inputLine inputRight left-addon' type='text' name='participantEmail' placeholder='Participant email'>
                       <span class='inputFocus'></span>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <NewParticipant v-for='i in items' v-bind:key='i.id' v-bind:id='i.id' v-model='i.value' v-on:remove-item='remove($event)'></NewParticipant>
+                  <NewParticipant class='inputLine' v-for='i in items' v-bind:key='i.id' v-bind:id='i.id' v-model='i.value' v-on:remove-item='remove($event)'></NewParticipant>
                 </div>
               </form>
             </div>
@@ -80,6 +88,21 @@
 <script>
 /* eslint-disable */
 import NewParticipant from '@/components/NewParticipant';
+import './../assets/vendor/sha256/sha256.js'
+const request = require('./requests/requests_main')
+const $ = require('jquery')
+
+// FOCUS WHEN INPUT HAS CONTENT
+$(".inputLine").each((index, element) => {
+    $(element).on("blur", () => {
+        if($(element).val().trim() != "") {
+            $(element).addClass("has-val");
+        }
+        else {
+            $(element).removeClass("has-val");
+        }
+    })
+});
 
 export default {
     name: 'CreateEvent',
@@ -93,7 +116,31 @@ export default {
             }
     },
     methods: {
-        createEventRequest: function () { },
+        createEventRequest: function () {
+          var participantsRaw = $("#eventData").serializeArray()
+          let participantsArray = []
+          for(let i = 0; i < participantsRaw.length; i++) {
+            if(participantsRaw[i].value == "")
+              continue
+            else
+              participantsArray.push({email: participantsRaw[i].value})
+          }
+          let name = $("#eventNameField input[name='eventName']").val()
+          let address = $("#addressField input[name='address'").val()
+          let amount = $("#maxAmountField input[name='maxAmount']").val()
+          let date = $("#dateField input[name='date']").val()
+          request.createEventRequest(name, date, address, amount)
+          .then(next => {
+            if (next) {
+              request.postEventParticipants(participantsArray, next.eventId)
+              .then(res => {
+                console.log(res)
+              })
+              this.$router.push('/hub')
+            }
+
+          })
+        },
         add: function() {
             console.log(this.n);
             this.items.push({id: this.n++, value: ''});

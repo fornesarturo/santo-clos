@@ -19,13 +19,7 @@ apiRouter.route("/user")
                     return;
                 }
                 else {
-                    res.status(200);
-                    res.json({
-                        redirect: "/auth/token",
-                        username: req.body.username,
-                        password: req.body.password
-                    });
-                    res.send();
+                    util.correctPost(req, res, null)
                 }
             });
     else

@@ -1,59 +1,52 @@
 /* eslint-disable */
 import axios from 'axios'
-const $ = require('jquery')
-window.jQuery = $
-window.Popper = require('popper.js')
-require('bootstrap')
 
 // Create USER in DB
-async function registerUser(name, email, username, password) {
+export async function createUser(name, email, username, password) {
     let data = {
         username: username,
         password: sha256(password),
         name: name,
         email: email
     };
-    let fullURL = "http://localhost:8080/api/user";
 
     let response = await axios({
-		method: 'post',
-		url: fullURL,
-		headers: {
+        method: 'post',
+        url: 'http://localhost:8080/api/user',
+        headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-		},
-		withCredentials: true,
-		data: data
-	})
-	.then((res) => {
-		let resJSON = res.data;
-		if(resJSON.redirect = "/auth/token" && resJSON.username && resJSON.password) {
-			return loginUser(resJSON.username, resJSON.password);
+        },
+        withCredentials: true,
+        data: data
+    }).then(res => {
+        if (res.status == 200) {
+            console.log("Load HUB!")
+            return true
+        } else{
+            console.log(res)
+            return false
         }
-        else {
-			console.log(resJSON);
-			return false;
-		} 
-	})
-	.catch((err) => {
-		console.log(err);
-		return false;
-	});
 
-    return response;
+    }).catch(err => {
+        console.log('Error', err)
+        return false
+    })
+
+    return response
 }
 
 // Login USER
-async function loginUser(username, password) {
+export async function loginUser(username, password) {
+
 	let data = {
         username: username,
         password: sha256(password)
     };
-    let fullURL = "http://localhost:8080/auth/token";
 
 	let response = await axios({
 		method: 'post',
-		url: fullURL,
+        url: "http://localhost:8080/auth/token",
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -64,24 +57,18 @@ async function loginUser(username, password) {
 	.then((res) => {
 		let resJSON = res.data;
 		if(resJSON.access_token && resJSON.type == "Bearer") {
-			return true;
+			return true
         }
         else {
 			console.log(resJSON);
-			return false;
+			return false
 		} 
 	})
 	.catch((err) => {
-		console.log(err);
-		return false;
+		console.log(err)
+		return false
 	});
 
-	return response;
-}
-
-export { loginUser, registerUser };
-
-function loadMain() {
-    location.href = "/main";
+	return response
 }
 
