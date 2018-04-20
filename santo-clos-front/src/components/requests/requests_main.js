@@ -1,11 +1,6 @@
 /* eslint-disable */
-const $ = require('jquery')
-window.jQuery = $
-window.Popper = require('popper.js')
-require('bootstrap')
-
 // Create EVENT in DB
-async function createEventRequest(name, date, address, amount) {
+export async function createEventRequest(name, date, address, amount) {
     let data = {
         name: name,
         date: date,
@@ -37,7 +32,7 @@ async function createEventRequest(name, date, address, amount) {
     return response;
 }
 
-async function postEventParticipants(participants, eventId) {
+export async function postEventParticipants(participants, eventId) {
     let data = {
         eventId: eventId,
         participants: participants
@@ -67,7 +62,7 @@ async function postEventParticipants(participants, eventId) {
 }
 
 // Get EVENTS where the user is participant
-async function getJoinedEventsRequest() {
+export async function getJoinedEventsRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
@@ -93,7 +88,7 @@ async function getJoinedEventsRequest() {
 }
 
 // Get EVENTS where the user is admin
-async function getEventsAdminRequest() {
+export async function getEventsAdminRequest() {
     let options = {
         hostname: 'localhost',
         port: 8080,
@@ -118,7 +113,7 @@ async function getEventsAdminRequest() {
 }
 
 // Check if password is valid
-async function passwordValidationRequest(username, password) {
+export async function passwordValidationRequest(username, password) {
     let data = {
         username: username,
         password: sha256(password)
@@ -148,7 +143,7 @@ async function passwordValidationRequest(username, password) {
 }
 
 // Update user data using PUT
-async function updateDataRequest(data) {
+export async function updateDataRequest(data) {
     let options = {
         hostname: 'localhost',
         port: 8080,

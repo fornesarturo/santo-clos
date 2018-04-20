@@ -53,6 +53,41 @@ const $ = require('jquery')
 let login = 0;
 let register = 1;
 
+// FOCUS WHEN INPUT HAS CONTENT
+$(".inputLine").each((index, element) => {
+    $(element).on("blur", () => {
+        if($(element).val().trim() != "") {
+            $(element).addClass("has-val");
+        }
+        else {
+            $(element).removeClass("has-val");
+        }
+    })    
+});
+
+// Remove validation error on clicked input
+$(".mainForm .inputLine").each((index, element) => {
+    $(element).focus(() => {
+        hideValidate(element);
+    });
+});
+
+// Validation Regexes.
+const emailRegex = new RegExp('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}');
+const usernameRegex = new RegExp('^[a-zA-Z0-9_-]{3,16}');
+const passwordStrengthRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\-_!@#$%^&*/])(?=.{8,})");
+
+// Show validation error
+function showValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).addClass("alertValidation");
+}
+// Remove validation error
+function hideValidate(input) {
+    let thisAlert = $(input).parent();
+    $(thisAlert).removeClass("alertValidation");
+}
+
 export default {
   name: "LoginIndex",
   data: () => {
@@ -65,12 +100,12 @@ export default {
       password: ""
     };
   },
-  created: () => {
+  created: function () {
     this.mode = 0;
     this.modeText = "I don't have an account";
   },
   methods: {
-		modeChange: () => {
+		modeChange: function () {
 			let button = $("#changeMode");
 			let name = $("#nameField");
 			let email = $("#emailField");
@@ -88,21 +123,76 @@ export default {
 			}
 			button.val(this.modeText);
 		},
-		request: () => {
+		request: function () {
 			if (this.mode === login) {
-				console.log("Login: ", this.username, ", ", this.password);
-				let tempUsername = "Osoazul1_1";
-				let tempPassword = "Wl151@&w3xK3"
-				console.log("Testing Login with: ", tempUsername, ", ", tempPassword);
-				request.loginUser(tempUsername, tempPassword).then((next) => {
-					if(next) {
-						console.log("LOAD MAIN");
-					}
-				})
-				
+        let username = $(".inputValidate input[name='username']");
+        let password = $(".inputValidate input[name='password']");
+        let usernameVal = $(username).val().trim();
+        let passwordVal = $(password).val().trim();
+
+        let checkPassed = true;
+        if(usernameVal == "" || !usernameRegex.test(usernameVal)) {
+          showValidate(username);
+          checkPassed=false;
+        }
+        if(passwordVal == "") {
+          showValidate(password);
+          checkPassed=false;
+        }
+        if(checkPassed) {
+          request.loginUser(usernameVal, passwordVal).then((next) => {
+					  if(next) {
+              console.log("LOAD MAIN")
+              this.$emit('login-event')
+              this.$router.push('/hub')
+					  }
+				  })
+        }
 			} 
 			else if (this.mode === register) {
-				console.log("Register: ", this.username, ", ", this.password);
+        let name = $(".inputValidate input[name='name']");
+        let username = $(".inputValidate input[name='username']");
+        let password = $(".inputValidate input[name='password']");
+        let email = $(".inputValidate input[name='email']");
+        let nameVal = $(name).val().trim()
+        let emailVal = $(email).val().trim()
+        let usernameVal = $(username).val().trim()
+        let passwordVal = $(password).val().trim()
+        
+        let checkPassed = true;
+        if(usernameVal == '' || !usernameRegex.test(usernameVal)) {
+          showValidate(username)
+          checkPassed=false
+        }
+        if(passwordVal == '' || !passwordStrengthRegex.test(passwordVal)) {
+          showValidate(password)
+          checkPassed=false
+        }
+        if(emailVal == '' || !emailRegex.test(emailVal)) {
+          showValidate(email)
+          checkPassed=false
+        }
+        if(nameVal == ''){
+          showValidate(name)
+          checkPassed=false
+        }
+
+        if(checkPassed) {
+          request.createUser(nameVal, emailVal, usernameVal, passwordVal)
+          .then(res => {
+            if (res) {
+              request.loginUser(usernameVal, passwordVal).then((next) => {
+					      if(next) {
+                  console.log("LOAD MAIN")
+                  this.$emit('login-event')
+                  this.$router.push('/hub')
+					      }
+				      })
+            } else {
+              console.log('Failed register!')
+            }
+          })
+        }
 			}
 		}
 	}
@@ -110,6 +200,8 @@ export default {
 </script>
 
 <style scoped>
+@import './../assets/css/index.css';
+
 .copyright {
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }

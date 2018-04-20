@@ -18,7 +18,7 @@ export default {
     methods: {
         newEvent: function() {
             this.$emit('change-to-event');
-            location.href = "main#/create-event";
+            location.href = "#/create-event";
         }
     }
 }

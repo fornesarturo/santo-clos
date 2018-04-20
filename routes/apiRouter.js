@@ -19,7 +19,7 @@ apiRouter.route("/user")
                     return;
                 }
                 else {
-                    res.redirect(307, '../../auth/token');
+                    util.correctPost(req, res, null)
                 }
             });
     else
