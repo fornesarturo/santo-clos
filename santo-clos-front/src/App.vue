@@ -28,7 +28,7 @@
               <router-link to="/settings">Settings</router-link>
             </a>
           </li>
-            <button type="button" id="logoutButton" class="nav-item">
+            <button type="button" id="logoutButton" class="nav-item" v-on:click="logoutFunction()">
               <a href="#"> Log Out </a>
             </button>
         </ul>
@@ -37,7 +37,7 @@
     <Modal v-if="showModal" @close="showModal = false" v-bind:name="eventModal.name" v-bind:date="eventModal.date" v-bind:location="eventModal.location" v-bind:hostname="eventModal.hostName" v-bind:useryougive="eventModal.userYouGive" v-bind:maxamount="eventModal.maxAmount" v-bind:eventid="eventModal.eventId" v-bind:wishlist="eventModal.wishlist">
     </Modal>
     </div>
-    <router-view @login-event="setLogin()" @change-to-event="setCreateEventActive()"></router-view>
+    <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>
   </div>
 </template>
 
@@ -45,6 +45,7 @@
 /* eslint-disable */
 import Modal from '@/components/Modal'
 import '@/assets/vendor/js-cookie/js-cookie.js'
+const request = require('./components/requests/requests_main')
 
 export default {
   name: "App",
@@ -65,6 +66,9 @@ export default {
   methods: {
     setLogin: function() {
       this.loggedIn = true
+    },
+    setLoginActive: function() {
+      this.activeView = "login";
     },
     setHubActive: function() {
       this.activeView = "hub"
@@ -89,7 +93,25 @@ export default {
     logoutFunction: function() {
       Cookies.remove("current_user");
       Cookies.remove("token");
+      this.loggedIn = false;
+      console.log("logging out");
       location.href = "/logout";
+      this.activeView = "login";
+    }
+  },
+  mounted() {
+
+    if(this.activeView != "login") {
+      console.log("hello");
+      request.checkIfLoggedIn().then(
+        (logged) => {
+          console.log(logged);
+          if(logged) this.loggedIn = true;
+          else {
+            this.logoutFunction()
+          }
+        }
+      );
     }
   }
 };

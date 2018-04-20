@@ -157,7 +157,6 @@ export async function passwordValidationRequest(username, password) {
 
 // Update user data using PUT
 export async function updateDataRequest(data) {
-    let fullURL = "/api/user";
     let response = await axios({
 		method: 'put',
         url: "http://localhost:8080/api/user",
@@ -167,7 +166,37 @@ export async function updateDataRequest(data) {
         },
         data: data,
 		withCredentials: true
-    }).then(res => res.json());
+    })
+    .then(res => res.json())
+    .catch(err => {
+        console.log('Error', err)
+        return false
+    });
     
+    return response;
+}
+
+// Check if session is logged in
+export async function checkIfLoggedIn() {
+    let response = await axios({
+        method: "post",
+        url: "http://localhost:8080/auth/whoami",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    })
+    .then(
+        (res) => {
+            console.log(res);
+            if(res.status == 200) return true;
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false
+    });
     return response;
 }

@@ -100,12 +100,16 @@ export default {
       password: ""
     };
   },
-  created: () => {
+  created: function() {
     this.mode = login;
     this.modeText = "I don't have an account";
     this.buttonText= "Log In";
+    this.loginSetActive();
   },
   methods: {
+    loginSetActive: function() {
+      this.$emit('login-setActive');
+    },
 		modeChange: function () {
 			let button = $("#changeMode");
 			let loginRegisterButton = $("#loginRegisterButton");
@@ -147,8 +151,9 @@ export default {
         if(checkPassed) {
           request.loginUser(usernameVal, passwordVal).then((next) => {
 					  if(next) {
-              this.$emit('login-event')
-              this.$router.push('/hub')
+              this.$emit('login-event');
+              this.$emit('change-to-hub');
+              this.$router.push('/hub');
 					  }
 				  })
         }
@@ -187,8 +192,9 @@ export default {
             if (res) {
               request.loginUser(usernameVal, passwordVal).then((next) => {
 					      if(next) {
-                  this.$emit('login-event')
-                  this.$router.push('/hub')
+                  this.$emit('login-event');
+                  this.$emit('change-to-hub');
+                  this.$router.push('/hub');
 					      }
 				      })
             } else {
