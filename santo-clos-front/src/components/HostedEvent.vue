@@ -36,7 +36,7 @@ export default {
                                     resUsersExcl.push(resUsers[i]);
                                 }
                             }
-                            console.log(resUsersExcl);
+                            console.log(JSON.stringify(resUsersExcl));
 
                             this.$parent.$parent.$parent.modalData(
                                 { 
@@ -60,7 +60,6 @@ export default {
                 }
             );
             //this.$parent.$parent.$parent.setEventInformationActive();
-            
         }
     }
 }

@@ -47,7 +47,7 @@
                                     <div class="row">
                                     </div>
                                     <div class="col-md-12">
-                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:value="w.value" v-model="w.value" v-on:remove-wish='removeWish($event)'></NewWish>
+                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                                 </div>
                                 <div v-if='sortDone'>
@@ -60,8 +60,8 @@
                                     <input type="button" id="addParticipantButton" v-on:click='add()' value="Add Participant" class="loginOnly btn btn-lg btn-primary btn-block">
                                     <br>
                                     <ul>
-                                        <li v-for="p in participants" v-bind:key="p.id" v-bind:wishlist="p.wishlist" v-bind:name="p.name">
-                                            <b class="mainB"> {{ p.id}} </b>
+                                        <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                                            <b class="mainB"> {{ p }} </b>
                                         </li>
                                     </ul>
                                     <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
