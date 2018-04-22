@@ -31,9 +31,13 @@ export default {
                     request.getUsersFromEvent(this.id).then(
                         (resUsers) => {
                             let resUsersExcl = [];
+                            let myGifteeUsername;
                             for(let i in resUsers) {
                                 if(resUsers[i].username != Cookies.get("current_user")) {
                                     resUsersExcl.push(resUsers[i]);
+                                }
+                                else {
+                                    myGifteeUsername = resUsers[i].giftee || "Mr. Trump";
                                 }
                             }
                             console.log(resUsersExcl);
@@ -46,7 +50,7 @@ export default {
                                     hostName: this.hostName, 
                                     maxAmount: this.maxAmount, 
                                     eventId: this.id, 
-                                    userYouGive: "Mr. Trump",
+                                    userYouGive: myGifteeUsername,
                                     gifteeList: 
                                         [{id: 0, value: 'asfas'},
                                         {id: 1, value: 'ggggggg'},

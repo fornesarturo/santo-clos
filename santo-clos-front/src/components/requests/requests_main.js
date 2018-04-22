@@ -226,7 +226,7 @@ export async function getMyWishlist(eventId) {
     return response;
 }
 
-// Get my wishlist for designated event and user
+// Get wishlist for designated event and user
 export async function getWishlist(eventId, username) {
     let response = await axios({
         method: "get",
@@ -251,7 +251,7 @@ export async function getWishlist(eventId, username) {
     return response;
 }
 
-// Get my users for designated event
+// Get users for designated event
 export async function getUsersFromEvent(eventId) {
     let response = await axios({
         method: "get",
