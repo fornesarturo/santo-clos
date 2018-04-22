@@ -124,14 +124,20 @@ export default {
     "wishlist",
     "participants",
     "gifteeList",
-    "sortDone"
+    "sortDone",
+    "parentComponent"
   ],
   data: function() {
     return {
       n: 0,
-      items: []
+      items: [],
+      sortDoneCopy: this.sortDone
     };
   },
+//   updated: function() {
+//       this.sortDoneCopy = this.sortDone;
+//       console.log(this.sortDoneCopy, this.sortDone);
+//   },
   methods: {
     createEventRequest: function() {},
     add: function() {
@@ -146,7 +152,6 @@ export default {
       }
     },
     addWish: function(){
-        console.log(this.sortDone);
         this.wishlist.push({id: this.wishlist.length, value: ""});
     },
     removeWish: function(id){
@@ -159,8 +164,13 @@ export default {
     finishEvent: function(){
         request.startEvent(this.eventId).then(
             (success) => {
-                console.log(success);
-                if(success) this.sortDone = true;
+                if(success == true) {
+                    this.$emit("update:sortDone", true);
+                    this.parentComponent.updateSortDone();
+                    // this.sortDoneCopy = true;
+                    // console.log(this.sortDoneCopy);
+                    this.$forceUpdate();
+                }
             }
         )
 

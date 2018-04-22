@@ -294,7 +294,10 @@ export async function startEvent(eventId) {
     .then(
         (res) => {
             let resJSON = res.data;
-            if(res.status == 200) return true;
+            if(res.status == 200){
+                console.log("TRUE!!!");
+                return true;
+            }
             else return false;
         }
     )

@@ -34,7 +34,7 @@
         </ul>
       </div>
     </nav>
-    <Modal v-if="showModal" @close="showModal = false"
+    <Modal v-if="showModal" @close="showModalClose()"
         v-bind:gifteeList="eventModal.gifteeList"
         v-bind:name="eventModal.name"
         v-bind:date="eventModal.date"
@@ -45,7 +45,8 @@
         v-bind:eventId="eventModal.eventId"
         v-bind:wishlist="eventModal.wishlist"
         v-bind:participants="eventModal.participants"
-        v-bind:sortDone="eventModal.started">
+        v-bind:sortDone.sync="eventModal.sortDone"
+        v-bind:parentComponent="eventModal.parentComponent">
     </Modal>
     </div>
     <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>
@@ -106,6 +107,9 @@ export default {
       this.loggedIn = false;
       location.href = "/logout";
       this.activeView = "login";
+    },
+    showModalClose: function() {
+      this.showModal = false;
     }
   },
   mounted() {

@@ -17,10 +17,15 @@ import '@/assets/vendor/js-cookie/js-cookie.js';
 
 export default {
     name: 'HostedEvent',
-    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist', 'started'],
+    data: function() {
+        return {
+            sortDoneCopy: this.sortDone
+        };
+    },
+    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist', 'sortDone'],
     methods: {
-        clickedEvent: function() {
-            console.log(this.id);
+        updateSortDone: function() {
+            this.$emit("update:sortDone", true);
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
@@ -39,31 +44,33 @@ export default {
                                     myGifteeUsername = resUsers[i].giftee || "lafercho";
                                 }
                             }
-                            if(this.started == false) {
-                                console.log("NOT STARTED");
+                            let modalStarted;
+                            if(this.sortDone== false) {
+                                // this.eventStartedCopy = false;
+                                this.$emit("update:sortDone", false);
                             }
-                            else if(this.started == true) {
-                                console.log("STARTED");
+                            else if(this.sortDone == true) {
+                                // this.eventStartedCopy = true;
+                                this.$emit("update:sortDone", true);
                             }
 
                             request.getWishlist(this.id, myGifteeUsername).then(
                                 (resGifteeWishlist) => {
-                                    console.log(JSON.stringify(resGifteeWishlist));
-                                    this.$parent.$parent.$parent.modalData(
-                                        { 
-                                            started: this.started,
-                                            name: this.name, 
-                                            date: this.date, 
-                                            location: this.location, 
-                                            hostName: this.hostName, 
-                                            maxAmount: this.maxAmount, 
-                                            eventId: this.id, 
-                                            userYouGive: myGifteeUsername,
-                                            gifteeList: resGifteeWishlist,
-                                            participants: resUsersExcl,
-                                            wishlist: resMyWishlist
-                                        }
-                                    );
+                                    let data = { 
+                                        parentComponent: this,
+                                        sortDone: this.sortDone,
+                                        name: this.name, 
+                                        date: this.date, 
+                                        location: this.location, 
+                                        hostName: this.hostName, 
+                                        maxAmount: this.maxAmount, 
+                                        eventId: this.id, 
+                                        userYouGive: myGifteeUsername,
+                                        gifteeList: resGifteeWishlist,
+                                        participants: resUsersExcl,
+                                        wishlist: resMyWishlist
+                                    }
+                                    this.$parent.$parent.$parent.modalData(data);
                                 }
                             );
                         }
