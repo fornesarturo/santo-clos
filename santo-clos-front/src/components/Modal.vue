@@ -157,7 +157,6 @@ export default {
         }
     },
     finishEvent: function(){
-<<<<<<< HEAD
         request.startEvent(this.eventId).then(
             (success) => {
                 console.log(success);
@@ -165,10 +164,6 @@ export default {
             }
         )
 
-=======
-        this.sortDone = true;
-        console.log(this.sortDone);
->>>>>>> d117f2d695ead39554045d161a01db1a7f526cb9
     },
     modifyWishlist: function(){
         //logic to change wishlist to database
