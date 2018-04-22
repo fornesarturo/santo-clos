@@ -2,13 +2,14 @@
     <div class="hubWrapper">
         <span class="mainTitle"><b>Events I Host</b></span>
         <HostedEvent v-for="event in admined"
-        v-bind:key="event.eventId"
-        v-bind:maxAmount="event.amount"
-        v-bind:hostName="event.admin"
-        v-bind:location="event.address"
-        v-bind:name="event.name"
-        v-bind:date="event.eventDate"
-        v-bind:id="event.eventId"></HostedEvent>
+            v-bind:key="event.eventId"
+            v-bind:maxAmount="event.amount"
+            v-bind:hostName="event.admin"
+            v-bind:location="event.address"
+            v-bind:name="event.name"
+            v-bind:date="event.eventDate"
+            v-bind:id="event.eventId">
+        </HostedEvent>
         <div class="createEventButton" v-on:click="createNewEvent">
             <i class="fas fa - plus"></i>
         </div>

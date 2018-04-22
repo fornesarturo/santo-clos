@@ -39,7 +39,7 @@
         v-bind:name="eventModal.name"
         v-bind:date="eventModal.date"
         v-bind:location="eventModal.location"
-        v-bind:hostname="eventModal.hostname"
+        v-bind:hostName="eventModal.hostName"
         v-bind:userYouGive="eventModal.userYouGive"
         v-bind:maxAmount="eventModal.maxAmount"
         v-bind:eventId="eventModal.eventId"

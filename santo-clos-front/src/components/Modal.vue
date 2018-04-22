@@ -8,7 +8,7 @@
                             <b>{{ name }}</b>
                         </span>
                         <span class="mainSubtitle">
-                            <b>Hosted by {{ hostname }}</b>
+                            <b>Hosted by {{ hostName }}</b>
                         </span>
                     </div>
                     <div class="modal-body">
@@ -85,7 +85,7 @@ export default {
     "name",
     "date",
     "location",
-    "hostname",
+    "hostName",
     "userYouGive",
     "maxAmount",
     "eventId",

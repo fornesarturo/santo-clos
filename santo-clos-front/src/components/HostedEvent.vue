@@ -28,7 +28,7 @@ export default {
                     name: this.name, 
                     date: this.date, 
                     location: this.location, 
-                    hostname: this.hostName, 
+                    hostName: this.hostName, 
                     maxAmount: this.maxAmount, 
                     eventId: this.eventId, 
                     userYouGive: "Mr. Trump",
