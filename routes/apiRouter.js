@@ -164,6 +164,7 @@ apiRouter.route("/event")
                 }
                 if (rows.info.affectedRows > 0) {
                     req.body.eventId = rows.info.insertId;
+                    util.addUserToEvent(req.body.authUsername, req.body.eventId, null);
                     util.correctPost(req, res, rows.info.insertId);
                     return;
                 }
@@ -179,7 +180,7 @@ apiRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
         let event = req.query["id"] || false;
         if (event)
-            mariadb.query("SELECT * FROM participant WHERE eventId = :id",
+            mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
                 { id: event }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);

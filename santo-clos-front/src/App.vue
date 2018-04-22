@@ -97,13 +97,11 @@ export default {
     },
     modalData: function(data) {
       this.eventModal = data
-      console.log(this.eventModal.maxAmount)
     },
     logoutFunction: function() {
       Cookies.remove("current_user");
       Cookies.remove("token");
       this.loggedIn = false;
-      console.log("logging out");
       location.href = "/logout";
       this.activeView = "login";
     }
@@ -111,10 +109,8 @@ export default {
   mounted() {
 
     if(this.activeView != "login") {
-      console.log("hello");
       request.checkIfLoggedIn().then(
         (logged) => {
-          console.log(logged);
           if(logged) this.loggedIn = true;
           else {
             this.logoutFunction()

@@ -1,5 +1,6 @@
 /* eslint-disable */
 import axios from 'axios'
+import '@/assets/vendor/js-cookie/js-cookie.js';
 
 // Create EVENT in DB
 export async function createEventRequest(name, date, address, amount) {
@@ -189,7 +190,6 @@ export async function checkIfLoggedIn() {
     })
     .then(
         (res) => {
-            console.log(res);
             if(res.status == 200) return true;
             else return false;
         }
@@ -197,6 +197,81 @@ export async function checkIfLoggedIn() {
     .catch(err => {
         console.log('Error', err)
         return false
+    });
+    return response;
+}
+
+// Get my wishlist for designated event
+export async function getMyWishlist(eventId) {
+    let response = await axios({
+        method: "get",
+        url: "http://localhost:8080/api/event/wishlist?id="+ eventId + "&user=" + Cookies.get("current_user"),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200 && resJSON) return resJSON.data;
+            else return null;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
+    });
+    return response;
+}
+
+// Get my wishlist for designated event and user
+export async function getWishlist(eventId, username) {
+    let response = await axios({
+        method: "get",
+        url: "http://localhost:8080/api/event/wishlist?id="+ eventId + "&user=" + username,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200 && resJSON) return resJSON.data;
+            else return null;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
+    });
+    return response;
+}
+
+// Get my users for designated event
+export async function getUsersFromEvent(eventId) {
+    let response = await axios({
+        method: "get",
+        url: "http://localhost:8080/api/event/users?id="+ eventId,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200 && resJSON) return resJSON.data;
+            else return null;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
     });
     return response;
 }
