@@ -16,16 +16,16 @@
                             <span class="mainB">
                                 <b> Date: {{ date }} </b> <br><br>
                                 <b> Location: {{ location }}</b> <br><br>
-                                <b> Maximum amount to spend: {{ maxamount }}</b> <br><br>
+                                <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
                                 <!-- <button> My Wishlist </button> <br> -->
-                                <b> You're buying a gift for {{ useryougive }} ! </b> <br><br>
+                                <b> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
                             </span>
                             <hr>
                             <span class="mainTitle">
-                                <b> {{ useryougive }}'s wishlist </b><br>
+                                <b> {{ userYouGive }}'s wishlist </b><br>
                             </span>
                             <ul>
-                                <li v-for="wish in gifteelist" v-bind:key="wish.value">
+                                <li v-for="wish in gifteeList" v-bind:key="wish.value">
                                     <b class="mainB"> {{ wish.value}} </b>
                                 </li>
                             </ul>
@@ -86,12 +86,12 @@ export default {
     "date",
     "location",
     "hostname",
-    "useryougive",
-    "maxamount",
-    "eventid",
+    "userYouGive",
+    "maxAmount",
+    "eventId",
     "wishlist",
     "participants",
-    "gifteelist"
+    "gifteeList"
   ],
   data: function() {
     return {

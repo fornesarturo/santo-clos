@@ -34,7 +34,16 @@
         </ul>
       </div>
     </nav>
-    <Modal v-if="showModal" @close="showModal = false" v-bind:gifteelist="eventModal.gifteelist" v-bind:name="eventModal.name" v-bind:date="eventModal.date" v-bind:location="eventModal.location" v-bind:hostname="eventModal.hostName" v-bind:useryougive="eventModal.userYouGive" v-bind:maxamount="eventModal.maxAmount" v-bind:eventid="eventModal.eventId" v-bind:wishlist="eventModal.wishlist">
+    <Modal v-if="showModal" @close="showModal = false"
+        v-bind:gifteeList="eventModal.gifteeList"
+        v-bind:name="eventModal.name"
+        v-bind:date="eventModal.date"
+        v-bind:location="eventModal.location"
+        v-bind:hostname="eventModal.hostname"
+        v-bind:userYouGive="eventModal.userYouGive"
+        v-bind:maxAmount="eventModal.maxAmount"
+        v-bind:eventId="eventModal.eventId"
+        v-bind:wishlist="eventModal.wishlist">
     </Modal>
     </div>
     <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>
