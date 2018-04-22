@@ -32,12 +32,33 @@
                                     <b> {{ userYouGive }}'s wishlist </b><br>
                                 </span>
                                 <ul>
-                                    <li v-for="wish in gifteeList" v-bind:key="wish.value">
-                                        <b class="mainB"> {{ wish.value}} </b>
+                                    <li v-for="wish in gifteeList" v-bind:key="wish.wish">
+                                        <b class="mainB"> {{ wish.wish}} </b>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="row">
+                            <br>
+                            <div v-if='sortDone'>
+                                <span class="mainTitle">
+                                        <b> Your wishlist </b>
+                                    </span>
+                                    <div class="row">
+                                        <div class="buttonColumn">
+                                           <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="btn-primary">
+                                            <!-- <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block"> -->
+                                        </div>
+                                        <div class="buttonColumn">
+                                            <input type="button" id="modifyWishlistButton" v-on:click='modifyWishlist()' value="Accept Changes" class="loginOnly btn btn-lg btn-success btn-block">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
+                                    </div>
+                            </div>
+                            <div class="row" v-else>
                                 <div class="column">
                                     <span class="mainTitle">
                                         <b> Your wishlist </b>
@@ -57,9 +78,7 @@
                                         <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                                 </div>
-                                <div v-if='sortDone'>
-                                </div>
-                                <div class="column" v-else>
+                                <div class="column">
                                     <span class="mainTitle">
                                         <b> Participants </b>
                                     </span>
@@ -138,6 +157,7 @@ export default {
         }
     },
     finishEvent: function(){
+<<<<<<< HEAD
         request.startEvent(this.eventId).then(
             (success) => {
                 console.log(success);
@@ -145,6 +165,10 @@ export default {
             }
         )
 
+=======
+        this.sortDone = true;
+        console.log(this.sortDone);
+>>>>>>> d117f2d695ead39554045d161a01db1a7f526cb9
     },
     modifyWishlist: function(){
         //logic to change wishlist to database
