@@ -39,7 +39,7 @@ export default {
                                     myGifteeUsername = resUsers[i].giftee || "lafercho";
                                 }
                             }
-
+                        
                             request.getWishlist(this.id, myGifteeUsername).then(
                                 (resGifteeWishlist) => {
                                     this.$parent.$parent.$parent.modalData(

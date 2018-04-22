@@ -237,7 +237,7 @@ apiRouter.route("/event/users")
 
 apiRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        let user = req.body.authUsername || false;
+        let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event) {
             mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
