@@ -43,7 +43,8 @@
         v-bind:userYouGive="eventModal.userYouGive"
         v-bind:maxAmount="eventModal.maxAmount"
         v-bind:eventId="eventModal.eventId"
-        v-bind:wishlist="eventModal.wishlist">
+        v-bind:wishlist="eventModal.wishlist"
+        v-bind:participants="eventModal.participants">
     </Modal>
     </div>
     <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>

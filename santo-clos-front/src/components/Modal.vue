@@ -42,7 +42,14 @@
                                     <span class="mainTitle">
                                         <b> Your wishlist </b>
                                     </span>
-                                    <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
+                                    <div class="row">
+                                        <div class="buttonColumn">
+                                            <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
+                                        </div>
+                                        <div class="buttonColumn">
+                                            <input type="button" id="modifyWishlistButton" v-on:click='modifyWishlist()' value="Accept Changes" class="loginOnly btn btn-lg btn-success btn-block">
+                                        </div>
+                                    </div>
                                     <br>
                                     <div class="row">
                                     </div>
@@ -51,7 +58,6 @@
                                     </div>
                                 </div>
                                 <div v-if='sortDone'>
-
                                 </div>
                                 <div class="column" v-else>
                                     <span class="mainTitle">
@@ -61,7 +67,7 @@
                                     <br>
                                     <ul>
                                         <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                            <b class="mainB"> {{ p }} </b>
+                                            <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
                                         </li>
                                     </ul>
                                     <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
@@ -130,6 +136,9 @@ export default {
     },
     finishEvent: function(){
         this.sortDone = true;
+    },
+    modifyWishlist: function(){
+        //logic to change wishlist to database
     }
   }
 };
