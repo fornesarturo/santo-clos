@@ -128,6 +128,28 @@ apiRouter.route("/user/joinedEvents")
             util.sendError(res, 400, "Some data was missing.");
     });
 
+apiRouter.route("/eventStart") 
+    .put((req, res, next) => {
+        if (req.body) {
+            let query = "UPDATE event SET started = 1 WHERE eventId = " + req.body.eventId;
+            mariadb.query(query, (err, rows) => {
+                if (err) {
+                    util.sendError(res, 500, err);
+                    return;
+                }
+                if (rows.info.affectedRows > 0) {
+                    util.correctPost(req, res, null);
+                    return;
+                }
+                else {
+                    util.sendError(res, 404, "Not found in DB.");
+                }
+            });
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    });
+
 apiRouter.route("/event")
     .get(cache(20), (req, res, next) => {
         let eventId = req.query["id"] || false;

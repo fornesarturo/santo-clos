@@ -17,7 +17,7 @@ import '@/assets/vendor/js-cookie/js-cookie.js';
 
 export default {
     name: 'HostedEvent',
-    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist'],
+    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist', 'started'],
     methods: {
         clickedEvent: function() {
             console.log(this.id);
@@ -39,11 +39,18 @@ export default {
                                     myGifteeUsername = resUsers[i].giftee || "lafercho";
                                 }
                             }
-                        
+                            if(this.started == false) {
+                                console.log("NOT STARTED");
+                            }
+                            else if(this.started == true) {
+                                console.log("STARTED");
+                            }
+
                             request.getWishlist(this.id, myGifteeUsername).then(
                                 (resGifteeWishlist) => {
                                     this.$parent.$parent.$parent.modalData(
                                         { 
+                                            started: this.started,
                                             name: this.name, 
                                             date: this.date, 
                                             location: this.location, 

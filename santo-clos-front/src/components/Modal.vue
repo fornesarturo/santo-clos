@@ -87,6 +87,8 @@
 import NewParticipant from "@/components/NewParticipant";
 import ParticipantWishlist from "@/components/ParticipantWishlist";
 import NewWish from "@/components/NewWish";
+const request = require('./requests/requests_main');
+
 export default {
   name: "Modal",
   components: {
@@ -125,6 +127,7 @@ export default {
       }
     },
     addWish: function(){
+        console.log(this.sortDone);
         this.wishlist.push({id: this.wishlist.length, value: ""});
     },
     removeWish: function(id){
@@ -135,7 +138,13 @@ export default {
         }
     },
     finishEvent: function(){
-        this.sortDone = true;
+        request.startEvent(this.eventId).then(
+            (success) => {
+                console.log(success);
+                if(success) this.sortDone = true;
+            }
+        )
+
     },
     modifyWishlist: function(){
         //logic to change wishlist to database

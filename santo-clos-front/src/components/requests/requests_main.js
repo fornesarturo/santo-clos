@@ -275,3 +275,32 @@ export async function getUsersFromEvent(eventId) {
     });
     return response;
 }
+
+// Get users for designated event
+export async function startEvent(eventId) {
+    let data = {
+        eventId: eventId
+    };
+    let response = await axios({
+        method: "put",
+        url: "http://localhost:8080/api/eventStart",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200) return true;
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false;
+    });
+    return response;
+}

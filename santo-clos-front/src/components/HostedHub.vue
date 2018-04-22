@@ -8,7 +8,8 @@
             v-bind:location="event.address"
             v-bind:name="event.name"
             v-bind:date="event.eventDate"
-            v-bind:id="event.eventId">
+            v-bind:id="event.eventId"
+            v-bind:started="event.started">
         </HostedEvent>
         <div class="createEventButton" v-on:click="createNewEvent">
             <i class="fas fa - plus"></i>
