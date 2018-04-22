@@ -42,6 +42,7 @@ export default {
 
                             request.getWishlist(this.id, myGifteeUsername).then(
                                 (resGifteeWishlist) => {
+                                    console.log(JSON.stringify(resGifteeWishlist));
                                     this.$parent.$parent.$parent.modalData(
                                         { 
                                             name: this.name, 
