@@ -27,7 +27,6 @@ export default {
             // /api/event/wishlist?id={eventId}&user={username}
             request.getMyWishlist(this.id).then(
                 (resMyWishlist) => {
-                    console.log(resMyWishlist);
                     request.getUsersFromEvent(this.id).then(
                         (resUsers) => {
                             let resUsersExcl = [];
@@ -37,26 +36,26 @@ export default {
                                     resUsersExcl.push(resUsers[i]);
                                 }
                                 else {
-                                    myGifteeUsername = resUsers[i].giftee || "Mr. Trump";
+                                    myGifteeUsername = resUsers[i].giftee || "lafercho";
                                 }
                             }
-                            console.log(JSON.stringify(resUsersExcl));
 
-                            this.$parent.$parent.$parent.modalData(
-                                { 
-                                    name: this.name, 
-                                    date: this.date, 
-                                    location: this.location, 
-                                    hostName: this.hostName, 
-                                    maxAmount: this.maxAmount, 
-                                    eventId: this.id, 
-                                    userYouGive: myGifteeUsername,
-                                    gifteeList: 
-                                        [{id: 0, value: 'asfas'},
-                                        {id: 1, value: 'ggggggg'},
-                                        {id: 2, value: 'uvavvvvvs'}],
-                                    participants: resUsersExcl,
-                                    wishlist: resMyWishlist
+                            request.getWishlist(this.id, myGifteeUsername).then(
+                                (resGifteeWishlist) => {
+                                    this.$parent.$parent.$parent.modalData(
+                                        { 
+                                            name: this.name, 
+                                            date: this.date, 
+                                            location: this.location, 
+                                            hostName: this.hostName, 
+                                            maxAmount: this.maxAmount, 
+                                            eventId: this.id, 
+                                            userYouGive: myGifteeUsername,
+                                            gifteeList: resGifteeWishlist,
+                                            participants: resUsersExcl,
+                                            wishlist: resMyWishlist
+                                        }
+                                    );
                                 }
                             );
                         }
