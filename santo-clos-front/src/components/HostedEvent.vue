@@ -40,7 +40,7 @@ export default {
                                     myGifteeUsername = resUsers[i].giftee || "Mr. Trump";
                                 }
                             }
-                            console.log(resUsersExcl);
+                            console.log(JSON.stringify(resUsersExcl));
 
                             this.$parent.$parent.$parent.modalData(
                                 { 
@@ -64,7 +64,6 @@ export default {
                 }
             );
             //this.$parent.$parent.$parent.setEventInformationActive();
-            
         }
     }
 }
