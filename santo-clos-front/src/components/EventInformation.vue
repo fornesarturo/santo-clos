@@ -13,7 +13,7 @@
                             <b class="mainB"> Location: {{ evtLocation }} </b>
                             <b class="mainB"> Max Amount: {{ evtMaxAmount }} </b>
                             <button> My Wishlist </button>
-                            <b class="mainB"> You're buying a gift for {{ evtUserYouGive }} ! </b>
+                            <b class="mainB"> You're buying a gift for {{ evtUserYouGive }}</b>
                         </div>
                         <div class="container col-md-6">
                             <ParticipantWishlist></ParticipantWishlist>

@@ -13,22 +13,50 @@
                     </div>
                     <div class="modal-body">
                         <div class="container col-md-10">
-                            <b> {{ date }} </b> <br>
-                            <b> {{ location }}</b> <br>
-                            <b> {{ maxamount }}</b> <br>
-                            <button> My Wishlist </button> <br>
-                            <b> You're buying a gift for {{ useryougive }} ! </b> <br>
-                            <b> Check {{ useryougive }}'s checklist </b>
-                            <span class="mainSubtitle">
+                            <span class="mainB">
+                                <b> Date: {{ date }} </b> <br><br>
+                                <b> Location: {{ location }}</b> <br><br>
+                                <b> Maximum amount to spend: {{ maxamount }}</b> <br><br>
+                                <!-- <button> My Wishlist </button> <br> -->
+                                <b> You're buying a gift for {{ useryougive }} ! </b> <br><br>
+                            </span>
+                            <hr>
+                            <span class="mainTitle">
+                                <b> {{ useryougive }}'s wishlist </b><br>
+                            </span>
+                            <ul>
+                                <li v-for="wish in gifteelist" v-bind:key="wish.value">
+                                    <b class="mainB"> {{ wish.value}} </b>
+                                </li>
+                            </ul>
+                            <hr>
+                            <span class="mainTitle">
                                 <b> Your wishlist </b>
                             </span>
-                            <b> {{ wishlist }}</b> <br><br>
+                             <div class="row">
+                            </div>
+                            <div class="col-md-12">
+                                <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:value="w.value" v-model="w.value" v-on:remove-wish='removeWish($event)'></NewWish>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
+                            </div>
+                            <hr>
+                             <span class="mainTitle">
+                                <b> Participants </b>
+                            </span>
                             <div class="col-md-12">
                                 <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
                             </div>
-                            <div class="col-md-12">
+                            <ul>
+                                <li v-for="p in participants" v-bind:key="p.id" v-bind:wishlist="p.wishlist" v-bind:name="p.name">
+                                    <b class="mainB"> {{ p.id}} </b>
+                                </li>
+                            </ul>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
                                 <input type="button" id="addParticipantButton" v-on:click='add()' value="Add Participant" class="loginOnly btn btn-lg btn-primary btn-block">
-                            </div>
                         </div>
                         <div class="container col-md-6">
                             <ParticipantWishlist></ParticipantWishlist>
@@ -47,10 +75,11 @@
 /* eslint-disable */
 import NewParticipant from "@/components/NewParticipant";
 import ParticipantWishlist from "@/components/ParticipantWishlist";
+import NewWish from "@/components/NewWish";
 export default {
   name: "Modal",
   components: {
-      NewParticipant, ParticipantWishlist
+      NewParticipant, ParticipantWishlist, NewWish
   },
   props: [
     "name",
@@ -60,7 +89,9 @@ export default {
     "useryougive",
     "maxamount",
     "eventid",
-    "wishlist"
+    "wishlist",
+    "participants",
+    "gifteelist"
   ],
   data: function() {
     return {
@@ -80,6 +111,21 @@ export default {
           this.items.splice(i, 1);
         }
       }
+    },
+    addWish: function(){
+        var abc = this.wishlist.length;
+        console.log(abc);
+        for(var w in this.wishlist){
+            console.log(w);
+        }
+        this.wishlist.push({id: abc, value: ""});
+    },
+    removeWish: function(id){
+        for (let i = 0; i < this.wishlist.length; i++){
+            if (this.wishlist[i].id == id){
+                this.wishlist.splice(i, 1);
+            }
+        }
     }
   }
 };

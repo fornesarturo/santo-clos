@@ -40,6 +40,11 @@
   .modal-body {
     margin: 20px 0;
   }
+
+  .modal-text{
+    font-size: 50px;
+    color: azure;
+  }
   
   .modal-default-button {
     float: right;

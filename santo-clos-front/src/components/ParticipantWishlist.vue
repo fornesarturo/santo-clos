@@ -1,12 +1,13 @@
 <template>
     <div>
-        <li v-for="participant in participants" v-bind:key="participant.id">
+        <li v-for="participant in participants" v-bind:key="participant.id" v-bind:wishlist="participant.wishlist">
             <div class="row">
                 <div class="col-md-8">
                     <b class="mainB"> {{ participant.name }} </b>
+                    <input type="button">
                 </div>
                 <div class="col-md-4">
-                    <input type="button" id="checkParticipantWishlist" v-on:click='loadWishlist()' value="View Checklist">
+                    <b class="mainB"> {{ participant.wishlist }} </b>
                 </div>
             </div>
         </li>
@@ -18,11 +19,6 @@
 export default {
     name: 'ParticipantWishlist',
     props: ['participants'],
-        methods: {
-            loadWishlist: function(){
-                // wat to do?
-            }
-    }
 }
 </script>
 

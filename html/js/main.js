@@ -16,7 +16,7 @@ Vue.component('modal', {
                                     <b>{{ name }}</b>\
                                 </span>\
                                 <span class=\"mainSubtitle\">\
-                                    <b>Hosted by {{ hostname }}</b>\
+                                    <b>Hosted by your nigger {{ hostname }}</b>\
                                 </span>\
                             </div>\
                             \
@@ -36,7 +36,11 @@ Vue.component('modal', {
                                     <span class=\"mainSubtitle\">\
                                         <b> Your wishlist </b>\
                                     </span>\
-                                    <b> {{ wishlist }}</b>\
+                                    <div>\
+                                        <li v-for=\"wish in wishlist\" v-bind:value=\"wish.value\">\
+                                            <b> {{ wish.value }} </b>\
+                                        </li>\
+                                    </div>\
                                     <br><br>\
                                     <div class=\"col-md-12\">\
                                         <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.value\" v-on:remove-item=\'remove($event)\'></new-participant>\
@@ -121,9 +125,14 @@ Vue.component('hosted-event', {
             console.log(this.id);
         },
         showModalFunct: function() {
+            wishlist: [
+                {value: 'coco'},
+                {value: 'manjar'},
+                {value: 'uvas'}
+            ]
             this.$parent.$parent.$parent.showModal = true;
             this.$parent.$parent.$parent.setEventInformationActive();
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "John Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump", wishlist: "Condones, google.com/imagen=penesenormes"});
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "John Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump", wishlist: this.wishlist});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
