@@ -6,64 +6,69 @@
                     <div class="modal-header">
                         <span class="mainTitle">
                             <b>{{ name }}</b>
+                            <b class="mainSubtitle">Hosted by {{ hostName }}</b>
+                            <div class="row">
+                                <div class="buttonColumn">
+                                    <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-danger btn-block">
+                                </div>
+                                <div class="buttonColumn">
+                                    <b v-if='sortDone'></b>
+                                    <input type="button" v-else v-on:click='finishEvent()' value="Accept Event" class="loginOnly btn btn-lg btn-success btn-block">
+                                </div>
+                            </div>
                         </span>
-                        <span class="mainSubtitle">
-                            <b>Hosted by {{ hostName }}</b>
-                        </span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container col-md-10">
-                            <span class="mainB">
+                         <span class="mainB">
                                 <b> Date: {{ date }} </b> <br><br>
                                 <b> Location: {{ location }}</b> <br><br>
                                 <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
                                 <!-- <button> My Wishlist </button> <br> -->
-                                <b> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
-                            </span>
-                            <hr>
-                            <span class="mainTitle">
-                                <b> {{ userYouGive }}'s wishlist </b><br>
-                            </span>
-                            <ul>
-                                <li v-for="wish in gifteeList" v-bind:key="wish.value">
-                                    <b class="mainB"> {{ wish.value}} </b>
-                                </li>
-                            </ul>
-                            <hr>
-                            <span class="mainTitle">
-                                <b> Your wishlist </b>
-                            </span>
-                             <div class="row">
-                            </div>
-                            <div class="col-md-12">
-                                <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:value="w.value" v-model="w.value" v-on:remove-wish='removeWish($event)'></NewWish>
-                            </div>
-                            <div class="col-md-12">
-                                <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
-                            </div>
-                            <hr>
-                             <span class="mainTitle">
-                                <b> Participants </b>
-                            </span>
-                            <div class="col-md-12">
-                                <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
-                            </div>
-                            <ul>
-                                <li v-for="p in participants" v-bind:key="p.id" v-bind:wishlist="p.wishlist" v-bind:name="p.name">
-                                    <b class="mainB"> {{ p.id}} </b>
-                                </li>
-                            </ul>
-                        </div>
-                        <br>
-                        <div class="col-md-12">
-                                <input type="button" id="addParticipantButton" v-on:click='add()' value="Add Participant" class="loginOnly btn btn-lg btn-primary btn-block">
-                        </div>
-                        <div class="container col-md-6">
-                            <ParticipantWishlist></ParticipantWishlist>
-                        </div>
+                                <b v-if='sortDone'> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
+                        </span>
                     </div>
-                    <div class="modal-footer">
-                        <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-primary btn-block">
+                    <div class="modal-body">
+                        <div class="container col-md-12">
+                            <div v-if='sortDone'>
+                                <span class="mainTitle">
+                                    <b> {{ userYouGive }}'s wishlist </b><br>
+                                </span>
+                                <ul>
+                                    <li v-for="wish in gifteeList" v-bind:key="wish.value">
+                                        <b class="mainB"> {{ wish.value}} </b>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <span class="mainTitle">
+                                        <b> Your wishlist </b>
+                                    </span>
+                                    <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
+                                    <br>
+                                    <div class="row">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:value="w.value" v-model="w.value" v-on:remove-wish='removeWish($event)'></NewWish>
+                                    </div>
+                                </div>
+                                <div v-if='sortDone'>
+
+                                </div>
+                                <div class="column" v-else>
+                                    <span class="mainTitle">
+                                        <b> Participants </b>
+                                    </span>
+                                    <input type="button" id="addParticipantButton" v-on:click='add()' value="Add Participant" class="loginOnly btn btn-lg btn-primary btn-block">
+                                    <br>
+                                    <ul>
+                                        <li v-for="p in participants" v-bind:key="p.id" v-bind:wishlist="p.wishlist" v-bind:name="p.name">
+                                            <b class="mainB"> {{ p.id}} </b>
+                                        </li>
+                                    </ul>
+                                    <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
                     </div>
                 </div>
             </div>
@@ -91,7 +96,8 @@ export default {
     "eventId",
     "wishlist",
     "participants",
-    "gifteeList"
+    "gifteeList",
+    "sortDone"
   ],
   data: function() {
     return {
@@ -113,12 +119,7 @@ export default {
       }
     },
     addWish: function(){
-        var abc = this.wishlist.length;
-        console.log(abc);
-        for(var w in this.wishlist){
-            console.log(w);
-        }
-        this.wishlist.push({id: abc, value: ""});
+        this.wishlist.push({id: this.wishlist.length, value: ""});
     },
     removeWish: function(id){
         for (let i = 0; i < this.wishlist.length; i++){
@@ -126,6 +127,9 @@ export default {
                 this.wishlist.splice(i, 1);
             }
         }
+    },
+    finishEvent: function(){
+        this.sortDone = true;
     }
   }
 };

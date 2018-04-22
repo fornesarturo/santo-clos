@@ -16,9 +16,9 @@
   }
   
   .modal-container {
-    width: 500px;
-    margin: 0px auto;
-    padding: 20px 30px;
+    width: 1200px;
+    margin: 50px auto;
+    padding: 50px 30px;
     background: rgb(7, 75, 104);
     background: -webkit-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
     background: -o-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
@@ -29,16 +29,19 @@
     transition: all .3s ease;
     font-family: Helvetica, Arial, sans-serif;
     max-height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
   }
-  
+  .buttonMargin{
+    margin-bottom: 50px;
+  }
   .modal-header h3 {
     margin-top: 0;
     color: #42b983;
   }
   
   .modal-body {
-    margin: 20px 0;
+    margin: 50px 0;
+    margin-bottom: 500px 0;
   }
 
   .mainB{
@@ -49,6 +52,7 @@
     line-height: 1.2;
     text-align: center;
     text-transform: 30px;
+    margin-bottom: 500px 0;
   }
   
   .modal-default-button {
@@ -77,4 +81,25 @@
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
   }
-  
+
+  /* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+.buttonColumn {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 50px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
