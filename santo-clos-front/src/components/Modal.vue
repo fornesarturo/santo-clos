@@ -55,7 +55,7 @@
                                     <div class="row">
                                     </div>
                                     <div class="col-md-12">
-                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
+                                        <NewWish v-for="w in wishlist" v-bind:key="w.wishId" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                             </div>
                             <div class="row" v-else>
@@ -75,7 +75,7 @@
                                     <div class="row">
                                     </div>
                                     <div class="col-md-12">
-                                        <NewWish v-for="w in wishlist" v-bind:key="w.id" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
+                                        <NewWish v-for="w in wishlist" v-bind:key="w.wishId" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                                 </div>
                                 <div class="column">
@@ -141,7 +141,6 @@ export default {
   methods: {
     createEventRequest: function() {},
     add: function() {
-      console.log(this.n);
       this.items.push({ id: this.n++, value: "" });
     },
     remove: function(id) {
@@ -158,6 +157,7 @@ export default {
         for (let i = 0; i < this.wishlist.length; i++){
             if (this.wishlist[i].id == id){
                 this.wishlist.splice(i, 1);
+                break;
             }
         }
     },
@@ -167,8 +167,6 @@ export default {
                 if(success == true) {
                     this.$emit("update:sortDone", true);
                     this.parentComponent.updateSortDone();
-                    // this.sortDoneCopy = true;
-                    // console.log(this.sortDoneCopy);
                     this.$forceUpdate();
                 }
             }
@@ -177,6 +175,7 @@ export default {
     },
     modifyWishlist: function(){
         //logic to change wishlist to database
+        console.log(JSON.stringify(this.wishlist));
     }
   }
 };

@@ -262,7 +262,7 @@ apiRouter.route("/event/wishlist")
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event) {
-            mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
+            mariadb.query("SELECT wishId, wish FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
