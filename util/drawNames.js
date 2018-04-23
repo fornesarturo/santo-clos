@@ -107,6 +107,4 @@ function drawNames(participants, veto = null) {
     return hamiltonianDraw(participants, veto)
 }
 
-module.exports = {
-    drawNames: drawNames
-}
+module.exports = drawNames
