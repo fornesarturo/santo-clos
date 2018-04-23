@@ -307,3 +307,40 @@ export async function startEvent(eventId) {
     });
     return response;
 }
+
+// Put wishlist (Erase and update) of user
+export async function putAllWishes(eventId, wishes) {
+    let wishesWish = [];
+    for(let i in wishes) {
+        wishesWish.push({wish: wishes[i].wish});
+    }
+    let data = {
+        eventId: eventId,
+        user: Cookies.get("current_user"),
+        wishes: wishesWish
+    };
+    let response = await axios({
+        method: "put",
+        url: "http://localhost:8080/api/event/wishlist",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200 && resJSON){
+                return resJSON.data;
+            }
+            else return null;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
+    });
+    return response;
+}

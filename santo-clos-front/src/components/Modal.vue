@@ -55,7 +55,7 @@
                                     <div class="row">
                                     </div>
                                     <div class="col-md-12">
-                                        <NewWish v-for="w in wishlist" v-bind:key="w.wishId" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
+                                        <NewWish v-for="(w, i) in wishlist" v-bind:key="w.wishId" v-bind:id="i" v-bind:value="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                             </div>
                             <div class="row" v-else>
@@ -75,7 +75,7 @@
                                     <div class="row">
                                     </div>
                                     <div class="col-md-12">
-                                        <NewWish v-for="w in wishlist" v-bind:key="w.wishId" v-bind:id="w.id" v-bind:wish="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
+                                        <NewWish v-for="(w, i) in wishlist" v-bind:key="w.wishId" v-bind:id="i" v-bind:value="w.wish" v-model="w.wish" v-on:remove-wish='removeWish($event)'></NewWish>
                                     </div>
                                 </div>
                                 <div class="column">
@@ -130,8 +130,7 @@ export default {
   data: function() {
     return {
       n: 0,
-      items: [],
-      sortDoneCopy: this.sortDone
+      items: []
     };
   },
 //   updated: function() {
@@ -151,15 +150,12 @@ export default {
       }
     },
     addWish: function(){
-        this.wishlist.push({id: this.wishlist.length, value: ""});
+        this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
     },
     removeWish: function(id){
-        for (let i = 0; i < this.wishlist.length; i++){
-            if (this.wishlist[i].id == id){
-                this.wishlist.splice(i, 1);
-                break;
-            }
-        }
+        console.log(id);
+        this.wishlist.splice(id, 1);
+        console.log(JSON.stringify(this.wishlist));
     },
     finishEvent: function(){
         request.startEvent(this.eventId).then(
@@ -175,7 +171,7 @@ export default {
     },
     modifyWishlist: function(){
         //logic to change wishlist to database
-        console.log(JSON.stringify(this.wishlist));
+        request.putAllWishes(this.eventId, this.wishlist);
     }
   }
 };

@@ -302,6 +302,44 @@ apiRouter.route("/event/wishlist")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    })
+    .put((req, res, next) => {
+        let user = req.body.authUsername || false;
+        let event = req.body.eventId || false;
+        let wishes = req.body.wishes || false;
+        if (user && event && wishes)
+            mariadb.query("DELETE FROM wish WHERE username = :username AND eventId = :id",
+                { id: event, username: user}, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.affectedRows >= 0) {
+                        for(let wishId in wishes) {
+                            mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
+                            { id: event, username: user, wishText: wishes[wishId].wish }, (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err);
+                                    return;
+                                }
+                                if (rows.info.affectedRows > 0) {
+                                    return
+                                }
+                                else {
+                                    util.sendError(res, 404, "Not found in DB.");
+                                    return;
+                                }
+                            });
+                        }
+                        util.correctPost(req, res, null);
+                        return
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
+                });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/giftee")

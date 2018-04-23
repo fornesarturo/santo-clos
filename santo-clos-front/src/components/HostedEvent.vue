@@ -32,6 +32,10 @@ export default {
             // /api/event/wishlist?id={eventId}&user={username}
             request.getMyWishlist(this.id).then(
                 (resMyWishlist) => {
+                    // for(let wishId in resMyWishlist) {
+                    //     resMyWishlist[wishId].id = wishId;
+                    // }
+
                     request.getUsersFromEvent(this.id).then(
                         (resUsers) => {
                             let resUsersExcl = [];
