@@ -154,13 +154,6 @@ export default {
     },
     removeWish: function(id){
         console.log(id);
-        // for (let i in this.wishlist){
-        //     if (this.wishlist[i].id == id){
-        //         console.log("i:", i, " wish: ", this.wishlist[i]);
-        //         this.wishlist.splice(i, 1);
-        //         break;
-        //     }
-        // }
         this.wishlist.splice(id, 1);
         console.log(JSON.stringify(this.wishlist));
     },

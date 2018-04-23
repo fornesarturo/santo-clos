@@ -306,7 +306,8 @@ apiRouter.route("/event/wishlist")
     .put((req, res, next) => {
         let user = req.body.authUsername || false;
         let event = req.body.eventId || false;
-        if (user && event && wish)
+        let wishes = req.body.wishes || false;
+        if (user && event && wishes)
             mariadb.query("DELETE FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user}, (err, rows) => {
                     if (err) {
@@ -314,10 +315,9 @@ apiRouter.route("/event/wishlist")
                         return;
                     }
                     if (rows.info.affectedRows >= 0) {
-                        let wishes = req.body.wishes || false;
                         for(let wishId in wishes) {
                             mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
-                            { id: event, username: user, wishText: wishes[wishId] }, (err, rows) => {
+                            { id: event, username: user, wishText: wishes[wishId].wish }, (err, rows) => {
                                 if (err) {
                                     util.sendError(res, 500, err);
                                     return;

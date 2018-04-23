@@ -310,12 +310,15 @@ export async function startEvent(eventId) {
 
 // Put wishlist (Erase and update) of user
 export async function putAllWishes(eventId, wishes) {
+    let wishesWish = [];
+    for(let i in wishes) {
+        wishesWish.push({wish: wishes[i].wish});
+    }
     let data = {
         eventId: eventId,
         user: Cookies.get("current_user"),
-        wishes: wishes
+        wishes: wishesWish
     };
-    console.log(JSON.stringify(data));
     let response = await axios({
         method: "put",
         url: "http://localhost:8080/api/event/wishlist",
