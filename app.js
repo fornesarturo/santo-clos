@@ -14,6 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(logger);
 
+const cors = require('cors');    
+app.use(cors({credentials: true, origin: ['http://localhost:8081', 'http://localhost:8080', 'http://localhost:' + PORT]}));
+// app.use(cors({credentials: true, origin: '*'}));
+
 app.use('/', require('./routes/staticRouter.js'));
 app.use('/auth', require('./routes/authRouter.js'));
 app.use('/api', require('./routes/apiRouter.js'));

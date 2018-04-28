@@ -1,5 +1,11 @@
 Vue.component('modal', {
-    props: ['name', 'date', 'location', 'hostName', 'userYouGive', 'maxAmount', 'eventId'],
+    props: ['name', 'date', 'location', 'hostname', 'useryougive', 'maxamount', 'eventid', 'wishlist'],
+    data: function() {
+        return {
+            n: 0,
+            items: []
+         }
+    },
     template: " <transition name=\"modal\">\
                 <div class=\"modal-mask\">\
                     <div class=\"modal-wrapper\">\
@@ -10,21 +16,38 @@ Vue.component('modal', {
                                     <b>{{ name }}</b>\
                                 </span>\
                                 <span class=\"mainSubtitle\">\
-                                    <b>Hosted by {{ hostName }} hostName</b>\
+                                    <b>Hosted by your nigger {{ hostname }}</b>\
                                 </span>\
                             </div>\
                             \
                             <div class=\"modal-body\">\
                                 <div class=\"container col-md-10\">\
                                     <b> {{ date }} </b>\
-                                    <b> {{ location }} location </b>\
-                                    <b> {{ maxAmount }} maxAmount </b>\
+                                    <br>\
+                                    <b> {{ location }}</b>\
+                                    <br>\
+                                    <b> {{ maxamount }}</b>\
                                     <br>\
                                     <button> My Wishlist </button>\
                                     <br>\
-                                    <b> You're buying a gift for {{ userYouGive }} userYouGive ! </b>\
+                                    <b> You're buying a gift for {{ useryougive }} ! </b>\
                                     <br>\
-                                    <b> Check {{ userYouGive }} userYouGive\'s checklist </b>\
+                                    <b> Check {{ useryougive }}\'s checklist </b>\
+                                    <span class=\"mainSubtitle\">\
+                                        <b> Your wishlist </b>\
+                                    </span>\
+                                    <div>\
+                                        <li v-for=\"wish in wishlist\" v-bind:value=\"wish.value\">\
+                                            <b> {{ wish.value }} </b>\
+                                        </li>\
+                                    </div>\
+                                    <br><br>\
+                                    <div class=\"col-md-12\">\
+                                        <new-participant v-for=\"i in items\" v-bind:id=\"i.id\" v-model=\"i.value\" v-on:remove-item=\'remove($event)\'></new-participant>\
+                                    </div>\
+                                    <div class=\"col-md-12\">\
+                                        <input type=\"button\" id=\"addParticipantButton\" v-on:click=\'add()\' value=\"Add Participant\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
+                                    </div>\
                                 </div>\
                                 <div class=\"container col-md-6\">\
                                     <participants-wishlist-container>\
@@ -32,15 +55,34 @@ Vue.component('modal', {
                             </div>\
                             \
                             <div class=\"modal-footer\">\
-                                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
-                                    Cerrar\
-                                </button>\
+                                <input type=\"button\" @click=\"$emit('close')\" value=\"Close\" class=\"loginOnly btn btn-lg btn-primary btn-block\">\
                             </div>\
                             \
                         </div>\
                     </div>\
                 </div>\
-                </transition>"
+                </transition>",
+                /*
+                <button class=\"modal-default-button\" @click=\"$emit('close')\">\
+                                    Close\
+                                </button>\
+                */
+    methods: {
+        createEventRequest: function () {
+            
+        },
+        add: function() {
+            console.log(this.n);
+            this.items.push({id: this.n++, value: ""});
+        },
+        remove: function(id) {
+            for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].id == id) {
+                    this.items.splice(i, 1);
+                }
+            }
+        },
+    }
     // template: " <transition name=\"modal\">\
     //                 <div class=\"modal-mask\">\
     //                 <div class=\"modal-wrapper\">\
@@ -77,14 +119,20 @@ Vue.component('modal', {
 });
 
 Vue.component('hosted-event', {
-    props: ['name', 'date', 'id'],
+    props: ['name', 'date', 'id', 'location', 'hostName', 'maxAmount', 'wishlist'],
     methods: {
         clickedEvent: function() {
             console.log(this.id);
         },
         showModalFunct: function() {
+            wishlist: [
+                {value: 'coco'},
+                {value: 'manjar'},
+                {value: 'uvas'}
+            ]
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "", hostName: "", userYouGive: "", maxAmount: "", eventId: this.eventId });
+            this.$parent.$parent.$parent.setEventInformationActive();
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: "El caribe", hostName: "John Cena", maxAmount: "100", eventId: this.eventId, userYouGive: "Mr. Trump", wishlist: this.wishlist});
         }
     },
     template:   "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
@@ -95,11 +143,11 @@ Vue.component('hosted-event', {
   
 
 Vue.component('joined-event', {
-    props: ['name', 'date', 'admin', 'id'],
+    props: ['name', 'date', 'id', 'location', 'hostname', 'maxamount'],
     template: "<div v-on:click=\"showModalFunct\" class=\"santoClosEvent\">\
                     <div class=\"name\">{{ name }}</div>\
                     <div class=\"date\">{{ date }}</div>\
-                    <div class=\"admin\">Hosted by:&nbsp&nbsp{{ admin }}</div>\
+                    <div class=\"admin\">Hosted by:&nbsp&nbsp{{ hostname }}</div>\
                 </div>",
     methods: {
         clickedEvent: function () {
@@ -107,7 +155,8 @@ Vue.component('joined-event', {
         },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
-            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, });
+            this.$parent.$parent.$parent.setEventInformationActive();
+            this.$parent.$parent.$parent.modalData({ name: this.name, date: this.date, location: this.location, hostName: this.hostname, maxAmount: this.maxamount, eventId: this.eventId, userYouGive: "Mr. Trump"});
         }
     }
     
@@ -118,7 +167,7 @@ Vue.component('joined-event', {
 Vue.component('joined-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I've Joined</b></span>\
-            <joined-event v-for=\"event in joined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\" v-bind:admin=\"event.admin\"></joined-event>\
+            <joined-event v-for=\"event in joined\" v-bind:maxamount=\"event.amount\" v-bind:hostname=\"event.admin\" v-bind:location=\"event.address\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></joined-event>\
             </div>",
     data: function() {
         return { joined: [] };
@@ -152,7 +201,7 @@ Vue.component('joined-hub', {
 Vue.component('hosted-hub', {
     template: "<div class=\"hubWrapper\">\
             <span class=\"mainTitle\"><b>Events I Host</b></span>\
-            <hosted-event v-for=\"event in admined\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
+            <hosted-event v-for=\"event in admined\" v-bind:maxamount=\"event.amount\" v-bind:hostname=\"event.admin\" v-bind:location=\"event.address\" v-bind:name=\"event.name\" v-bind:date=\"event.eventDate\" v-bind:id=\"event.eventId\"></hosted-event>\
             <div class=\"createEventButton\" v-on:click=\"createNewEvent\"><i class=\"fas fa - plus\"></i></div>\
             </div>",
     methods: {
@@ -471,8 +520,8 @@ const eventInformation = {
 const routes = [
     { path: "/", component: hub },
     { path: "/settings", component: settings },
-    { path: "/create-event", component: createEvent }
-    //{ path: "/eventInformation", component: eventInformation}
+    { path: "/create-event", component: createEvent },
+    { path: "/eventInformation", component: eventInformation}
 ];
 
 const router = new VueRouter({
@@ -505,9 +554,11 @@ var main = new Vue({
         },
         setEventInformationActive: function(){
             this.activeView = "eventInformation";
+            location.href = "main#/eventInformation";
         },
         modalData: function(data) {
             this.eventModal = data;
+            console.log(this.eventModal.maxAmount);
         }
         /*,
         setEventInformationActive: function(){

@@ -3,6 +3,7 @@ const util = require('../util/util.js');
 const cache = require('../util/cache.js');
 const mariadb = require('../util/mariadb.js');
 const auth = require('../util/authenticate.js');
+const drawer = require('../util/drawNames.js');
 
 var apiRouter = express.Router();
 
@@ -19,7 +20,7 @@ apiRouter.route("/user")
                     return;
                 }
                 else {
-                    res.redirect(307, '../../auth/token');
+                    util.correctPost(req, res, null)
                 }
             });
     else
@@ -94,6 +95,7 @@ apiRouter.route("/user/events")
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
+                        res.status(200);
                         next();
                     }
                     else {
@@ -123,6 +125,28 @@ apiRouter.route("/user/joinedEvents")
                         util.sendError(res, 404, "Not found in DB.");
                     }
                 });
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    });
+
+apiRouter.route("/eventStart") 
+    .put((req, res, next) => {
+        if (req.body) {
+            let query = "UPDATE event SET started = 1 WHERE eventId = " + req.body.eventId;
+            mariadb.query(query, (err, rows) => {
+                if (err) {
+                    util.sendError(res, 500, err);
+                    return;
+                }
+                if (rows.info.affectedRows > 0) {
+                    util.correctPost(req, res, null);
+                    return;
+                }
+                else {
+                    util.sendError(res, 404, "Not found in DB.");
+                }
+            });
+        }
         else
             util.sendError(res, 400, "Some data was missing.");
     });
@@ -163,6 +187,7 @@ apiRouter.route("/event")
                 }
                 if (rows.info.affectedRows > 0) {
                     req.body.eventId = rows.info.insertId;
+                    util.addUserToEvent(req.body.authUsername, req.body.eventId, null);
                     util.correctPost(req, res, rows.info.insertId);
                     return;
                 }
@@ -178,7 +203,7 @@ apiRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
         let event = req.query["id"] || false;
         if (event)
-            mariadb.query("SELECT * FROM participant WHERE eventId = :id",
+            mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
                 { id: event }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
@@ -235,10 +260,10 @@ apiRouter.route("/event/users")
 
 apiRouter.route("/event/wishlist")
     .get(cache(20), (req, res, next) => {
-        let user = req.body.authUsername || false;
+        let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event) {
-            mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
+            mariadb.query("SELECT wishId, wish FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
@@ -278,6 +303,44 @@ apiRouter.route("/event/wishlist")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    })
+    .put((req, res, next) => {
+        let user = req.body.authUsername || false;
+        let event = req.body.eventId || false;
+        let wishes = req.body.wishes || false;
+        if (user && event && wishes)
+            mariadb.query("DELETE FROM wish WHERE username = :username AND eventId = :id",
+                { id: event, username: user}, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.affectedRows >= 0) {
+                        for(let wishId in wishes) {
+                            mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
+                            { id: event, username: user, wishText: wishes[wishId].wish }, (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err);
+                                    return;
+                                }
+                                if (rows.info.affectedRows > 0) {
+                                    return
+                                }
+                                else {
+                                    util.sendError(res, 404, "Not found in DB.");
+                                    return;
+                                }
+                            });
+                        }
+                        util.correctPost(req, res, null);
+                        return
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
+                });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/giftee")
@@ -302,6 +365,41 @@ apiRouter.route("/event/giftee")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    });
+
+apiRouter.route("/canDraw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        // Populate participants using MariaDB.
+        let participants = [];
+        // Populate veto using MariaDB.
+        let veto = {};
+        let draw = drawer(participants, veto);
+        if (!draw) {
+            util.sendError(res, 400, "Unable to draw");
+            return;
+        }
+        res.body.draw = draw;
+        util.correctPost(req, res, null);
+    });
+
+apiRouter.route("/draw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        // Populate participants using MariaDB.
+        let participants = [];
+        // Populate veto using MariaDB.
+        let veto = {};
+        let draw = drawer(participants, veto);
+        if (!draw) {
+            util.sendError(res, 400, "Unable to draw");
+            return;
+        }
+        /*
+            UPDATE MARIADB HERE
+        */
+        res.body.draw = draw;
+        util.correctPost(req, res, null);
     });
 
 // Only expect to use this on GET requests.
