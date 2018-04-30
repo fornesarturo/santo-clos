@@ -1,0 +1,7 @@
+node_modules/
+package-lock.json
+
+santo-clos-front/node_modules/
+santo-clos-front/package-lock.json
+
+santo-clos-front/dist

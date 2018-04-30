@@ -3,6 +3,7 @@ const util = require('../util/util.js');
 const cache = require('../util/cache.js');
 const mariadb = require('../util/mariadb.js');
 const auth = require('../util/authenticate.js');
+const drawer = require('../util/drawNames.js');
 
 var apiRouter = express.Router();
 
@@ -364,6 +365,41 @@ apiRouter.route("/event/giftee")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    });
+
+apiRouter.route("/canDraw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        // Populate participants using MariaDB.
+        let participants = [];
+        // Populate veto using MariaDB.
+        let veto = {};
+        let draw = drawer(participants, veto);
+        if (!draw) {
+            util.sendError(res, 400, "Unable to draw");
+            return;
+        }
+        res.body.draw = draw;
+        util.correctPost(req, res, null);
+    });
+
+apiRouter.route("/draw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        // Populate participants using MariaDB.
+        let participants = [];
+        // Populate veto using MariaDB.
+        let veto = {};
+        let draw = drawer(participants, veto);
+        if (!draw) {
+            util.sendError(res, 400, "Unable to draw");
+            return;
+        }
+        /*
+            UPDATE MARIADB HERE
+        */
+        res.body.draw = draw;
+        util.correctPost(req, res, null);
     });
 
 // Only expect to use this on GET requests.
