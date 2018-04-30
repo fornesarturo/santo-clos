@@ -132,7 +132,7 @@ export default {
           request.createEventRequest(name, date, address, amount).then(
             (next) => {
               if(next) {
-                request.postEventParticipants(participantsArray, next.eventId).then(
+                request.postEventParticipants(next.eventId, participantsArray).then(
                   (res) => {
                     if(!res.inserted) console.log(res);
                   }
