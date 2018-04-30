@@ -164,9 +164,7 @@ export default {
                     this.$emit("update:sortDone", true);
                     this.parentComponent.updateSortDone();
                     this.$forceUpdate();
-
-                    console.log(JSON.stringify(this.items));
-                    request.postEventParticipants(this.eventId, this.items);
+                    request.postEventParticipants(this.eventId, this.items.map((element) => element.value));
                 }
             }
         )

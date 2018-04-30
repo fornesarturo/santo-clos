@@ -82,7 +82,7 @@ async function shortenURL(url) {
 function sendEmailInvite(participant, token) {
     console.log("Sending sign in email invite to: ", participant.email);
     if(process.env.IS_LOCALHOST == "true") {
-        var url = "http://localhost:8080/?tokenEvent=" + token;
+        var url = "http://localhost:8081/?tokenEvent=" + token;
     }
     else {
         var url = "https://santo-clos.herokuapp.com/?tokenEvent=" + token;
@@ -96,7 +96,7 @@ function sendEmailInvite(participant, token) {
             <h2>Follow this link to sign up and join the event.</h2>\
             <a href=\"" + urlS + "\">Sign Up!</a>\
             <p>If you can't follow the previous link, please copy and paste the following address: </p>\
-            <p> " + urlS + " </p>"
+            <p> " + url + " </p>"
     
             // <a href=3D\"localhost:8080?t=" + token + "\">localhost:8080?t=" + token + "</a>"
         );

@@ -38,7 +38,8 @@ export async function createEventRequest(name, date, address, amount) {
     return response;
 }
 
-export async function postEventParticipants(participants, eventId) {
+export async function postEventParticipants(eventId, participants) {
+    console.log(eventId, participants);
     let data = {
         eventId: eventId,
         participants: participants
