@@ -3,7 +3,6 @@ const o2x = require('object-to-xml');
 const fetch = require('node-fetch');
 const mail = require('./mailModule');
 const mariadb = require('./mariadb');
-const urlencode = require('urlencode');
 const BitlyClient = require('bitly');
 const Bitly = BitlyClient(process.env.BITLY_TOKEN);
 
