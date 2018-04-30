@@ -1,0 +1,235 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+a, a:visited {
+    outline:none;
+    color:#389dc1;
+}
+
+a:hover{
+    text-decoration:none;
+}
+
+section, footer, header, aside, nav{
+    display: block;
+}
+
+/*-------------------------
+    The menu
+--------------------------*/
+
+nav{
+    display:inline-block;
+    width: 100%;
+    background-color:rgb(7, 75, 104);
+    background: -webkit-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -o-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -moz-linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: linear-gradient(60deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    box-shadow:0 1px 1px #ccc;
+    border-radius:2px;
+}
+
+nav a{
+    display:inline-block;
+    padding: 18px 30px;
+    color:#fff !important;
+    font-weight:bold;
+    font-size:16px;
+    text-decoration:none !important;
+    line-height:1;
+    text-transform: uppercase;
+    background-color:transparent;
+
+    -webkit-transition:background-color 0.25s;
+    -moz-transition:background-color 0.25s;
+    transition:background-color 0.25s;
+}
+
+nav a:first-child{
+    border-radius:2px 0 0 2px;
+}
+
+nav a:last-child{
+    border-radius:0 2px 2px 0;
+}
+
+nav#create-event #create-event,
+nav#settings #settings,
+nav#services #services,
+nav#contact #contact,
+nav#hub #hub{
+    background-color:#2A8FBD;
+    background: -webkit-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: -o-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: -moz-linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+    background: linear-gradient(45deg, #2A8FBD, rgb(11, 124, 41));
+}
+
+@media only screen and (max-width: 575px) {
+    #hub, #settings, #services, #create-event {
+        width: 100%;
+    }
+}
+
+.custom-toggler.navbar-toggler {
+    border-color: rgb(255, 255, 255);
+}
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+p{
+    font-size:22px;
+    font-weight:bold;
+    color:#7d9098;
+}
+
+p b{
+    color:#ffffff;
+    display:inline-block;
+    padding:5px 10px;
+    background-color:#c4d7e0;
+    border-radius:2px;
+    text-transform:uppercase;
+    font-size:18px;
+}
+.resource {
+  margin: 20px 0;
+}
+
+/*---------------------------------------------
+Create Event Container */
+.eventContainer {
+    width: 100%;  
+    min-height: 100vh;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255,255,255,0.6);
+  }
+/*---------------------------------------------
+Cards Holder*/
+.eventWrapper {
+    width: 500px;
+    background: rgb(7, 75, 104);
+    background: -webkit-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -o-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: -moz-linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    background: linear-gradient(45deg, rgb(7, 75, 104), rgb(11, 124, 41));
+    border-radius: 10px;
+    margin: 10px;
+    overflow: hidden;
+    padding: 72px 55px 65px 55px;
+    transition: all .3s ease;
+
+}
+
+/*
+    ICONS
+*/
+/* enable absolute positioning */
+.inner-addon { 
+    position: absolute; 
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  -110px;}
+.right-addon .glyphicon { right: -100px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  35px; }
+.right-addon input { padding-right: 50px; }
+
+/*---------------------------------------------
+Input Line*/
+input.inputRight {
+    height: 45px;
+    display: block;
+    width: 100%;
+    background: transparent;
+    font-family: Poppins-Regular;
+    font-size: 15px;
+    color: #fff;
+    line-height: 1.2;
+    padding: 10 5px;
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}

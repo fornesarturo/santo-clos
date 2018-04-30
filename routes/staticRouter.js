@@ -13,7 +13,7 @@ staticRouter.route('/')
         if(req.query.tokenEvent) {
             res.cookie("tokenEvent", req.query.tokenEvent);
         }
-        res.status(200).sendFile(path.join(__dirname, '../html', 'index.html'));
+        res.status(200).sendFile(path.join(__dirname, '../santo-clos-front', "dist", 'index.html'));
     });
 
 staticRouter.route('/main')

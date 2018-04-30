@@ -169,7 +169,7 @@ input.inputRight {
     line-height: 1.2;
     padding: 10 5px;
 }
-
+/*
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -198,6 +198,11 @@ input.inputRight {
   font-family: Helvetica, Arial, sans-serif;
 }
 
+.modal-text{
+    color: azure;
+    font-size: 14px;
+}
+
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
@@ -220,6 +225,9 @@ input.inputRight {
  * these styles.
  */
 
+
+ /*
+
 .modal-enter {
   opacity: 0;
 }
@@ -233,3 +241,4 @@ input.inputRight {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+*/

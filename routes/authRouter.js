@@ -22,8 +22,10 @@ authRouter.route("/whoami")
         if (err) {
             util.sendError(res, 401, err);
         } else {
-            let user = decoded.name;
-            res.json({ username: user });
+            let userServer = decoded.name;
+            let userClient = req.body.user || req.cookies.current_user;
+            if(userServer === userClient) res.status(200).json({}).send();
+            else util.sendError(res, 401, err);
         }
     });
 });
