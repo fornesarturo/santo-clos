@@ -57,6 +57,7 @@ export async function postEventParticipants(participants, eventId) {
         let resJSON = res.data;
         if(!resJSON.inserted) {
             console.log("Error on postEventParticipants");
+            return false;
         }
         return resJSON;
     })
