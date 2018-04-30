@@ -333,6 +333,7 @@ export async function putAllWishes(eventId, wishes) {
     .then(
         (res) => {
             let resJSON = res.data;
+            console.log(resJSON);
             if(res.status == 200 && resJSON){
                 return resJSON.data;
             }
