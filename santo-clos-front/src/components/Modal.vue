@@ -186,6 +186,9 @@
         //       console.log(this.sortDoneCopy, this.sortDone);
         //   },
         created: function() {
+            request.canDraw(this.eventId, false).then((data) => {
+                console.log(JSON.stringify(data));
+            })
             let usernames = []
             for (let participant of this.participants) {
                 usernames.push(participant.username)
