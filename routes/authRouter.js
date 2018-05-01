@@ -57,7 +57,7 @@ authRouter.route("/token")
                         auth.authenticateJWTInvite(tokenEvent).then((event) => {
                             let id = event.eventId;
                             let email = event.email;
-                            let user = req.cookies.current_user;
+                            let user = username;
                             mariadb.query("SELECT * FROM user WHERE username = :username", { username: user },
                                 (err, rows) => {
                                     if (err) {
