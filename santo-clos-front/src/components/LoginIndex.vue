@@ -193,7 +193,7 @@ export default {
           request.createUser(nameVal, emailVal, usernameVal, passwordVal, this.eventToken)
           .then(res => {
             if (res) {
-              request.loginUser(usernameVal, passwordVal).then((next) => {
+              request.loginUser(usernameVal, passwordVal, this.eventToken).then((next) => {
 					      if(next) {
                   this.$emit('login-event');
                   this.$emit('change-to-hub');
