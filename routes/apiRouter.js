@@ -46,7 +46,7 @@ apiRouter.route("/user")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found user in DB.");
                     }
                 });
         else
@@ -72,7 +72,7 @@ apiRouter.route("/user")
                             return;
                         }
                         else {
-                            util.sendError(res, 404, "Not found in DB.");
+                            util.sendError(res, 404, "Not found user in DB.");
                         }
                     });
             else
@@ -99,7 +99,7 @@ apiRouter.route("/user/events")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found events in DB.");
                     }
                 });
         else
@@ -122,7 +122,7 @@ apiRouter.route("/user/joinedEvents")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found joined events in DB.");
                     }
                 });
         else
@@ -143,7 +143,7 @@ apiRouter.route("/eventStart")
                     return;
                 }
                 else {
-                    util.sendError(res, 404, "Not found in DB.");
+                    util.sendError(res, 404, "Not found event in DB.");
                 }
             });
         }
@@ -167,7 +167,7 @@ apiRouter.route("/event")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found event in DB.");
                     }
                 });
         else
@@ -241,7 +241,8 @@ apiRouter.route("/event/users")
                             participant.adminName = util.process(rows)[0].name;
                             if (rowsParticipants.info.numRows > 0) {
                                 // console.log("Already in DB");
-                                util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
+                                // util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
+                                util.sendEmailInvite(participant, auth.signJWTInvite(req.body.eventId, participant.email));
                             }
                             else {
                                 // This particular email isn't in our DB, so we send them an email invite.

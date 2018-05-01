@@ -51,7 +51,25 @@ authRouter.route("/token")
                         signed: true, 
                         httpOnly: true 
                     });
-
+                    if (req.cookies.tokenEvent) {
+                        let tokenEvent = req.cookies.tokenEvent;
+                        res.clearCookie("tokenEvent");
+                        auth.authenticateJWTInvite(tokenEvent).then((event) => {
+                            let id = event.eventId;
+                            let email = event.email;
+                            let user = req.cookies.current_user;
+                            mariadb.query("SELECT * FROM user WHERE username = :username", { username: user },
+                                (err, rows) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    else {
+                                        let emailDB = util.process(rows)[0].email
+                                        if (email == emailDB) util.addUserToEvent(user, id, null);
+                                    }
+                                });
+                        });
+                    }
                     res.cookie("current_user", username);
                     res.json(data);
                 } else {
