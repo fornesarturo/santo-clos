@@ -150,7 +150,10 @@ export default {
       }
     },
     addWish: function(){
-        this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
+        if(this.wishlist.length-1 >= 0) 
+            this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
+        else 
+            this.wishlist.push({wishId: 1, wish: ""});
     },
     removeWish: function(id){
         console.log(id);
