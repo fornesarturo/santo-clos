@@ -157,7 +157,12 @@ export default {
               this.$emit('login-event');
               this.$emit('change-to-hub');
               this.$router.push('/hub');
-					  }
+            }
+            else {
+              showValidate(username);
+              showValidate(password);
+              alert("Wrong username or password");
+            }
 				  })
         }
 			} 
@@ -212,6 +217,7 @@ export default {
 </script>
 
 <style scoped>
+@import './../assets/fonts/font-awesome-4.7.0/css/font-awesome.css';
 @import './../assets/css/index.css';
 
 .copyright {
