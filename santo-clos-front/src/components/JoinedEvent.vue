@@ -36,7 +36,7 @@ export default {
                                 if(resUsers[i].username != Cookies.get("current_user")){
                                     resUsersExcl.push(resUsers[i]);
                                 }else{
-                                    myGifteeUsername = resUsers[i].giftee || "lafercho";
+                                    myGifteeUsername = resUsers[i].giftee || false;
                                 }
                             }
                             let modalStarted;
