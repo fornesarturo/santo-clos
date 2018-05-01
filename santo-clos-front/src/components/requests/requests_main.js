@@ -328,8 +328,7 @@ export async function canDraw(eventId) {
         (res) => {
             let resJSON = res.data;
             if(res.status == 200){
-                console.log(res);
-                return true;
+                return resJSON.inserted.draw;
             }
             else return false;
         }

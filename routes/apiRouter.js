@@ -369,79 +369,94 @@ apiRouter.route("/event/giftee")
     });
 
 async function getEventParticipants(eventId) {
-    let response = await 
+    let response = await new Promise((resolve, reject) => {
         mariadb.query("SELECT user.username FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
         { id: eventId }, (err, rows) => {
             if (err) {
-                return false;
+                reject(err);
             }
             if (rows.info.numRows > 0) {
-                return util.process(rows);
+                resolve(util.process(rows));
+            }
+            else {
+                reject(false);
             }
         });
+    });
     return response;
 
 }
 
-async function canDrawCheck(eventId, participant, veto) {
+async function canDrawCheck(eventId, participants, veto) {
     let response = await drawer(participants, veto).then((draw) => {
         if (!draw) {
             return false;
         }
-        return true;
+        return draw;
     });
     return response;
 }
 
 async function deleteAllVetos(eventId) {
-    let response = await mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
-        if (err) {
-            return false;
-        }
-        else {
-            return true;
-        } 
-    });
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            } 
+        });
+    })
     return response;
 }
 
 async function insertSingleVeto(eventId, vetoer, vetoed) {
-    let response = await mariadb.query("INSERT INTO veto VALUES (:eventId, :vetoer, :vetoed)", 
-    {eventId: eventId, vetoer: vetoer, vetoed: vetoed }, (err, rows) => {
-        if (err) {
-            return false;
-        }
-        else {
-            return true;
-        }
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("INSERT INTO veto VALUES (:eventId, :vetoer, :vetoed)", 
+        {eventId: eventId, vetoer: vetoer, vetoed: vetoed }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            }
+        });
     });
     return response;
 }
 
 async function insertVetos(eventId, newVetos) {
-    let response = await Object.keys(newVetos).forEach((vetoer) => {
-        let success = newVetos[vetoer].forEach((vetoed) => {
-            let success = insertSingleVeto().then((inserted) => {
-                if(!inserted) {
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            });
-            if(!success) {
-                return success;
+    let response = await new Promise((resolve, reject) => {
+        Object.keys(newVetos).forEach((vetoer) => {
+            newVetos[vetoer].forEach((vetoed) => {
+                insertSingleVeto(eventId, vetoer, vetoed).then((inserted) => {
+                    if(!inserted) {
+                        reject(false);
+                    }
+                    else {
+                        resolve(true);
+                    }
+                });
+            })
+        });
+    });
+    return response;
+}
+
+async function getCurrentVetos(eventId) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("SELECT * FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else if (rows.info.numRows > 0) {
+                resolve(util.process(rows));
             }
             else {
-                continue;
+                reject(false);
             }
-        })
-        if(!success) {
-            return success;
-        }
-        else {
-            continue;
-        }
+        });
     });
     return response;
 }
@@ -449,15 +464,27 @@ async function insertVetos(eventId, newVetos) {
 apiRouter.route("/canDraw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
-        let newVetos = req.body.vetos || false;
+        let newVetos = req.body.vetos 
+        || { 
+            A: [ 'C', 'D', 'E' ],
+            B: [ 'C', 'D', 'E' ],
+            C: [ 'A' ],
+            D: [ 'A', 'B', 'E' ],
+            E: [ 'A', 'B' ],
+            lafercho: [],
+            osoazul1_1: []
+        };
 
         if (eventId) {
-            getEventParticipants(eventId).then((participants) => {
-                //let participants = ["A", "B", "C", "D", "E"];
-                if(!participants) {
+            getEventParticipants(eventId).then((participantsRaw) => {
+                if(!participantsRaw) {
                     util.sendError(res, 500, err);
                 }
                 else {
+                    let participants = [];
+                    participantsRaw.forEach(element => {
+                        participants.push(element.username);
+                    });
                     if(newVetos) {
                         let vetoBuid = {};
                         canDrawCheck(eventId, participants, newVetos).then((canDraw) => {
@@ -477,7 +504,7 @@ apiRouter.route("/canDraw")
                                                 return false;
                                             }
                                             else {
-                                                req.body.draw = draw;
+                                                req.body.draw = canDraw;
                                                 util.correctPost(req, res, null);
                                                 return true;
                                             }
@@ -489,42 +516,39 @@ apiRouter.route("/canDraw")
                     }
                     // Will check if old data works. IT SHOULD.
                     else {
-                        let oldVeto = {};
-                        mariadb.query("SELECT * FROM veto  WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
-                            if (err) {
+                        getCurrentVetos(eventId).then((rawVetos) => {
+                            if(rawVetos === null) {
                                 util.sendError(res, 500, err);
-                                return;
                             }
-                            if (rows.info.numRows > 0) {
-                                let rawVetos = util.process(rows);
+                            else if(rawVetos === false){
+                                util.sendError(res, 404, "Not found in DB.");
+                            }
+                            else {
+                                let oldVeto = {};
+                                participants.forEach(element => {
+                                    oldVeto[element] = [];
+                                })
                                 rawVetos.forEach(element => {
                                     let vetoer = element.vetoer;
                                     if(oldVeto[vetoer]) {
                                         oldVeto[vetoer].push(element.vetoed);
                                     }
-                                    else {
-                                        oldVeto[vetoer] = [];
-                                        oldVeto[vetoer].push(element.vetoed);
-                                    }
                                 });
+
                                 canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
                                     if(canDraw) {
-                                        res.body = {};
-                                        res.body.draw = draw;
+                                        req.body.draw = canDraw;
                                         util.correctPost(req, res, null);
                                     }
                                     else {
                                         util.sendError(res, 500, err);
                                     }
-                                })
-                            }
-                            else {
-                                util.sendError(res, 404, "Not found in DB.");
+                                });
                             }
                         });
                     }
                 }
-            })
+            });
         }
         else {
             util.sendError(res, 400, "Some data was missing.");

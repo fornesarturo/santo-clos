@@ -54,7 +54,9 @@ export async function loginUser(username, password, eventToken="") {
 		data: data
 	})
 	.then((res) => {
-		let resJSON = res.data;
+        let resJSON = res.data;
+        document.cookie = "current_user=" + res.data.current_user;
+        console.log(document.cookie);
 		if(resJSON.access_token && resJSON.type == "Bearer") {
 			return true
         }

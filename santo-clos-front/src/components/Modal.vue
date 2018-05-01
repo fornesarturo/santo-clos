@@ -121,6 +121,7 @@
     import NewParticipant from "@/components/NewParticipant";
     import ParticipantWishlist from "@/components/ParticipantWishlist";
     import NewWish from "@/components/NewWish";
+    import '@/assets/vendor/js-cookie/js-cookie.js';
     const request = require('./requests/requests_main');
     
     export default {
@@ -187,11 +188,18 @@
                 console.log(JSON.stringify(this.wishlist));
             },
             finishEvent: function() {
+                let myThis = this;
                 request.startEvent(this.eventId).then(
-                    (success) => {
-                        if (success == true) {
-                            this.$emit("update:sortDone", true);
-                            this.parentComponent.updateSortDone();
+                    function(success) {
+                        if (success) {
+                            myThis.$emit("update:sortDone", true);
+                            myThis.parentComponent.updateSortDone();
+                            console.log(success);
+                            console.log(document.cookie);
+                            console.log(Cookies.get("current_user"));
+                            console.log(success[Cookies.get("current_user")]);
+                            console.log(myThis);
+                            myThis.userYouGive = success[Cookies.get("current_user")];
                         }
                     }
                 )

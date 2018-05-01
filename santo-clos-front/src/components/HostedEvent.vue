@@ -45,7 +45,7 @@ export default {
                                     resUsersExcl.push(resUsers[i]);
                                 }
                                 else {
-                                    myGifteeUsername = resUsers[i].giftee || "lafercho";
+                                    myGifteeUsername = resUsers[i].giftee;
                                 }
                             }
                             let modalStarted;

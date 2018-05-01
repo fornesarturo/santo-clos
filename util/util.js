@@ -48,9 +48,6 @@ function correctInsertResult(req, res, eventId) {
             inserted: req.body,
             status: 200
         }
-
-        console.log(JSONResponse);
-
         res.json(JSONResponse);
     }
 }
