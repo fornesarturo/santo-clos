@@ -31,7 +31,7 @@ apiRouter.route("/user")
 apiRouter.use(auth.authenticateJWT);
 
 apiRouter.route("/user")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.query["user"] || false;
         if (user)
             mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
@@ -83,7 +83,7 @@ apiRouter.route("/user")
     );
 
 apiRouter.route("/user/events")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.body.authUsername || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE admin = :user",
@@ -107,7 +107,7 @@ apiRouter.route("/user/events")
     });
 
 apiRouter.route("/user/joinedEvents")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.body.authUsername || false;
         if (user)
             mariadb.query("SELECT * FROM event JOIN participant WHERE event.eventId = participant.eventId AND participant.username = :user AND event.admin != :user",
@@ -152,7 +152,7 @@ apiRouter.route("/eventStart")
     });
 
 apiRouter.route("/event")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let eventId = req.query["id"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
@@ -200,7 +200,7 @@ apiRouter.route("/event")
     });
 
 apiRouter.route("/event/users")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let event = req.query["id"] || false;
         if (event)
             mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
@@ -260,7 +260,7 @@ apiRouter.route("/event/users")
     });
 
 apiRouter.route("/event/wishlist")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event) {
@@ -345,7 +345,7 @@ apiRouter.route("/event/wishlist")
     });
 
 apiRouter.route("/event/giftee")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
