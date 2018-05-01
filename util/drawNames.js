@@ -95,8 +95,8 @@ async function drawNames(participants, veto = null) {
             let path = drawRecurse(possibleGifters, origin, [], new Set())
             if (path) {
                 let draw = {}
-                for (let i = 0; i < path.length - 1; i++) {
-                    draw[path[i]] = path[i + 1]
+                for (let i = path.length - 1; i > 0; i--) {
+                    draw[path[i]] = path[i - 1]
                 }
                 return draw
             }
