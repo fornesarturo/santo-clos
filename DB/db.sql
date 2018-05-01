@@ -34,6 +34,13 @@ CREATE TABLE invitation (
 	CONSTRAINT invitations_pk PRIMARY KEY (username, eventId)
 );
 
+CREATE TABLE veto (
+	eventId INT(30) NOT NULL,
+	vetoer VARCHAR(20) NOT NULL,
+	vetoed VARCHAR(20) NOT NULL,
+	CONSTRAINT invitations_pk PRIMARY KEY (eventId, vetoer, vetoed)
+);
+
 ALTER TABLE event 
 ADD started BOOLEAN NOT NULL;
 

@@ -1,4 +1,4 @@
-function drawNames(participants, veto = null) {
+async function drawNames(participants, veto = null) {
     function lastResortDrawNames(participants, veto = null, possibleGifters) {
         // The final name draw.
         let draw = {}
@@ -104,7 +104,7 @@ function drawNames(participants, veto = null) {
         return lastResortDrawNames(participants, veto, possibleGifters)
     }
 
-    return hamiltonianDraw(participants, veto)
+    return await hamiltonianDraw(participants, veto)
 }
 
 module.exports = drawNames

@@ -131,24 +131,25 @@ apiRouter.route("/user/joinedEvents")
 
 apiRouter.route("/eventStart") 
     .put((req, res, next) => {
-        if (req.body) {
-            let query = "UPDATE event SET started = 1 WHERE eventId = " + req.body.eventId;
-            mariadb.query(query, (err, rows) => {
-                if (err) {
-                    util.sendError(res, 500, err);
-                    return;
-                }
-                if (rows.info.affectedRows > 0) {
-                    util.correctPost(req, res, null);
-                    return;
-                }
-                else {
-                    util.sendError(res, 404, "Not found in DB.");
-                }
-            });
-        }
-        else
-            util.sendError(res, 400, "Some data was missing.");
+        // if (req.body) {
+        //     let query = "UPDATE event SET started = 1 WHERE eventId = " + req.body.eventId;
+        //     mariadb.query(query, (err, rows) => {
+        //         if (err) {
+        //             util.sendError(res, 500, err);
+        //             return;
+        //         }
+        //         if (rows.info.affectedRows > 0) {
+        //             util.correctPost(req, res, null);
+        //             return;
+        //         }
+        //         else {
+        //             util.sendError(res, 404, "Not found in DB.");
+        //         }
+        //     });
+        // }
+        // else
+        //     util.sendError(res, 400, "Some data was missing.");
+        util.correctPost(req, res, null);
     });
 
 apiRouter.route("/event")
@@ -370,35 +371,96 @@ apiRouter.route("/event/giftee")
 apiRouter.route("/canDraw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
-        let participants = []
+        let newVetos = req.body.vetos || {
+            'A': ['C','D','E'],
+            'B': ['C','D','E'],
+            'C': ['A'],
+            'D': ['A','B','E'],
+            'E': ['A','B']
+        };
+
         if (eventId)
-            participants = mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
+            mariadb.query("SELECT user.username FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
                 { id: eventId }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
                         return;
                     }
                     if (rows.info.numRows > 0) {
-                        let data = util.process(rows);
-                        console.log(data);
-                        // Populate veto using MariaDB.
-                        let veto = {};
-                        let draw = drawer(participants, veto);
-                        if (!draw) {
-                            util.sendError(res, 400, "Unable to draw");
-                            return;
+                        // let participants = util.process(rows);
+                        let participants = ["A", "B", "C", "D", "E"];
+                        
+                        if(newVetos) {
+                            let vetoBuid = {};
+                            drawer(participants, newVetos).then((draw) => {
+                                if (!draw) {
+                                    util.sendError(res, 400, "Unable to draw");
+                                    return;
+                                }
+                                mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+                                    if (err) {
+                                        util.sendError(res, 500, err);
+                                        return;
+                                    }
+                                    else {
+                                        Object.keys(newVetos).forEach((vetoer) => {
+                                            newVetos[vetoer].forEach((vetoed) => {
+                                                mariadb.query("INSERT INTO veto VALUES (:eventId, :vetoer, :vetoed)", 
+                                                {eventId: eventId, vetoer: vetoer, vetoed: vetoed }, (err, rows) => {
+                                                    if (err) {
+                                                        console.log("ERROR: ", err);
+                                                        return;
+                                                    }
+                                                });
+                                            })
+                                        });
+                                        res.body = {};
+                                        res.body.draw = draw;
+                                        res.status(200).send();
+                                        return;
+                                    }
+                                });
+                            });
                         }
-                        res.body.draw = draw;
-                        util.correctPost(req, res, null);
-                    }
-                    else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        // Will check if old data works. IT SHOULD.
+                        else {
+                            let oldVeto = {};
+                            mariadb.query("SELECT * FROM veto  WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err);
+                                    return;
+                                }
+                                if (rows.info.numRows > 0) {
+                                    let rawVetos = util.process(rows);
+                                    rawVetos.forEach(element => {
+                                        let vetoer = element.vetoer;
+                                        if(oldVeto[vetoer]) {
+                                            oldVeto[vetoer].push(element.vetoed);
+                                        }
+                                        else {
+                                            oldVeto[vetoer] = [];
+                                            oldVeto[vetoer].push(element.vetoed);
+                                        }
+                                    });
+                                    drawer(participants, oldVeto).then((draw) => {
+                                        if (!draw) {
+                                            util.sendError(res, 400, "Unable to draw");
+                                            return;
+                                        }
+                                        res.body = {};
+                                        res.body.draw = draw;
+                                        util.correctPost(req, res, null);
+                                    });
+                                }
+                                else {
+                                    util.sendError(res, 404, "Not found in DB.");
+                                }
+                            });
+                        }
                     }
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
-
-        console.log(participants);
     });
 
 apiRouter.route("/draw")
