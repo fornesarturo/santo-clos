@@ -25,7 +25,7 @@
     import CheckboxRadio from 'vue-checkbox-radio'
     export default {
         name: 'Veto',
-        props: ["hostname","participants", "value"],
+        props: ["hostname","participants"],
         components: {
             CheckboxRadio
         },

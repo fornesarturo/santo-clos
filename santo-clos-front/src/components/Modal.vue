@@ -77,7 +77,7 @@
                             <div class="container col-md-12">
                                 <BulmaAccordion
                                         :dropdown="true"
-                                        :icon="'NADA'"
+                                        :icon="'custom'"
                                     >
                                         <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                                             <b class="accordionItem" slot="title">{{p.username}}</b>
@@ -186,6 +186,9 @@
         //       console.log(this.sortDoneCopy, this.sortDone);
         //   },
         created: function() {
+            request.canDraw(this.eventId, false).then((data) => {
+                console.log(JSON.stringify(data));
+            })
             let usernames = []
             for (let participant of this.participants) {
                 usernames.push(participant.username)
