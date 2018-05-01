@@ -465,15 +465,7 @@ apiRouter.route("/canDraw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
         let newVetos = req.body.vetos 
-        || { 
-            A: [ 'C', 'D', 'E' ],
-            B: [ 'C', 'D', 'E' ],
-            C: [ 'A' ],
-            D: [ 'A', 'B', 'E' ],
-            E: [ 'A', 'B' ],
-            lafercho: [],
-            osoazul1_1: []
-        };
+        || false;
 
         if (eventId) {
             getEventParticipants(eventId).then((participantsRaw) => {
@@ -536,6 +528,9 @@ apiRouter.route("/canDraw")
                                 });
 
                                 canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
+                                    console.log("PARTICIPANTS: ", participants);
+                                    console.log("VETOS: ", oldVeto);
+                                    console.log("DRAW: ", canDraw);
                                     if(canDraw) {
                                         req.body.draw = canDraw;
                                         util.correctPost(req, res, null);
