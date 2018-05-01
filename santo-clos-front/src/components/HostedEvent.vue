@@ -31,7 +31,6 @@ export default {
             this.$emit("update:sortDone", giftee);
         },
         showModalFunct: function() {
-            this.$parent.$parent.$parent.showModal = true;
             // /api/event/wishlist?id={eventId}&user={username}
             request.getMyWishlist(this.id).then(
                 (resMyWishlist) => {
@@ -72,6 +71,7 @@ export default {
                                         wishlist: resMyWishlist
                                     }
                                     this.$parent.$parent.$parent.modalData(data);
+                                    this.$parent.$parent.$parent.showModal = true;
                                 }
                             );
                         }

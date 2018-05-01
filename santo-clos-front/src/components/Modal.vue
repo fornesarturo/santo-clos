@@ -77,7 +77,7 @@
                             <div class="container col-md-12">
                                 <BulmaAccordion
                                         :dropdown="true"
-                                        :icon="'NADA'"
+                                        :icon="'custom'"
                                     >
                                         <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                                             <b class="accordionItem" slot="title">{{p.username}}</b>
