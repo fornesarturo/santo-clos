@@ -258,7 +258,8 @@
                 request.putAllWishes(this.eventId, this.wishlist);
             },
             changeChecked: function(who, owner) {
-                console.log("Who = ", who)
+                if(document.getElementById('doVetoButton').disabled)
+                    document.getElementById('doVetoButton').disabled = false;
                 if (this.vetoDictionary[owner].indexOf(who) != -1) {
                     this.vetoDictionary[owner].splice(this.vetoDictionary[owner].indexOf(who), 1)
                 } else {
@@ -267,7 +268,7 @@
                 console.log(JSON.stringify(this.vetoDictionary))
             },
             tryVeto(){
-
+                document.getElementById('doVetoButton').disabled = true;
             }
         }
     };
