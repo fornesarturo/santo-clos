@@ -109,6 +109,19 @@
                             </div>
                         </div>
                         <br><br>
+                        <BulmaAccordion
+                            :dropdown="true"
+                            :icon="'NADA'"
+                        >
+                            <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                                <b class="accordionItem" slot="title">{{p.username}}</b>
+                                <div slot="content">
+                                    <b> Ptm </b>
+                                    <b>wey</b>
+                                    <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
+                                </div>
+                            </BulmaAccordionItem>
+                        </BulmaAccordion>
                     </div>
                 </div>
             </div>
@@ -118,10 +131,13 @@
 
 <script>
 /* eslint-disable */
+/**<Veto v-bind:hostName="p.username" v-bind:participants="participants"> </Veto> */
+    import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
     import NewParticipant from "@/components/NewParticipant";
     import ParticipantWishlist from "@/components/ParticipantWishlist";
     import NewWish from "@/components/NewWish";
     import '@/assets/vendor/js-cookie/js-cookie.js';
+    import Veto from "@/components/Veto";
     const request = require('./requests/requests_main');
     
     export default {
@@ -129,7 +145,10 @@
         components: {
             NewParticipant,
             ParticipantWishlist,
-            NewWish
+            NewWish,
+            Veto,
+            BulmaAccordion,
+            BulmaAccordionItem
         },
         props: [
             "name",
@@ -220,3 +239,12 @@
         }
     };
 </script>
+
+<style>
+    .accordionItem {
+        background: none !important;
+    }
+    .accordionContainer {
+        background-color: #2A8FBB;
+    }
+</style>
