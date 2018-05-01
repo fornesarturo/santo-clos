@@ -37,7 +37,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <br>
                             <div v-if='sortDone'>
                                 <span class="mainTitle">
                                                 <b> Your wishlist </b>
