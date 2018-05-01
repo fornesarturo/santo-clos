@@ -92,15 +92,18 @@ export default {
   data: () => {
     return {
       mode: login,
-	  modeText: "I don't have an account",
-	  buttonText: "Log In",
+	    modeText: "I don't have an account",
+	    buttonText: "Log In",
       name: "",
       email: "",
       username: "",
-      password: ""
+      password: "",
+      eventToken: ""
     };
   },
   created: function() {
+    if (this.$route.query.tokenEvent)
+      this.eventToken = "?tokenEvent=" + this.$route.query.tokenEvent
     this.mode = login;
     this.modeText = "I don't have an account";
     this.buttonText= "Log In";
@@ -149,7 +152,7 @@ export default {
           checkPassed=false;
         }
         if(checkPassed) {
-          request.loginUser(usernameVal, passwordVal).then((next) => {
+          request.loginUser(usernameVal, passwordVal, this.eventToken).then((next) => {
 					  if(next) {
               this.$emit('login-event');
               this.$emit('change-to-hub');
@@ -187,7 +190,7 @@ export default {
         }
 
         if(checkPassed) {
-          request.createUser(nameVal, emailVal, usernameVal, passwordVal)
+          request.createUser(nameVal, emailVal, usernameVal, passwordVal, this.eventToken)
           .then(res => {
             if (res) {
               request.loginUser(usernameVal, passwordVal).then((next) => {

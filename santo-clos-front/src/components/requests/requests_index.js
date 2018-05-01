@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 // Create USER in DB
-export async function createUser(name, email, username, password) {
+export async function createUser(name, email, username, password, eventToken="") {
     let data = {
         username: username,
         password: sha256(password),
@@ -12,7 +12,7 @@ export async function createUser(name, email, username, password) {
 
     let response = await axios({
         method: 'post',
-        url: 'http://localhost:8080/api/user',
+        url: 'http://localhost:8080/api/user' + eventToken,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export async function createUser(name, email, username, password) {
 }
 
 // Login USER
-export async function loginUser(username, password) {
+export async function loginUser(username, password, eventToken="") {
 
 	let data = {
         username: username,
@@ -45,7 +45,7 @@ export async function loginUser(username, password) {
 
 	let response = await axios({
 		method: 'post',
-        url: "http://localhost:8080/auth/token",
+        url: "http://localhost:8080/auth/token" + eventToken,
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
