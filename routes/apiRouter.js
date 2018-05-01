@@ -555,23 +555,59 @@ apiRouter.route("/canDraw")
         }
     });
 
+async function putGiftee(eventId, user, giftee) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("UPDATE participant SET giftee = :giftee WHERE eventId = :eventId AND username = :user", 
+        {eventId: eventId, user: user, giftee: giftee }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            }
+        });
+    })
+}
+
 apiRouter.route("/draw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
         // Populate participants using MariaDB.
-        let participants = [];
-        // Populate veto using MariaDB.
-        let veto = {};
-        let draw = drawer(participants, veto);
-        if (!draw) {
-            util.sendError(res, 400, "Unable to draw");
-            return;
-        }
-        /*
-            UPDATE MARIADB HERE
-        */
-        res.body.draw = draw;
-        util.correctPost(req, res, null);
+        getEventParticipants(eventId).then((participantsRaw) => {
+            let participants = [];
+            participantsRaw.forEach(element => {
+                participants.push(element.username);
+            });
+
+            getCurrentVetos(eventId).then((rawVeto) => {
+                let veto = {};
+                participants.forEach(element => {
+                    veto[element] = [];
+                })
+                rawVeto.forEach(element => {
+                    let vetoer = element.vetoer;
+                    if(veto[vetoer]) {
+                        veto[vetoer].push(element.vetoed);
+                    }
+                });
+
+                canDrawCheck(eventId, participants, veto).then((draw) => {
+                    if (!draw) {
+                        util.sendError(res, 400, "Unable to draw");
+                        return;
+                    }
+                    else {
+                        Object.keys(draw).forEach((user) => {
+                            let giftee = draw[user];
+                            putGiftee(eventId, user, giftee);
+                        })
+                        req.body.draw = draw;
+                        util.correctPost(req, res, null);
+                    }
+                });                
+            });
+        });
+
     });
 
 // Only expect to use this on GET requests.
