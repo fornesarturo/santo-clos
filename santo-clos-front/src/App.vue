@@ -122,8 +122,8 @@ export default {
       Cookies.remove("current_user");
       Cookies.remove("token");
       this.loggedIn = false;
-      location.href = "/logout";
       this.activeView = "login";
+      this.$router.push('/');
     },
     showModalClose: function() {
       this.showModal = false;
