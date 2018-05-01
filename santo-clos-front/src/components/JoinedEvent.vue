@@ -24,8 +24,6 @@ export default {
             this.$emit("update:sortDone", true);
         },
         showModalFunct: function() {
-            this.$parent.$parent.$parent.showModalJoined = true;
-            
             request.getMyWishlist(this.id).then(
                 (resMyWishlist) => {
                     request.getUsersFromEvent(this.id).then(
@@ -62,6 +60,7 @@ export default {
                                         wishlist: resMyWishlist
                                     }
                                     this.$parent.$parent.$parent.modalData(data);
+                                    this.$parent.$parent.$parent.showModalJoined = true;
                                 }
                             );
                         }
