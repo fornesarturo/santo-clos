@@ -38,6 +38,7 @@
     "nodemailer": "^4.6.4",
     "nodemon": "^1.17.3",
     "object-to-xml": "^1.1.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "vue-bulma-accordion": "^0.3.5"
   }
 }

@@ -4,12 +4,14 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
 
 Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: { App, BulmaAccordion,
+    BulmaAccordionItem},
   template: '<App/>'
 })
