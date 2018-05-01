@@ -18,16 +18,16 @@ export default {
             sortDoneCopy: this.sortDone
         };
     },
-    props: ['name', 'date', 'id', 'location', 'hostname', 'maxamount', 'wishlist', 'sortDone'],
+    props: ['name', 'date', 'id', 'location', 'hostname', 'maxAmount', 'wishlist', 'sortDone'],
     methods: {
         updateSortDone: function(){
             this.$emit("update:sortDone", true);
         },
         showModalFunct: function() {
-            this.$parent.$parent.$parent.showModal = true;
+            this.$parent.$parent.$parent.showModalJoined = true;
             
             request.getMyWishlist(this.id).then(
-                (resMyWishList) => {
+                (resMyWishlist) => {
                     request.getUsersFromEvent(this.id).then(
                         (resUsers) => {
                             let resUsersExcl = [];

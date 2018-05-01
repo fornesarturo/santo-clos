@@ -48,6 +48,20 @@
         v-bind:sortDone.sync="eventModal.sortDone"
         v-bind:parentComponent="eventModal.parentComponent">
     </Modal>
+    <ModalJoined v-if="showModalJoined" @close="showModalJoinedClose()"
+        v-bind:gifteeList="eventModal.gifteeList"
+        v-bind:name="eventModal.name"
+        v-bind:date="eventModal.date"
+        v-bind:location="eventModal.location"
+        v-bind:hostName="eventModal.hostName"
+        v-bind:userYouGive="eventModal.userYouGive"
+        v-bind:maxAmount="eventModal.maxAmount"
+        v-bind:eventId="eventModal.eventId"
+        v-bind:wishlist="eventModal.wishlist"
+        v-bind:participants="eventModal.participants"
+        v-bind:sortDone.sync="eventModal.sortDone"
+        v-bind:parentComponent="eventModal.parentComponent">
+    </ModalJoined>
     </div>
     <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>
   </div>
@@ -56,13 +70,15 @@
 <script>
 /* eslint-disable */
 import Modal from '@/components/Modal'
+import ModalJoined from '@/components/ModalJoined'
 import '@/assets/vendor/js-cookie/js-cookie.js'
 const request = require('./components/requests/requests_main')
 
 export default {
   name: "App",
   components: {
-    Modal
+    Modal,
+    ModalJoined
   },
   data: () => {
     return {
@@ -72,6 +88,7 @@ export default {
       n: 0,
       items: [],
       showModal: false,
+      showModalJoined: false,
       eventModal: {}
     }
   },
@@ -110,7 +127,11 @@ export default {
     },
     showModalClose: function() {
       this.showModal = false;
-    }
+    },
+    showModalJoinedClose: function() {
+      console.log("CLOSE MOFO");
+      this.showModalJoined = false;
+    },
   },
   mounted() {
 

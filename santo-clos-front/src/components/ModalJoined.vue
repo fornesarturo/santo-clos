@@ -6,14 +6,10 @@
                     <div class="modal-header">
                         <span class="mainTitle">
                             <b>{{ name }}</b>
-                            <b class="mainSubtitle">IM GAY by {{ hostName }}</b>
+                            <b class="mainSubtitle">Hosted by {{ hostName }}</b>
                             <div class="row">
                                 <div class="buttonColumn">
                                     <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-danger btn-block">
-                                </div>
-                                <div class="buttonColumn">
-                                    <b v-if='sortDone'></b>
-                                    <input type="button" v-else v-on:click='finishEvent()' value="Accept Event" class="loginOnly btn btn-lg btn-success btn-block">
                                 </div>
                             </div>
                         </span>
@@ -82,8 +78,6 @@
                                     <span class="mainTitle">
                                         <b> Participants </b>
                                     </span>
-                                    <input type="button" id="addParticipantButton" v-on:click='add()' value="Add Participant" class="loginOnly btn btn-lg btn-primary btn-block">
-                                    <br>
                                     <ul>
                                         <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                                             <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
@@ -109,7 +103,7 @@ import NewWish from "@/components/NewWish";
 const request = require('./requests/requests_main');
 
 export default {
-  name: "Modal",
+  name: "ModalJoined",
   components: {
       NewParticipant, ParticipantWishlist, NewWish
   },
@@ -150,29 +144,16 @@ export default {
       }
     },
     addWish: function(){
-        this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
+        if(wishId == undefined){
+            console.log("was empty");
+        }else{
+            this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
+        }
     },
     removeWish: function(id){
         console.log(id);
         this.wishlist.splice(id, 1);
         console.log(JSON.stringify(this.wishlist));
-    },
-    finishEvent: function(){
-        request.startEvent(this.eventId).then(
-            (success) => {
-                if(success == true) {
-                    this.$emit("update:sortDone", true);
-                    this.parentComponent.updateSortDone();
-                }
-            }
-        )
-        // MOVE TO BUTTON v
-        let emails = [];
-        this.items.forEach((element) => {
-            emails.push({"email": element.value});
-        });
-        request.postEventParticipants(this.eventId, emails);
-
     },
     modifyWishlist: function() {
         // Logic to change wishlist to database
