@@ -88,7 +88,6 @@ function sendEmailInvite(participant, token) {
     else {
         var url = "https://santo-clos.herokuapp.com/?tokenEvent=" + token;
         shortenURL(url).then((urlS) => {
-            console.log(urlS);
             mail.sendMail(
                 participant.email,
                 "You've been invited to a SantoClos event!",
