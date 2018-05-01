@@ -4,7 +4,7 @@ import axios from 'axios'
 // Create USER in DB
 export async function createUser(name, email, username, password, eventToken="") {
     let data = {
-        username: username,
+        username: username.toLowerCase(),
         password: sha256(password),
         name: name,
         email: email
@@ -39,7 +39,7 @@ export async function createUser(name, email, username, password, eventToken="")
 export async function loginUser(username, password, eventToken="") {
 
 	let data = {
-        username: username,
+        username: username.toLowerCase(),
         password: sha256(password)
     };
 
