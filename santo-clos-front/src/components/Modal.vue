@@ -213,12 +213,8 @@
                         if (success) {
                             myThis.$emit("update:sortDone", true);
                             myThis.parentComponent.updateSortDone();
-                            console.log(success);
-                            console.log(document.cookie);
-                            console.log(Cookies.get("current_user"));
-                            console.log(success[Cookies.get("current_user")]);
-                            console.log(myThis);
-                            myThis.userYouGive = success[Cookies.get("current_user")];
+                            myThis.$emit("update:userYouGive", success[Cookies.get("current_user")]);
+                            myThis.parentComponent.updateUserYouGive(success[Cookies.get("current_user")]);
                         }
                     }
                 )

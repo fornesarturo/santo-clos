@@ -27,6 +27,9 @@ export default {
         updateSortDone: function() {
             this.$emit("update:sortDone", true);
         },
+        updateUserYouGive: function(giftee) {
+            this.$emit("update:sortDone", giftee);
+        },
         showModalFunct: function() {
             this.$parent.$parent.$parent.showModal = true;
             // /api/event/wishlist?id={eventId}&user={username}
