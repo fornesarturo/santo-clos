@@ -62,11 +62,36 @@
                                 </span>
                                 <ul>
                                     <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                        <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
+                                        <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b><br>
                                     </li>
                                 </ul>
                             </div>
                             <div class="row" v-else>
+                                <div class="container col-md-12">
+                                <span class="mainTitle">
+                                        <b> Veto </b>
+                                </span>
+                                <span class="mainSubtitle">
+                                    <b> Select the people you hate</b>
+                                </span>
+                            </div>
+                            <div class="container col-md-12">
+                                <BulmaAccordion
+                                        :dropdown="true"
+                                        :icon="'NADA'"
+                                    >
+                                        <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                                            <b class="accordionItem" slot="title">{{p.username}}</b>
+                                            <div slot="content">
+                                                <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
+                                            </div>
+                                        </BulmaAccordionItem>
+                                    </BulmaAccordion>
+                            </div><br>
+                            <div class="container col-md-12">
+                                <input type="button" id="doVetoButton" v-on:click='tryVeto()' value="Do Veto" class="loginOnly btn btn-lg btn-success btn-block">
+                            </div>
+                            <br>
                                 <div class="column">
                                     <span class="mainTitle">
                                                 <b> Your wishlist </b>
@@ -101,35 +126,11 @@
                                     <br>
                                     <ul>
                                         <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                            <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
+                                            <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b><br>
                                         </li>
                                     </ul>
                                     <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
                                 </div>
-                            </div>
-                            <div class="container col-md-12">
-                                <span class="mainTitle">
-                                        <b> Veto </b>
-                                </span>
-                                <span class="mainSubtitle">
-                                    <b> Select the people you hate</b>
-                                </span>
-                            </div>
-                            <div class="container col-md-12">
-                                <BulmaAccordion
-                                        :dropdown="true"
-                                        :icon="'NADA'"
-                                    >
-                                        <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                            <b class="accordionItem" slot="title">{{p.username}}</b>
-                                            <div slot="content">
-                                                <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
-                                            </div>
-                                        </BulmaAccordionItem>
-                                    </BulmaAccordion>
-                            </div><br>
-                            <div class="container col-md-12">
-                                <input type="button" id="doVetoButton" v-on:click='tryVeto()' value="Do Veto" class="loginOnly btn btn-lg btn-success btn-block">
                             </div>
                         </div>
                     </div>

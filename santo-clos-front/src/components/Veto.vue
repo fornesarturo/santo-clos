@@ -1,12 +1,16 @@
 <template>
     <div class="row">
-        <div class="col-md-1 offset-sm-3" >
-            <input type="checkbox" class="double">
-        </div>
-        <div class="col-md-8">
+        <div class="col-md-12">
             <ul>
                 <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                    <h2 v-if="validateParticipant(p.username)"> {{ p.name }} A.K.A: {{ p.username }} </h2>
+                    <div class="row">
+                        <div class="col-md-2 offset-sm-2">
+                            <input v-if="validateParticipant(p.username)" type="checkbox" class="double">
+                        </div>
+                        <div class="col-md-8">
+                            <h2 v-if="validateParticipant(p.username)"> {{ p.name }} A.K.A: {{ p.username }} </h2>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
