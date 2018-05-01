@@ -607,7 +607,6 @@ apiRouter.route("/draw")
                 });                
             });
         });
-
     });
 
 // Only expect to use this on GET requests.
