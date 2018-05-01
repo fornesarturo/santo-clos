@@ -117,6 +117,7 @@ export default {
     },
     methods: {
         createEventRequestMain: function () {
+          document.getElementById('createEventButton').disabled = true;
           var participantsRaw = $("#eventData").serializeArray()
           let participantsArray = []
           for(let i = 0; i < participantsRaw.length; i++) {
