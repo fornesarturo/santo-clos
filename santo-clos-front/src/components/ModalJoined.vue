@@ -6,7 +6,7 @@
                     <div class="modal-header">
                         <span class="mainTitle">
                             <b>{{ name }}</b>
-                            <b class="mainSubtitle">Hosted by {{ hostName }}</b>
+                            <b class="mainSubtitle">IM GAY by {{ hostName }}</b>
                             <div class="row">
                                 <div class="buttonColumn">
                                     <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-danger btn-block">
