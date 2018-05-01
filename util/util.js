@@ -68,7 +68,7 @@ async function shortenURL(url) {
 function sendEmailInvite(participant, token) {
     console.log("Sending sign in email invite to: ", participant.email);
     if(process.env.IS_LOCALHOST == "true") {
-        var url = "http://127.0.0.1:8081/#/?tokenEvent=" + token;
+        var url = "http://localhost:8081/#/?tokenEvent=" + token;
         mail.sendMail(
             participant.email,
             "You've been invited to a SantoClos event!",

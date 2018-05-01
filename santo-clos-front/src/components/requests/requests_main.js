@@ -309,10 +309,11 @@ export async function startEvent(eventId) {
     return response;
 }
 
-// Checks if can draw with available vetos
-export async function canDraw(eventId) {
+// Checks if can draw with available vetos, returns possible draw and vetos
+export async function canDraw(eventId, vetos) {
     let data = {
-        eventId: eventId
+        eventId: eventId,
+        vetos: vetos
     };
     let response = await axios({
         method: "post",

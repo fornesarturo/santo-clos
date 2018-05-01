@@ -464,8 +464,7 @@ async function getCurrentVetos(eventId) {
 apiRouter.route("/canDraw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
-        let newVetos = req.body.vetos 
-        || false;
+        let newVetos = req.body.vetos || false;
 
         if (eventId) {
             getEventParticipants(eventId).then((participantsRaw) => {
@@ -496,6 +495,7 @@ apiRouter.route("/canDraw")
                                                 return false;
                                             }
                                             else {
+                                                req.body.vetos = newVetos;
                                                 req.body.draw = canDraw;
                                                 util.correctPost(req, res, null);
                                                 return true;
@@ -532,6 +532,7 @@ apiRouter.route("/canDraw")
                                     console.log("VETOS: ", oldVeto);
                                     console.log("DRAW: ", canDraw);
                                     if(canDraw) {
+                                        req.body.vetos = oldVeto;
                                         req.body.draw = canDraw;
                                         util.correctPost(req, res, null);
                                     }
