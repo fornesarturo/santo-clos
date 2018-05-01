@@ -370,17 +370,35 @@ apiRouter.route("/event/giftee")
 apiRouter.route("/canDraw")
     .post((req, res, next) => {
         let eventId = req.body.eventId;
-        // Populate participants using MariaDB.
-        let participants = [];
-        // Populate veto using MariaDB.
-        let veto = {};
-        let draw = drawer(participants, veto);
-        if (!draw) {
-            util.sendError(res, 400, "Unable to draw");
-            return;
-        }
-        res.body.draw = draw;
-        util.correctPost(req, res, null);
+        let participants = []
+        if (eventId)
+            participants = mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
+                { id: eventId }, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.numRows > 0) {
+                        let data = util.process(rows);
+                        console.log(data);
+                        // Populate veto using MariaDB.
+                        let veto = {};
+                        let draw = drawer(participants, veto);
+                        if (!draw) {
+                            util.sendError(res, 400, "Unable to draw");
+                            return;
+                        }
+                        res.body.draw = draw;
+                        util.correctPost(req, res, null);
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
+                });
+        else
+            util.sendError(res, 400, "Some data was missing.");
+
+        console.log(participants);
     });
 
 apiRouter.route("/draw")

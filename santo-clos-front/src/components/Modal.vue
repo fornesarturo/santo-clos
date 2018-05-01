@@ -158,25 +158,24 @@ export default {
         console.log(JSON.stringify(this.wishlist));
     },
     finishEvent: function(){
-        // request.startEvent(this.eventId).then(
-        //     (success) => {
-        //         if(success == true) {
-        //             this.$emit("update:sortDone", true);
-        //             this.parentComponent.updateSortDone();
-        //             this.$forceUpdate();
-        //         }
-        //     }
-        // )
+        request.startEvent(this.eventId).then(
+            (success) => {
+                if(success == true) {
+                    this.$emit("update:sortDone", true);
+                    this.parentComponent.updateSortDone();
+                }
+            }
+        )
+        // MOVE TO BUTTON v
         let emails = [];
         this.items.forEach((element) => {
             emails.push({"email": element.value});
         });
-        console.log(emails);
         request.postEventParticipants(this.eventId, emails);
 
     },
-    modifyWishlist: function(){
-        //logic to change wishlist to database
+    modifyWishlist: function() {
+        // Logic to change wishlist to database
         request.putAllWishes(this.eventId, this.wishlist);
     }
   }

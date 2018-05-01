@@ -278,7 +278,7 @@ export async function getUsersFromEvent(eventId) {
     return response;
 }
 
-// Get users for designated event
+// Start (And draw in next call) designated event
 export async function startEvent(eventId) {
     let data = {
         eventId: eventId
@@ -297,7 +297,38 @@ export async function startEvent(eventId) {
         (res) => {
             let resJSON = res.data;
             if(res.status == 200){
-                console.log("TRUE!!!");
+                return canDraw(eventId);
+            }
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false;
+    });
+    return response;
+}
+
+// Checks if can draw with available vetos
+export async function canDraw(eventId) {
+    let data = {
+        eventId: eventId
+    };
+    let response = await axios({
+        method: "post",
+        url: "http://localhost:8080/api/canDraw",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200){
+                console.log(resJSON);
                 return true;
             }
             else return false;
@@ -309,6 +340,8 @@ export async function startEvent(eventId) {
     });
     return response;
 }
+
+
 
 // Put wishlist (Erase and update) of user
 export async function putAllWishes(eventId, wishes) {
