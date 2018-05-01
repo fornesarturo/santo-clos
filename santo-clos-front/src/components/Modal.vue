@@ -83,7 +83,7 @@
                                         <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                                             <b class="accordionItem" slot="title">{{p.username}}</b>
                                             <div slot="content">
-                                                <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
+                                                <Veto v-on:changecheck='changeChecked($event, p.username)' v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
                                             </div>
                                         </BulmaAccordionItem>
                                     </BulmaAccordion>
@@ -178,13 +178,25 @@
         data: function() {
             return {
                 n: 0,
-                items: []
+                items: [],
+                vetoDictionary: {}
             };
         },
         //   updated: function() {
         //       this.sortDoneCopy = this.sortDone;
         //       console.log(this.sortDoneCopy, this.sortDone);
         //   },
+        created: function() {
+            let usernames = []
+            for (let participant of this.participants) {
+                usernames.push(participant.username)
+            }
+            for (let participant of usernames) {
+                this.vetoDictionary[participant] = []
+            }
+            console.log(this.participants)
+            console.log(JSON.stringify(this.vetoDictionary))
+        },
         methods: {
             createEventRequest: function() {},
             add: function() {
@@ -242,6 +254,15 @@
             modifyWishlist: function() {
                 // Logic to change wishlist to database
                 request.putAllWishes(this.eventId, this.wishlist);
+            },
+            changeChecked: function(who, owner) {
+                console.log("Who = ", who)
+                if (this.vetoDictionary[owner].indexOf(who) != -1) {
+                    this.vetoDictionary[owner].splice(this.vetoDictionary[owner].indexOf(who), 1)
+                } else {
+                    this.vetoDictionary[owner].push(who)
+                }
+                console.log(JSON.stringify(this.vetoDictionary))
             },
             tryVeto(){
 

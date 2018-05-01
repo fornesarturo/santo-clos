@@ -5,7 +5,7 @@
                 <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                     <div class="row">
                         <div class="col-md-2 offset-sm-2">
-                            <input v-if="validateParticipant(p.username)" type="checkbox" class="double">
+                            <input v-if="validateParticipant(p.username)" v-bind:value="p.username" type="checkbox" class="double inputVeto" v-on:change="changeStatus($event.target.value)">
                         </div>
                         <div class="col-md-8">
                             <h2 v-if="validateParticipant(p.username)"> {{ p.name }} A.K.A: {{ p.username }} </h2>
@@ -22,16 +22,20 @@
 /*<li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                     <b v-if="validateParticipant()" class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
                 </li>*/
-    import CheckboxRadio from 'vue-checkbox-radio';
+    import CheckboxRadio from 'vue-checkbox-radio'
     export default {
         name: 'Veto',
-        props: ["hostname","participants"],
+        props: ["hostname","participants", "value"],
         components: {
             CheckboxRadio
         },
         methods: {
             validateParticipant: function(participant){
-                return (this.hostname != participant);
+                return (this.hostname != participant)
+            },
+            changeStatus: function(value) {
+                console.log("OnChangeCalled: ", value)
+      	        this.$emit('changecheck', value)
             }
         }
     }
