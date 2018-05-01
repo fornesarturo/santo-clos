@@ -107,21 +107,31 @@
                                     <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
                                 </div>
                             </div>
+                            <div class="container col-md-12">
+                                <span class="mainTitle">
+                                        <b> Veto </b>
+                                </span>
+                                <span class="mainSubtitle">
+                                    <b> Select the people you hate</b>
+                                </span>
+                            </div>
+                            <div class="container col-md-12">
+                                <BulmaAccordion
+                                        :dropdown="true"
+                                        :icon="'NADA'"
+                                    >
+                                        <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                                            <b class="accordionItem" slot="title">{{p.username}}</b>
+                                            <div slot="content">
+                                                <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
+                                            </div>
+                                        </BulmaAccordionItem>
+                                    </BulmaAccordion>
+                            </div><br>
+                            <div class="container col-md-12">
+                                <input type="button" id="doVetoButton" v-on:click='tryVeto()' value="Do Veto" class="loginOnly btn btn-lg btn-success btn-block">
+                            </div>
                         </div>
-                        <br><br>
-                        <BulmaAccordion
-                            :dropdown="true"
-                            :icon="'NADA'"
-                        >
-                            <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                <b class="accordionItem" slot="title">{{p.username}}</b>
-                                <div slot="content">
-                                    <b> Ptm </b>
-                                    <b>wey</b>
-                                    <Veto v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
-                                </div>
-                            </BulmaAccordionItem>
-                        </BulmaAccordion>
                     </div>
                 </div>
             </div>
@@ -132,7 +142,7 @@
 <script>
 /* eslint-disable */
 /**<Veto v-bind:hostName="p.username" v-bind:participants="participants"> </Veto> */
-    import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion'
+    import { BulmaAccordion, BulmaAccordionItem } from 'vue-bulma-accordion';
     import NewParticipant from "@/components/NewParticipant";
     import ParticipantWishlist from "@/components/ParticipantWishlist";
     import NewWish from "@/components/NewWish";
@@ -213,12 +223,8 @@
                         if (success) {
                             myThis.$emit("update:sortDone", true);
                             myThis.parentComponent.updateSortDone();
-                            console.log(success);
-                            console.log(document.cookie);
-                            console.log(Cookies.get("current_user"));
-                            console.log(success[Cookies.get("current_user")]);
-                            console.log(myThis);
-                            myThis.userYouGive = success[Cookies.get("current_user")];
+                            myThis.$emit("update:userYouGive", success[Cookies.get("current_user")]);
+                            myThis.parentComponent.updateUserYouGive(success[Cookies.get("current_user")]);
                         }
                     }
                 )
@@ -235,6 +241,9 @@
             modifyWishlist: function() {
                 // Logic to change wishlist to database
                 request.putAllWishes(this.eventId, this.wishlist);
+            },
+            tryVeto(){
+
             }
         }
     };
