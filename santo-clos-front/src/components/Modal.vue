@@ -44,7 +44,7 @@
                                     </span>
                                     <div class="row">
                                         <div class="buttonColumn">
-                                           <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="btn-primary">
+                                           <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
                                             <!-- <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block"> -->
                                         </div>
                                         <div class="buttonColumn">
