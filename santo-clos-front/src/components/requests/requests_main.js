@@ -328,6 +328,37 @@ export async function canDraw(eventId) {
         (res) => {
             let resJSON = res.data;
             if(res.status == 200){
+                return draw(eventId);
+            }
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false;
+    });
+    return response;
+}
+
+// Makes the actual draw
+export async function draw(eventId) {
+    let data = {
+        eventId: eventId
+    };
+    let response = await axios({
+        method: "post",
+        url: "http://localhost:8080/api/draw",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200){
                 return resJSON.inserted.draw;
             }
             else return false;
