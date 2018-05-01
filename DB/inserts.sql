@@ -26,3 +26,16 @@ INSERT INTO wish (eventId, username, wish) VALUES (96, "osoazul1_1", "Significad
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 1");
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 2");
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 3");
+
+INSERT INTO veto VALUES (96, "A", "C");
+INSERT INTO veto VALUES (96, "A", "D");
+INSERT INTO veto VALUES (96, "A", "E");
+INSERT INTO veto VALUES (96, "B", "C");
+INSERT INTO veto VALUES (96, "B", "D");
+INSERT INTO veto VALUES (96, "B", "E");
+INSERT INTO veto VALUES (96, "C", "A");
+INSERT INTO veto VALUES (96, "D", "A");
+INSERT INTO veto VALUES (96, "D", "B");
+INSERT INTO veto VALUES (96, "D", "E");
+INSERT INTO veto VALUES (96, "E", "A");
+INSERT INTO veto VALUES (96, "E", "B");
