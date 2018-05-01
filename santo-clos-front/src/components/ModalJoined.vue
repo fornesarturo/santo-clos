@@ -83,7 +83,6 @@
                                             <b class="mainB"> {{ p.name }} A.K.A: {{ p.username }} </b>
                                         </li>
                                     </ul>
-                                    <NewParticipant v-for="i in items" v-bind:key="i.id" v-bind:id="i.id" v-model="i.value" v-on:remove-item='remove($event)'></NewParticipant>
                                 </div>
                             </div>
                         </div>
@@ -144,11 +143,10 @@ export default {
       }
     },
     addWish: function(){
-        if(wishId == undefined){
-            console.log("was empty");
-        }else{
+        if(this.wishlist.length-1 >= 0) 
             this.wishlist.push({wishId: parseInt(this.wishlist[this.wishlist.length-1].wishId)+1, wish: ""});
-        }
+        else 
+            this.wishlist.push({wishId: 1, wish: ""});
     },
     removeWish: function(id){
         console.log(id);
