@@ -38,15 +38,9 @@ export default {
 
                     request.getUsersFromEvent(this.id).then(
                         (resUsers) => {
-                            let resUsersExcl = [];
                             let myGifteeUsername;
                             for(let i in resUsers) {
-                                if(resUsers[i].username != Cookies.get("current_user")) {
-                                    resUsersExcl.push(resUsers[i]);
-                                }
-                                else {
-                                    myGifteeUsername = resUsers[i].giftee || "lafercho";
-                                }
+                                myGifteeUsername = resUsers[i].giftee || "lafercho";
                             }
                             let modalStarted;
                             if(this.sortDone== false) {
@@ -71,7 +65,7 @@ export default {
                                         eventId: this.id, 
                                         userYouGive: myGifteeUsername,
                                         gifteeList: resGifteeWishlist,
-                                        participants: resUsersExcl,
+                                        participants: resUsers,
                                         wishlist: resMyWishlist
                                     }
                                     this.$parent.$parent.$parent.modalData(data);
