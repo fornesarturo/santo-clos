@@ -43,7 +43,8 @@ authRouter.route("/token")
                     res.charset = 'utf-8';
                     data = {
                         type: "Bearer",
-                        access_token: bearToken
+                        access_token: bearToken,
+                        current_user: username
                     }
                     res.cookie("token", bearToken, 
                     { 

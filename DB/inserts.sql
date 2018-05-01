@@ -27,6 +27,17 @@ INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafer
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 2");
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 3");
 
+INSERT INTO user VALUES ("A", "hashed-password", "A", "a@a.com");
+INSERT INTO user VALUES ("B", "hashed-password", "B", "b@a.com");
+INSERT INTO user VALUES ("C", "hashed-password", "C", "c@a.com");
+INSERT INTO user VALUES ("D", "hashed-password", "D", "d@a.com");
+INSERT INTO user VALUES ("E", "hashed-password", "E", "e@a.com");
+INSERT INTO participant VALUES ("F", 96, null);
+INSERT INTO participant VALUES ("E", 96, null);
+INSERT INTO participant VALUES ("D", 96, null);
+INSERT INTO participant VALUES ("C", 96, null);
+INSERT INTO participant VALUES ("B", 96, null);
+INSERT INTO participant VALUES ("A", 96, null);
 INSERT INTO veto VALUES (96, "A", "C");
 INSERT INTO veto VALUES (96, "A", "D");
 INSERT INTO veto VALUES (96, "A", "E");
