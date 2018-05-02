@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Credentials", true);
     res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, PUT, PATCH, POST, DELETE");
     // res.setHeader("Access-Control-Allow-Headers", "content-type");
-    // res.setHeader("Access-Control-Allow-Headers", "content-type, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin, Accept");
+    res.setHeader("Access-Control-Allow-Headers", "content-type, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin, Accept");
     // res.setHeader("Vary", "Origin, Access-Control-Request-Headers");
     next();
 });
