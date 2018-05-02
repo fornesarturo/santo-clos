@@ -3,6 +3,7 @@ const util = require('../util/util.js');
 const cache = require('../util/cache.js');
 const mariadb = require('../util/mariadb.js');
 const auth = require('../util/authenticate.js');
+const drawer = require('../util/drawNames.js');
 
 var apiRouter = express.Router();
 
@@ -19,7 +20,7 @@ apiRouter.route("/user")
                     return;
                 }
                 else {
-                    res.redirect(307, '../../auth/token');
+                    util.correctPost(req, res, null)
                 }
             });
     else
@@ -30,7 +31,7 @@ apiRouter.route("/user")
 apiRouter.use(auth.authenticateJWT);
 
 apiRouter.route("/user")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.query["user"] || false;
         if (user)
             mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
@@ -45,7 +46,7 @@ apiRouter.route("/user")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found user in DB.");
                     }
                 });
         else
@@ -71,7 +72,7 @@ apiRouter.route("/user")
                             return;
                         }
                         else {
-                            util.sendError(res, 404, "Not found in DB.");
+                            util.sendError(res, 404, "Not found user in DB.");
                         }
                     });
             else
@@ -82,7 +83,7 @@ apiRouter.route("/user")
     );
 
 apiRouter.route("/user/events")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.body.authUsername || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE admin = :user",
@@ -94,10 +95,11 @@ apiRouter.route("/user/events")
                     if (rows.info.numRows > 0) {
                         let data = util.process(rows);
                         req.body.data = data;
+                        res.status(200);
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found events in DB.");
                     }
                 });
         else
@@ -105,7 +107,7 @@ apiRouter.route("/user/events")
     });
 
 apiRouter.route("/user/joinedEvents")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.body.authUsername || false;
         if (user)
             mariadb.query("SELECT * FROM event JOIN participant WHERE event.eventId = participant.eventId AND participant.username = :user AND event.admin != :user",
@@ -120,15 +122,37 @@ apiRouter.route("/user/joinedEvents")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found joined events in DB.");
                     }
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
     });
 
+apiRouter.route("/eventStart") 
+    .put((req, res, next) => {
+        if (req.body) {
+            let query = "UPDATE event SET started = 1 WHERE eventId = " + req.body.eventId;
+            mariadb.query(query, (err, rows) => {
+                if (err) {
+                    util.sendError(res, 500, err);
+                    return;
+                }
+                if (rows.info.affectedRows > 0) {
+                    util.correctPost(req, res, null);
+                    return;
+                }
+                else {
+                    util.sendError(res, 404, "Not found event in DB.");
+                }
+            });
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    });
+
 apiRouter.route("/event")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let eventId = req.query["id"] || false;
         if (user)
             mariadb.query("SELECT * FROM event WHERE eventId = :id",
@@ -143,7 +167,7 @@ apiRouter.route("/event")
                         next();
                     }
                     else {
-                        util.sendError(res, 404, "Not found in DB.");
+                        util.sendError(res, 404, "Not found event in DB.");
                     }
                 });
         else
@@ -163,6 +187,7 @@ apiRouter.route("/event")
                 }
                 if (rows.info.affectedRows > 0) {
                     req.body.eventId = rows.info.insertId;
+                    util.addUserToEvent(req.body.authUsername, req.body.eventId, null);
                     util.correctPost(req, res, rows.info.insertId);
                     return;
                 }
@@ -172,13 +197,63 @@ apiRouter.route("/event")
             })
         else
             util.sendError(res, 400, "Some data was missing.");
-    });
+    })
+    .delete((req, res, next) => {
+        let id = req.body.id;
+        if (id) {
+            mariadb.query("DELETE FROM event WHERE eventId = :id", { id: id }, 
+                (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err)
+                        return
+                    }
+                    if (rows.info.affectedRows >= 0) {
+                        mariadb.query("DELETE FROM participant WHERE eventId = :id" , { id: id },
+                            (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err)
+                                    return
+                                }
+                                if (rows.info.affectedRows >= 0) {
+                                    mariadb.query("DELETE FROM wish WHERE eventId = :id" , { id: id },
+                                        (err, rows) => {
+                                            if (err) {
+                                                util.sendError(res, 500, err)
+                                                return
+                                            }
+                                            if (rows.info.affectedRows >= 0) {
+                                                mariadb.query("DELETE FROM veto WHERE eventId = :id" , { id: id },
+                                                    (err, rows) => {
+                                                        if (err) {
+                                                            util.sendError(res, 500, err)
+                                                            return
+                                                        }
+                                                        util.correctDelete(req, res)
+                                                        return
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
+                            }
+                        );
+                    } 
+                    else {
+                        util.sendError(res, 400, "Not found in DB.")
+                    }
+                }
+            );
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    })
 
 apiRouter.route("/event/users")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let event = req.query["id"] || false;
         if (event)
-            mariadb.query("SELECT * FROM participant WHERE eventId = :id",
+            mariadb.query("SELECT user.username, eventId, giftee, name, email FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
                 { id: event }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
@@ -216,7 +291,8 @@ apiRouter.route("/event/users")
                             participant.adminName = util.process(rows)[0].name;
                             if (rowsParticipants.info.numRows > 0) {
                                 // console.log("Already in DB");
-                                util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
+                                // util.addUserToEvent(util.process(rowsParticipants)[0].username, req.body.eventId, null);
+                                util.sendEmailInvite(participant, auth.signJWTInvite(req.body.eventId, participant.email));
                             }
                             else {
                                 // This particular email isn't in our DB, so we send them an email invite.
@@ -234,11 +310,11 @@ apiRouter.route("/event/users")
     });
 
 apiRouter.route("/event/wishlist")
-    .get(cache(20), (req, res, next) => {
-        let user = req.body.authUsername || false;
+    .get((req, res, next) => {
+        let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event) {
-            mariadb.query("SELECT wish FROM wish WHERE username = :username AND eventId = :id",
+            mariadb.query("SELECT wishId, wish FROM wish WHERE username = :username AND eventId = :id",
                 { id: event, username: user }, (err, rows) => {
                     if (err) {
                         util.sendError(res, 500, err);
@@ -278,10 +354,48 @@ apiRouter.route("/event/wishlist")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    })
+    .put((req, res, next) => {
+        let user = req.body.authUsername || false;
+        let event = req.body.eventId || false;
+        let wishes = req.body.wishes || false;
+        if (user && event && wishes)
+            mariadb.query("DELETE FROM wish WHERE username = :username AND eventId = :id",
+                { id: event, username: user}, (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err);
+                        return;
+                    }
+                    if (rows.info.affectedRows >= 0) {
+                        for(let wishId in wishes) {
+                            mariadb.query("INSERT INTO wish(eventId, username, wish) VALUES (:id, :username, :wishText)",
+                            { id: event, username: user, wishText: wishes[wishId].wish }, (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err);
+                                    return;
+                                }
+                                if (rows.info.affectedRows > 0) {
+                                    return
+                                }
+                                else {
+                                    util.sendError(res, 404, "Not found in DB.");
+                                    return;
+                                }
+                            });
+                        }
+                        util.correctPost(req, res, null);
+                        return
+                    }
+                    else {
+                        util.sendError(res, 404, "Not found in DB.");
+                    }
+                });
+        else
+            util.sendError(res, 400, "Some data was missing.");
     });
 
 apiRouter.route("/event/giftee")
-    .get(cache(20), (req, res, next) => {
+    .get((req, res, next) => {
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
@@ -302,6 +416,239 @@ apiRouter.route("/event/giftee")
                 });
         else
             util.sendError(res, 400, "Some data was missing.");
+    });
+
+async function getEventParticipants(eventId) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("SELECT user.username FROM participant JOIN user WHERE participant.eventId = :id AND participant.username = user.username",
+        { id: eventId }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            if (rows.info.numRows > 0) {
+                resolve(util.process(rows));
+            }
+            else {
+                reject(false);
+            }
+        });
+    });
+    return response;
+
+}
+
+async function canDrawCheck(eventId, participants, veto) {
+    let response = await drawer(participants, veto).then((draw) => {
+        if (!draw) {
+            return false;
+        }
+        return draw;
+    });
+    return response;
+}
+
+async function deleteAllVetos(eventId) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            } 
+        });
+    })
+    return response;
+}
+
+async function insertSingleVeto(eventId, vetoer, vetoed) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("INSERT INTO veto VALUES (:eventId, :vetoer, :vetoed)", 
+        {eventId: eventId, vetoer: vetoer, vetoed: vetoed }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            }
+        });
+    });
+    return response;
+}
+
+async function insertVetos(eventId, newVetos) {
+    let response = await new Promise((resolve, reject) => {
+        Object.keys(newVetos).forEach((vetoer) => {
+            newVetos[vetoer].forEach((vetoed) => {
+                insertSingleVeto(eventId, vetoer, vetoed).then((inserted) => {
+                    if(!inserted) {
+                        reject(false);
+                    }
+                    else {
+                        resolve(true);
+                    }
+                });
+            })
+        });
+    });
+    return response;
+}
+
+async function getCurrentVetos(eventId) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("SELECT * FROM veto WHERE eventId = :eventId", { eventId: eventId }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else if (rows.info.numRows >= 0) {
+                resolve(util.process(rows));
+            }
+        });
+    });
+    return response;
+}
+
+apiRouter.route("/canDraw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        let newVetos = req.body.vetos || false;
+
+        if (eventId) {
+            getEventParticipants(eventId).then((participantsRaw) => {
+                if(!participantsRaw) {
+                    util.sendError(res, 500, err);
+                }
+                else {
+                    let participants = [];
+                    participantsRaw.forEach(element => {
+                        participants.push(element.username);
+                    });
+                    if(newVetos) {
+                        let vetoBuid = {};
+                        canDrawCheck(eventId, participants, newVetos).then((canDraw) => {
+                            if (!canDraw) {
+                                util.sendError(res, 400, "Unable to draw");
+                                return false;
+                            }
+                            else {
+                                deleteAllVetos(eventId).then((deleted) => {
+                                    if(!deleted) {
+                                        util.sendError(res, 500, err);
+                                    }
+                                    else {
+                                        insertVetos(eventId, newVetos).then((inserted) => {
+                                            if(!inserted) {
+                                                util.sendError(res, 500, err);
+                                                return false;
+                                            }
+                                            else {
+                                                req.body.vetos = newVetos;
+                                                req.body.draw = canDraw;
+                                                util.correctPost(req, res, null);
+                                                return true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    // Will check if old data works. IT SHOULD.
+                    else {
+                        getCurrentVetos(eventId).then((rawVetos) => {
+                            if(!rawVetos) {
+                                util.sendError(res, 500, err);
+                            }
+                            else {
+                                let oldVeto = {};
+                                participants.forEach(element => {
+                                    oldVeto[element] = [];
+                                })
+                                rawVetos.forEach(element => {
+                                    let vetoer = element.vetoer;
+                                    if(oldVeto[vetoer]) {
+                                        oldVeto[vetoer].push(element.vetoed);
+                                    }
+                                });
+                                if(participants.length > 1) {
+                                    canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
+                                        if(!canDraw) {
+                                            util.sendError(res, 500, err);
+                                        }
+                                        else {
+                                            req.body.vetos = oldVeto;
+                                            req.body.draw = canDraw;
+                                            util.correctPost(req, res, null);
+                                        }
+                                    });
+                                }
+                                else {
+                                    req.body.vetos = oldVeto;
+                                    util.correctPost(req, res, null);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else {
+            util.sendError(res, 400, "Some data was missing.");
+        }
+    });
+
+async function putGiftee(eventId, user, giftee) {
+    let response = await new Promise((resolve, reject) => {
+        mariadb.query("UPDATE participant SET giftee = :giftee WHERE eventId = :eventId AND username = :user", 
+        {eventId: eventId, user: user, giftee: giftee }, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(true);
+            }
+        });
+    })
+}
+
+apiRouter.route("/draw")
+    .post((req, res, next) => {
+        let eventId = req.body.eventId;
+        // Populate participants using MariaDB.
+        getEventParticipants(eventId).then((participantsRaw) => {
+            let participants = [];
+            participantsRaw.forEach(element => {
+                participants.push(element.username);
+            });
+
+            getCurrentVetos(eventId).then((rawVeto) => {
+                let veto = {};
+                participants.forEach(element => {
+                    veto[element] = [];
+                })
+                rawVeto.forEach(element => {
+                    let vetoer = element.vetoer;
+                    if(veto[vetoer]) {
+                        veto[vetoer].push(element.vetoed);
+                    }
+                });
+
+                canDrawCheck(eventId, participants, veto).then((draw) => {
+                    if (!draw) {
+                        util.sendError(res, 400, "Unable to draw");
+                        return;
+                    }
+                    else {
+                        Object.keys(draw).forEach((user) => {
+                            let giftee = draw[user];
+                            putGiftee(eventId, user, giftee);
+                        })
+                        req.body.draw = draw;
+                        util.correctPost(req, res, null);
+                    }
+                });                
+            });
+        });
     });
 
 // Only expect to use this on GET requests.
