@@ -26,3 +26,28 @@ INSERT INTO wish (eventId, username, wish) VALUES (96, "osoazul1_1", "Significad
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 1");
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 2");
 INSERT INTO wish (eventId, username, wish) VALUES (96, "lafercho", "Regalo lafercho 3");
+
+INSERT INTO user VALUES ("a", "hashed-password", "a", "a@a.com");
+INSERT INTO user VALUES ("b", "hashed-password", "b", "b@a.com");
+INSERT INTO user VALUES ("c", "hashed-password", "c", "c@a.com");
+INSERT INTO user VALUES ("d", "hashed-password", "d", "d@a.com");
+INSERT INTO user VALUES ("e", "hashed-password", "e", "e@a.com");
+INSERT INTO user VALUES ("f", "hashed-password", "f", "f@a.com");
+INSERT INTO participant VALUES ("f", 96, null);
+INSERT INTO participant VALUES ("e", 96, null);
+INSERT INTO participant VALUES ("d", 96, null);
+INSERT INTO participant VALUES ("c", 96, null);
+INSERT INTO participant VALUES ("b", 96, null);
+INSERT INTO participant VALUES ("a", 96, null);
+INSERT INTO veto VALUES (96, "a", "c");
+INSERT INTO veto VALUES (96, "a", "d");
+INSERT INTO veto VALUES (96, "a", "e");
+INSERT INTO veto VALUES (96, "b", "c");
+INSERT INTO veto VALUES (96, "b", "d");
+INSERT INTO veto VALUES (96, "b", "e");
+INSERT INTO veto VALUES (96, "c", "a");
+INSERT INTO veto VALUES (96, "d", "a");
+INSERT INTO veto VALUES (96, "d", "b");
+INSERT INTO veto VALUES (96, "d", "e");
+INSERT INTO veto VALUES (96, "e", "A");
+INSERT INTO veto VALUES (96, "e", "b");

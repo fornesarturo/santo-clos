@@ -9,19 +9,19 @@
           <span class='mainSubtitle'><b>Please Log In or Register</b></span>
           <div class='fields'>
             <div id='nameField' class='registerOnly inputWrapper inputValidate' style='display:none' data-validate='Name is required'>
-              <input class='inputLine' v-model='name' type='text' name='name' placeholder='Name'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='name' type='text' name='name' placeholder='Name'>
               <span class='inputFocus'></span>
             </div>
             <div id='emailField' class='registerOnly inputWrapper inputValidate' style='display:none' data-validate = 'Valid email is required: ex@abc.xyz'>
-              <input class='inputLine' v-model='email' type='text' name='email' placeholder='Email'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='email' type='text' name='email' placeholder='Email'>
               <span class='inputFocus'></span>
             </div>
             <div id='usernameField' class='loginAndRegister inputWrapper inputValidate' data-validate='Username is required'>
-              <input class='inputLine' v-model='username' type='text' name='username' placeholder='Username'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='username' type='text' name='username' placeholder='Username'>
               <span class='inputFocus'></span>
             </div>
             <div id='passwordField' class='loginAndRegister inputWrapper inputValidate' data-validate='Minimum of 8 characters, at least one uppercase, one lowercase, one digit and one special'>
-              <input class='inputLine' v-model='password' type='password' name='password' placeholder='Password'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='password' type='password' name='password' placeholder='Password'>
               <span class='inputFocus'></span>
             </div>
           </div>
@@ -81,26 +81,24 @@ function showValidate(input) {
     let thisAlert = $(input).parent();
     $(thisAlert).addClass("alertValidation");
 }
-// Remove validation error
-function hideValidate(input) {
-    let thisAlert = $(input).parent();
-    $(thisAlert).removeClass("alertValidation");
-}
 
 export default {
   name: "LoginIndex",
   data: () => {
     return {
       mode: login,
-	  modeText: "I don't have an account",
-	  buttonText: "Log In",
+	    modeText: "I don't have an account",
+	    buttonText: "Log In",
       name: "",
       email: "",
       username: "",
-      password: ""
+      password: "",
+      eventToken: ""
     };
   },
   created: function() {
+    if (this.$route.query.tokenEvent)
+      this.eventToken = "?tokenEvent=" + this.$route.query.tokenEvent
     this.mode = login;
     this.modeText = "I don't have an account";
     this.buttonText= "Log In";
@@ -109,6 +107,13 @@ export default {
   methods: {
     loginSetActive: function() {
       this.$emit('login-setActive');
+    },
+    focusTest: function(){
+      console.log("Hi, welcome to Chilli's");
+    },
+    hideValidate: function(input){
+      let thisAlert = $(input).parent();
+      $(thisAlert).removeClass("alertValidation");
     },
 		modeChange: function () {
 			let button = $("#changeMode");
@@ -149,12 +154,17 @@ export default {
           checkPassed=false;
         }
         if(checkPassed) {
-          request.loginUser(usernameVal, passwordVal).then((next) => {
+          request.loginUser(usernameVal, passwordVal, this.eventToken).then((next) => {
 					  if(next) {
               this.$emit('login-event');
               this.$emit('change-to-hub');
               this.$router.push('/hub');
-					  }
+            }
+            else {
+              showValidate(username);
+              showValidate(password);
+              alert("Wrong username or password");
+            }
 				  })
         }
 			} 
@@ -187,10 +197,10 @@ export default {
         }
 
         if(checkPassed) {
-          request.createUser(nameVal, emailVal, usernameVal, passwordVal)
+          request.createUser(nameVal, emailVal, usernameVal, passwordVal, this.eventToken)
           .then(res => {
             if (res) {
-              request.loginUser(usernameVal, passwordVal).then((next) => {
+              request.loginUser(usernameVal, passwordVal, this.eventToken).then((next) => {
 					      if(next) {
                   this.$emit('login-event');
                   this.$emit('change-to-hub');
@@ -209,6 +219,7 @@ export default {
 </script>
 
 <style scoped>
+@import './../assets/fonts/font-awesome-4.7.0/css/font-awesome.css';
 @import './../assets/css/index.css';
 
 .copyright {

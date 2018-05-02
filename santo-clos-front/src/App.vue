@@ -40,14 +40,29 @@
         v-bind:date="eventModal.date"
         v-bind:location="eventModal.location"
         v-bind:hostName="eventModal.hostName"
-        v-bind:userYouGive="eventModal.userYouGive"
+        v-bind:userYouGive.sync="eventModal.userYouGive"
+        v-bind:maxAmount="eventModal.maxAmount"
+        v-bind:eventId="eventModal.eventId"
+        v-bind:wishlist="eventModal.wishlist"
+        v-bind:participants="eventModal.participants"
+        v-bind:sortDone.sync="eventModal.sortDone"
+        v-bind:parentComponent="eventModal.parentComponent"
+        @delete="setHubActivePlz()">
+    </Modal>
+    <ModalJoined v-if="showModalJoined" @close="showModalJoinedClose()"
+        v-bind:gifteeList="eventModal.gifteeList"
+        v-bind:name="eventModal.name"
+        v-bind:date="eventModal.date"
+        v-bind:location="eventModal.location"
+        v-bind:hostName="eventModal.hostName"
+        v-bind:userYouGive.sync="eventModal.userYouGive"
         v-bind:maxAmount="eventModal.maxAmount"
         v-bind:eventId="eventModal.eventId"
         v-bind:wishlist="eventModal.wishlist"
         v-bind:participants="eventModal.participants"
         v-bind:sortDone.sync="eventModal.sortDone"
         v-bind:parentComponent="eventModal.parentComponent">
-    </Modal>
+    </ModalJoined>
     </div>
     <router-view @login-setActive ="setLoginActive()" @login-event="setLogin()" @change-to-event="setCreateEventActive()" @change-to-hub="setHubActive()"></router-view>
   </div>
@@ -56,13 +71,15 @@
 <script>
 /* eslint-disable */
 import Modal from '@/components/Modal'
+import ModalJoined from '@/components/ModalJoined'
 import '@/assets/vendor/js-cookie/js-cookie.js'
 const request = require('./components/requests/requests_main')
 
 export default {
   name: "App",
   components: {
-    Modal
+    Modal,
+    ModalJoined
   },
   data: () => {
     return {
@@ -72,6 +89,7 @@ export default {
       n: 0,
       items: [],
       showModal: false,
+      showModalJoined: false,
       eventModal: {}
     }
   },
@@ -80,16 +98,29 @@ export default {
       this.loggedIn = true
     },
     setLoginActive: function() {
-      this.activeView = "login";
+      this.activeView = "login"
+      this.$router.push('/')
     },
     setHubActive: function() {
       this.activeView = "hub"
+      this.$router.push('/hub')
+    },
+    setHubActivePlz: function() {
+      this.activeView = "create-event";
+      this.$router.push('/create-event');
+      let myThis = this;
+      setTimeout(function(){
+          myThis.activeView = "hub";
+          myThis.$router.push('/hub');
+      }, 50);
     },
     setCreateEventActive: function() {
       this.activeView = "create-event"
+      this.$router.push('/create-event')
     },
     setSettingsActive: function() {
       this.activeView = "settings"
+      this.$router.push('/settings')
     },
     setServicesActive: function() {
       this.activeView = "services"
@@ -105,12 +136,15 @@ export default {
       Cookies.remove("current_user");
       Cookies.remove("token");
       this.loggedIn = false;
-      location.href = "/logout";
       this.activeView = "login";
+      this.$router.push('/');
     },
     showModalClose: function() {
       this.showModal = false;
-    }
+    },
+    showModalJoinedClose: function() {
+      this.showModalJoined = false;
+    },
   },
   mounted() {
 

@@ -278,7 +278,7 @@ export async function getUsersFromEvent(eventId) {
     return response;
 }
 
-// Get users for designated event
+// Start (And draw in next call) designated event
 export async function startEvent(eventId) {
     let data = {
         eventId: eventId
@@ -297,8 +297,70 @@ export async function startEvent(eventId) {
         (res) => {
             let resJSON = res.data;
             if(res.status == 200){
-                console.log("TRUE!!!");
-                return true;
+                return draw(eventId);
+            }
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false;
+    });
+    return response;
+}
+
+// Checks if can draw with available vetos, returns possible draw and vetos
+export async function canDraw(eventId, vetos) {
+    let data = {
+        eventId: eventId,
+        vetos: vetos
+    };
+    let response = await axios({
+        method: "post",
+        url: "http://localhost:8080/api/canDraw",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200){
+                return resJSON.inserted;
+            }
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return false;
+    });
+    return response;
+}
+
+// Makes the actual draw
+export async function draw(eventId) {
+    let data = {
+        eventId: eventId
+    };
+    let response = await axios({
+        method: "post",
+        url: "http://localhost:8080/api/draw",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200){
+                return resJSON.inserted.draw;
             }
             else return false;
         }
@@ -339,6 +401,37 @@ export async function putAllWishes(eventId, wishes) {
                 return resJSON.data;
             }
             else return null;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
+    });
+    return response;
+}
+
+// Put wishlist (Erase and update) of user
+export async function deleteEvent(eventId) {
+    let data = {
+        id: eventId,
+    };
+    let response = await axios({
+        method: "delete",
+        url: "http://localhost:8080/api/event",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            if(res.status == 200){
+                return true;
+            }
+            else return false;
         }
     )
     .catch(err => {
