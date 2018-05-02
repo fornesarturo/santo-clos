@@ -97,16 +97,20 @@ export default {
       this.loggedIn = true
     },
     setLoginActive: function() {
-      this.activeView = "login";
+      this.activeView = "login"
+      this.$router.push('/')
     },
     setHubActive: function() {
       this.activeView = "hub"
+      this.$router.push('/hub')
     },
     setCreateEventActive: function() {
       this.activeView = "create-event"
+      this.$router.push('/create-event')
     },
     setSettingsActive: function() {
       this.activeView = "settings"
+      this.$router.push('/settings')
     },
     setServicesActive: function() {
       this.activeView = "services"
@@ -122,8 +126,8 @@ export default {
       Cookies.remove("current_user");
       Cookies.remove("token");
       this.loggedIn = false;
-      location.href = "/logout";
       this.activeView = "login";
+      this.$router.push('/');
     },
     showModalClose: function() {
       this.showModal = false;

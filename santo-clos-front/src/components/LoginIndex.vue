@@ -9,19 +9,19 @@
           <span class='mainSubtitle'><b>Please Log In or Register</b></span>
           <div class='fields'>
             <div id='nameField' class='registerOnly inputWrapper inputValidate' style='display:none' data-validate='Name is required'>
-              <input class='inputLine' v-model='name' type='text' name='name' placeholder='Name'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='name' type='text' name='name' placeholder='Name'>
               <span class='inputFocus'></span>
             </div>
             <div id='emailField' class='registerOnly inputWrapper inputValidate' style='display:none' data-validate = 'Valid email is required: ex@abc.xyz'>
-              <input class='inputLine' v-model='email' type='text' name='email' placeholder='Email'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='email' type='text' name='email' placeholder='Email'>
               <span class='inputFocus'></span>
             </div>
             <div id='usernameField' class='loginAndRegister inputWrapper inputValidate' data-validate='Username is required'>
-              <input class='inputLine' v-model='username' type='text' name='username' placeholder='Username'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='username' type='text' name='username' placeholder='Username'>
               <span class='inputFocus'></span>
             </div>
             <div id='passwordField' class='loginAndRegister inputWrapper inputValidate' data-validate='Minimum of 8 characters, at least one uppercase, one lowercase, one digit and one special'>
-              <input class='inputLine' v-model='password' type='password' name='password' placeholder='Password'>
+              <input @focus="hideValidate($event.target)" class='inputLine' v-model='password' type='password' name='password' placeholder='Password'>
               <span class='inputFocus'></span>
             </div>
           </div>
@@ -81,11 +81,6 @@ function showValidate(input) {
     let thisAlert = $(input).parent();
     $(thisAlert).addClass("alertValidation");
 }
-// Remove validation error
-function hideValidate(input) {
-    let thisAlert = $(input).parent();
-    $(thisAlert).removeClass("alertValidation");
-}
 
 export default {
   name: "LoginIndex",
@@ -112,6 +107,13 @@ export default {
   methods: {
     loginSetActive: function() {
       this.$emit('login-setActive');
+    },
+    focusTest: function(){
+      console.log("Hi, welcome to Chilli's");
+    },
+    hideValidate: function(input){
+      let thisAlert = $(input).parent();
+      $(thisAlert).removeClass("alertValidation");
     },
 		modeChange: function () {
 			let button = $("#changeMode");
