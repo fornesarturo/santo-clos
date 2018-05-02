@@ -206,22 +206,43 @@ apiRouter.route("/event")
                         util.sendError(res, 500, err)
                         return
                     }
-                    if (rows.info.affectedRows > 0) {
+                    if (rows.info.affectedRows >= 0) {
                         mariadb.query("DELETE FROM participant WHERE eventId = :id" , { id: id },
                             (err, rows) => {
                                 if (err) {
                                     util.sendError(res, 500, err)
                                     return
                                 }
-                                util.correctDelete(req, res)
-                                return
+                                if (rows.info.affectedRows >= 0) {
+                                    mariadb.query("DELETE FROM wish WHERE eventId = :id" , { id: id },
+                                        (err, rows) => {
+                                            if (err) {
+                                                util.sendError(res, 500, err)
+                                                return
+                                            }
+                                            if (rows.info.affectedRows >= 0) {
+                                                mariadb.query("DELETE FROM veto WHERE eventId = :id" , { id: id },
+                                                    (err, rows) => {
+                                                        if (err) {
+                                                            util.sendError(res, 500, err)
+                                                            return
+                                                        }
+                                                        util.correctDelete(req, res)
+                                                        return
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    );
+                                }
                             }
-                        )
-                    } else {
+                        );
+                    } 
+                    else {
                         util.sendError(res, 400, "Not found in DB.")
                     }
                 }
-            )
+            );
         }
         else
             util.sendError(res, 400, "Some data was missing.");
