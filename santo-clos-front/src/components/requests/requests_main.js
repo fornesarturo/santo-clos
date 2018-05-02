@@ -372,8 +372,6 @@ export async function draw(eventId) {
     return response;
 }
 
-
-
 // Put wishlist (Erase and update) of user
 export async function putAllWishes(eventId, wishes) {
     let wishesWish = [];
