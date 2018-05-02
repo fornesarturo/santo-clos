@@ -12,7 +12,7 @@
             v-bind:sortDone.sync="event.started">
         </HostedEvent>
         <div class="createEventButton" v-on:click="createNewEvent">
-            <i class="fas fa - plus"></i>
+            <img class='glyphicon' src='./../assets/octicons/plus.svg' width='100%' height='100%'>
         </div>
     </div>
 </template>
