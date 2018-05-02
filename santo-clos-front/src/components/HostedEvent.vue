@@ -42,7 +42,7 @@ export default {
                         (resUsers) => {
                             let myGifteeUsername;
                             for(let i in resUsers) {
-                                myGifteeUsername = resUsers[i].giftee || "lafercho";
+                                myGifteeUsername = resUsers[i].giftee;
                             }
                             let modalStarted;
                             if(this.sortDone== false) {

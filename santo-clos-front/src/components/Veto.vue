@@ -53,7 +53,6 @@
                 return (this.hostname != participant)
             },
             changeStatus: function(value) {
-                console.log("OnChangeCalled: ", value)
       	        this.$emit('changecheck', value)
             }
         }
