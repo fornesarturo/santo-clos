@@ -18,12 +18,12 @@
                                     </div>
                                 </span>
                         <span class="mainB">
-                                        <b> Date: {{ date }} </b> <br><br>
-                                        <b> Location: {{ location }}</b> <br><br>
-                                        <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
-                                        <!-- <button> My Wishlist </button> <br> -->
-                                        <b v-if='sortDone'> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
-                                </span>
+                            <b> Date: {{ date }} </b> <br><br>
+                            <b> Location: {{ location }}</b> <br><br>
+                            <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
+                            <!-- <button> My Wishlist </button> <br> -->
+                            <b v-if='sortDone'> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
+                        </span>
                     </div>
                     <div class="modal-body">
                         <div class="container col-md-12">
@@ -75,17 +75,14 @@
                                 </span>
                             </div>
                             <div class="container col-md-12">
-                                <BulmaAccordion
-                                        :dropdown="true"
-                                        :icon="'custom'"
-                                    >
-                                        <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
-                                            <b class="accordionItem" slot="title">{{p.username}}</b>
-                                            <div slot="content">
-                                                <Veto v-on:changecheck='changeChecked($event, p.username)' v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
-                                            </div>
-                                        </BulmaAccordionItem>
-                                    </BulmaAccordion>
+                                <BulmaAccordion :dropdown="true" :icon="'custom'">
+                                    <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                                        <b class="accordionItem" slot="title">{{p.username}}</b>
+                                        <div slot="content" v-if="showVetos">
+                                            <Veto v-on:changecheck='changeChecked($event, p.username)' v-bind:hostname="p.username" v-bind:participants="participants" v-bind:checked="vetoDictionary[p.username]"></Veto>
+                                        </div>
+                                    </BulmaAccordionItem>
+                                </BulmaAccordion>
                             </div><br>
                             <div class="container col-md-12">
                                 <input type="button" id="doVetoButton" v-on:click='tryVeto()' value="Do Veto" class="loginOnly btn btn-lg btn-success btn-block">
@@ -93,8 +90,8 @@
                             <br>
                                 <div class="column">
                                     <span class="mainTitle">
-                                                <b> Your wishlist </b>
-                                            </span>
+                                        <b> Your wishlist </b>
+                                    </span>
                                     <div class="row">
                                         <div class="buttonColumn">
                                             <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
@@ -178,7 +175,8 @@
             return {
                 n: 0,
                 items: [],
-                vetoDictionary: {}
+                vetoDictionary: {},
+                showVetos: false
             };
         },
         //   updated: function() {
@@ -187,17 +185,22 @@
         //   },
         created: function() {
             request.canDraw(this.eventId, false).then((data) => {
-                console.log(JSON.stringify(data));
+                if(data.vetos) {
+                    this.vetoDictionary = data.vetos;
+                }
+                else {
+                    let usernames = []
+                    for (let participant of this.participants) {
+                        usernames.push(participant.username)
+                    }
+                    for (let participant of usernames) {
+                        this.vetoDictionary[participant] = []
+                    }
+                }
             })
-            let usernames = []
-            for (let participant of this.participants) {
-                usernames.push(participant.username)
-            }
-            for (let participant of usernames) {
-                this.vetoDictionary[participant] = []
-            }
-            console.log(this.participants)
-            console.log(JSON.stringify(this.vetoDictionary))
+            .then(() => {
+                this.showVetos = true;
+            });
         },
         methods: {
             createEventRequest: function() {},

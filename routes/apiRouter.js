@@ -528,9 +528,6 @@ apiRouter.route("/canDraw")
                                 });
 
                                 canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
-                                    console.log("PARTICIPANTS: ", participants);
-                                    console.log("VETOS: ", oldVeto);
-                                    console.log("DRAW: ", canDraw);
                                     if(canDraw) {
                                         req.body.vetos = oldVeto;
                                         req.body.draw = canDraw;

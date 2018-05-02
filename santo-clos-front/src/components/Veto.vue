@@ -2,9 +2,12 @@
     <div class="row">
         <div class="col-md-12">
             <ul>
-                <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
+                <li v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username" v-bind:checkedItem="p.checkedItem" v-if="processDone">
                     <div class="row">
-                        <div class="col-md-2 offset-sm-2">
+                        <div class="col-md-2 offset-sm-2" v-if="p.checkedItem">
+                            <input v-if="validateParticipant(p.username)" v-bind:value="p.username" type="checkbox" class="double inputVeto" v-on:change="changeStatus($event.target.value)" checked>
+                        </div>
+                        <div class="col-md-2 offset-sm-2" v-else>
                             <input v-if="validateParticipant(p.username)" v-bind:value="p.username" type="checkbox" class="double inputVeto" v-on:change="changeStatus($event.target.value)">
                         </div>
                         <div class="col-md-8">
@@ -25,7 +28,23 @@
     import CheckboxRadio from 'vue-checkbox-radio'
     export default {
         name: 'Veto',
-        props: ["hostname","participants"],
+        props: ["hostname", "participants", "checked"],
+        data: function() {
+            return {
+                processDone:false
+            };
+        },
+        created: function() {
+            this.participants.forEach(participant => {
+                if(this.checked.includes(participant.username)) {
+                    participant.checkedItem = true;
+                }
+                else {
+                    participant.checkedItem = false;
+                }
+            })
+            this.processDone = true;
+        },
         components: {
             CheckboxRadio
         },

@@ -48,7 +48,6 @@ async function drawNames(participants, veto = null) {
                     // Cycle reached?
                     if (gifters[lastVisited].indexOf(path[0]) != -1) {
                         path.push(path[0])
-                        console.log("Path: ", path)
                         return path
                     }
                     return false
