@@ -46,7 +46,7 @@ export async function loginUser(username, password, eventToken="") {
 
 	let response = await axios({
 		method: 'post',
-        url: "http://localhost:' + port + '/auth/token" + eventToken,
+        url: "http://localhost:" + port + "/auth/token" + eventToken,
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
