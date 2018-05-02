@@ -6,7 +6,7 @@
         <div class="fields">
           <fieldset>
             <div id="nameField" class="inputWrapper inputValidate" data-validate="Name cannot be empty">
-              <input class="inputLine" type="text" name="newName" placeholder="New Name">
+              <input @focus="hideValidate($event.target)" class="inputLine" type="text" name="newName" placeholder="New Name">
               <span class="inputFocus"></span>
             </div>
             <div>
@@ -14,15 +14,15 @@
             </div>
             <br>
             <div id="oldPasswordField" class="inputWrapper passwordValidate" data-validate="Must type old password">
-              <input class="inputLine" type="password" name="oldPassword" placeholder="Old Password">
+              <input @focus="hideValidate($event.target)" class="inputLine" type="password" name="oldPassword" placeholder="Old Password">
               <span class="inputFocus"></span>
             </div>
             <div id="newPasswordField" class="inputWrapper passwordValidate" data-validate="Minimum of 8 characters, at least one uppercase, one lowercase, one digit and one special">
-              <input class="inputLine" type="password" name="newPassword" placeholder="New Password">
+              <input @focus="hideValidate($event.target)" class="inputLine" type="password" name="newPassword" placeholder="New Password">
               <span class="inputFocus"></span>
             </div>
             <div id="newPasswordConfirmationField" class="inputWrapper passwordValidate" data-validate="Passwords must match">
-              <input class="inputLine" type="password" name="newConfirmPassword" placeholder="Confirm New Password">
+              <input @focus="hideValidate($event.target)" class="inputLine" type="password" name="newConfirmPassword" placeholder="Confirm New Password">
               <span class="inputFocus"></span>
             </div>
             <div>
@@ -30,7 +30,7 @@
             </div>
             <br>
             <div id="newEmailField" class="inputWrapper inputValidate" data-validate = "Valid email is required: ex@abc.xyz">
-              <input class="inputLine" type="email" name="newEmail" placeholder="New email">
+              <input @focus="hideValidate($event.target)" class="inputLine" type="email" name="newEmail" placeholder="New email">
               <span class="inputFocus"></span>
             </div>
             <div>
@@ -65,11 +65,6 @@ function showValidate(input) {
     let thisAlert = $(input).parent();
     $(thisAlert).addClass("alertValidation");
 }
-// Remove validation error
-function hideValidate(input) {
-    let thisAlert = $(input).parent();
-    $(thisAlert).removeClass("alertValidation");
-}
 
 function check(input) {
     if (input.value != document.getElementById('password').value)
@@ -98,6 +93,10 @@ export default {
             console.log(res);
           });
         }
+      },
+      hideValidate: function(input){
+        let thisAlert = $(input).parent();
+        $(thisAlert).removeClass("alertValidation");
       },
       saveNewPassword: function () {
         let oldPassword = $(".passwordValidate input[name='oldPassword']");
@@ -164,3 +163,6 @@ export default {
 }
 </script>
 
+<style scoped>
+@import './../assets/fonts/font-awesome-4.7.0/css/font-awesome.css';
+</style>

@@ -42,6 +42,8 @@
   .modal-body {
     margin: 50px 0;
     margin-bottom: 500px 0;
+    max-height: 100%;
+    overflow-y: scroll;
   }
 
   .mainB{

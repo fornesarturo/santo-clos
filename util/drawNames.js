@@ -1,4 +1,4 @@
-function drawNames(participants, veto = null) {
+async function drawNames(participants, veto = null) {
     function lastResortDrawNames(participants, veto = null, possibleGifters) {
         // The final name draw.
         let draw = {}
@@ -48,7 +48,6 @@ function drawNames(participants, veto = null) {
                     // Cycle reached?
                     if (gifters[lastVisited].indexOf(path[0]) != -1) {
                         path.push(path[0])
-                        console.log("Path: ", path)
                         return path
                     }
                     return false
@@ -95,8 +94,8 @@ function drawNames(participants, veto = null) {
             let path = drawRecurse(possibleGifters, origin, [], new Set())
             if (path) {
                 let draw = {}
-                for (let i = 0; i < path.length - 1; i++) {
-                    draw[path[i]] = path[i + 1]
+                for (let i = path.length - 1; i > 0; i--) {
+                    draw[path[i]] = path[i - 1]
                 }
                 return draw
             }
@@ -104,7 +103,7 @@ function drawNames(participants, veto = null) {
         return lastResortDrawNames(participants, veto, possibleGifters)
     }
 
-    return hamiltonianDraw(participants, veto)
+    return await hamiltonianDraw(participants, veto)
 }
 
 module.exports = drawNames

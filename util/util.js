@@ -3,6 +3,8 @@ const o2x = require('object-to-xml');
 const fetch = require('node-fetch');
 const mail = require('./mailModule');
 const mariadb = require('./mariadb');
+const BitlyClient = require('bitly');
+const Bitly = BitlyClient(process.env.BITLY_TOKEN);
 
 function processQueryResult(rows) {
     let data = [];
@@ -46,35 +48,26 @@ function correctInsertResult(req, res, eventId) {
             inserted: req.body,
             status: 200
         }
-
         res.json(JSONResponse);
     }
 }
 
+function correctDeleteResult(req, res) {
+    let JSONResponse = {
+        deleted: req.body,
+        status: 200
+    }
+    res.json(JSONResponse);
+}
 
 async function shortenURL(url) {
-    let data = {
-        longUrl: url,
-    };
-    let options = {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(data)
-    };
-    let fullURL = "https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyBShUiJ9PcIi1oFTw67otgpnnoNN0Kn8Hs";
-
-    let response = await fetch(fullURL, options)
-    .then(res => res.json())
-    .then(resJSON => {
-        if(resJSON.id) {
-            return resJSON.id;
-        }
-        else {
-            console.log(resJSON);
-        }
+    let response = await Bitly.shorten(encodeURIComponent(url))
+    .then(function(result) {
+        return result;
+    })
+    .catch(function(error) {
+        console.log("IF ENV IS DEV, SHORTENING ERRORS EXPECTED:");
+        console.error(error);
     });
     return response;
 }
@@ -82,25 +75,37 @@ async function shortenURL(url) {
 function sendEmailInvite(participant, token) {
     console.log("Sending sign in email invite to: ", participant.email);
     if(process.env.IS_LOCALHOST == "true") {
-        var url = "http://localhost:8080/?tokenEvent=" + token;
-    }
-    else {
-        var url = "https://santo-clos.herokuapp.com/?tokenEvent=" + token;
-    }
-    shortenURL(url).then((urlS) => {
+        var url = "http://localhost:8081/#/?tokenEvent=" + token;
         mail.sendMail(
             participant.email,
             "You've been invited to a SantoClos event!",
             "<h1>Hello!</h1>\
             <h2>" + participant.adminName + " invited you to an event!</h1>\
             <h2>Follow this link to sign up and join the event.</h2>\
-            <a href=\"" + urlS + "\">Sign Up!</a>\
+            <a href=\"" + url + "\">Sign Up!</a>\
             <p>If you can't follow the previous link, please copy and paste the following address: </p>\
-            <p> " + urlS + " </p>"
+            <p> " + url + " </p>"
     
             // <a href=3D\"localhost:8080?t=" + token + "\">localhost:8080?t=" + token + "</a>"
-        );
-    });
+        )
+    }
+    else {
+        var url = "https://santo-clos.herokuapp.com/#/?tokenEvent=" + token;
+        shortenURL(url).then((urlS) => {
+            mail.sendMail(
+                participant.email,
+                "You've been invited to a SantoClos event!",
+                "<h1>Hello!</h1>\
+                <h2>" + participant.adminName + " invited you to an event!</h1>\
+                <h2>Follow this link to sign up and join the event.</h2>\
+                <a href=\"" + url + "\">Sign Up!</a>\
+                <p>If you can't follow the previous link, please copy and paste the following address: </p>\
+                <p> " + urlS + " </p>"
+        
+                // <a href=3D\"localhost:8080?t=" + token + "\">localhost:8080?t=" + token + "</a>"
+            );
+        });
+    }
 }
 
 function xml(data, res) {
@@ -130,4 +135,5 @@ module.exports =
     sendError: sendErrorJSON,
     sendEmailInvite: sendEmailInvite,
     addUserToEvent: addUserToEvent,
+    correctDelete: correctDeleteResult
 };

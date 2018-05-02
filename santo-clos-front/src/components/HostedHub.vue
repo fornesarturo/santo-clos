@@ -11,8 +11,10 @@
             v-bind:id="event.eventId"
             v-bind:sortDone.sync="event.started">
         </HostedEvent>
-        <div class="createEventButton" v-on:click="createNewEvent">
-            <i class="fas fa - plus"></i>
+        <div class="row">
+            <div class="createEventButton" v-on:click="createNewEvent">
+                +
+            </div>
         </div>
     </div>
 </template>
@@ -44,4 +46,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    @import './../assets/fonts/font-awesome-4.7.0/css/font-awesome.css';
+</style>
+
 

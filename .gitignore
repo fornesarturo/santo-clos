@@ -56,11 +56,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# CUSTOM
-*.sql
-
-# Local DB files
-local_DB
-DB
-*.sql

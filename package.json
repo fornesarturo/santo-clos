@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/fornesarturo/santo-clos#readme",
   "dependencies": {
+    "bitly": "^5.0.12",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -36,6 +37,9 @@
     "node-fetch": "^2.1.2",
     "nodemailer": "^4.6.4",
     "nodemon": "^1.17.3",
-    "object-to-xml": "^1.1.0"
+    "object-to-xml": "^1.1.0",
+    "request": "^2.85.0",
+    "vue-bulma-accordion": "^0.3.5",
+    "vue-checkbox-radio": "^0.6.0"
   }
 }
