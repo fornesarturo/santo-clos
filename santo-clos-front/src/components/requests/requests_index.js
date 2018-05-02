@@ -1,7 +1,13 @@
 /* eslint-disable */
 import axios from 'axios'
 
-let port = process.env.BASE_PORT || 8080;
+let port = ""
+if(process.env.IS_LOCALHOST) {
+    port = "8080";
+}
+else {
+    port = "";
+}
 
 // Create USER in DB
 export async function createUser(name, email, username, password, eventToken="") {

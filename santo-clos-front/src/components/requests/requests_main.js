@@ -2,8 +2,13 @@
 import axios from 'axios'
 import '@/assets/vendor/js-cookie/js-cookie.js';
 
-let port = process.env.BASE_PORT || 8080;
-
+let port = ""
+if(process.env.IS_LOCALHOST) {
+    port = "8080";
+}
+else {
+    port = "";
+}
 // Create EVENT in DB
 export async function createEventRequest(name, date, address, amount) {
     let data = {
