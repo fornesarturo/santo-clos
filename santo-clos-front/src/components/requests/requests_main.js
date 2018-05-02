@@ -3,7 +3,7 @@ import axios from 'axios'
 import '@/assets/vendor/js-cookie/js-cookie.js';
 
 let port = ""
-if(process.env.IS_LOCALHOST) {
+if(true) {
     port = "http://localhost:8080";
 }
 else {
