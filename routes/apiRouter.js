@@ -197,7 +197,35 @@ apiRouter.route("/event")
             })
         else
             util.sendError(res, 400, "Some data was missing.");
-    });
+    })
+    .delete((req, res, next) => {
+        if (req.body.id) {
+            mariadb.query("DELETE FROM event WHERE eventId = :id", { id: id }, 
+                (err, rows) => {
+                    if (err) {
+                        util.sendError(res, 500, err)
+                        return
+                    }
+                    if (rows.info.affectedRows > 0) {
+                        mariadb.query("DELETE FROM participant WHERE eventId = :id" , { id: id },
+                            (err, rows) => {
+                                if (err) {
+                                    util.sendError(res, 500, err)
+                                    return
+                                }
+                                util.correctDelete(req, res)
+                                return
+                            }
+                        )
+                    } else {
+                        util.sendError(res, 400, "Not found in DB.")
+                    }
+                }
+            )
+        }
+        else
+            util.sendError(res, 400, "Some data was missing.");
+    })
 
 apiRouter.route("/event/users")
     .get((req, res, next) => {
@@ -528,9 +556,6 @@ apiRouter.route("/canDraw")
                                 });
 
                                 canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
-                                    console.log("PARTICIPANTS: ", participants);
-                                    console.log("VETOS: ", oldVeto);
-                                    console.log("DRAW: ", canDraw);
                                     if(canDraw) {
                                         req.body.vetos = oldVeto;
                                         req.body.draw = canDraw;

@@ -18,12 +18,12 @@
                                     </div>
                                 </span>
                         <span class="mainB">
-                                        <b> Date: {{ date }} </b> <br><br>
-                                        <b> Location: {{ location }}</b> <br><br>
-                                        <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
-                                        <!-- <button> My Wishlist </button> <br> -->
-                                        <b v-if='sortDone'> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
-                                </span>
+                            <b> Date: {{ date }} </b> <br><br>
+                            <b> Location: {{ location }}</b> <br><br>
+                            <b> Maximum amount to spend: {{ maxAmount }}</b> <br><br>
+                            <!-- <button> My Wishlist </button> <br> -->
+                            <b v-if='sortDone'> You're buying a gift for {{ userYouGive }} ! </b> <br><br>
+                        </span>
                     </div>
                     <div class="modal-body">
                         <div class="container col-md-12">
@@ -68,8 +68,8 @@
                             <div class="row" v-else>
                                 <div class="column">
                                     <span class="mainTitle">
-                                                <b> Your wishlist </b>
-                                            </span>
+                                        <b> Your wishlist </b>
+                                    </span>
                                     <div class="row">
                                         <div class="buttonColumn">
                                             <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
@@ -182,7 +182,8 @@
             return {
                 n: 0,
                 items: [],
-                vetoDictionary: {}
+                vetoDictionary: {},
+                showVetos: false
             };
         },
         //   updated: function() {
@@ -191,17 +192,22 @@
         //   },
         created: function() {
             request.canDraw(this.eventId, false).then((data) => {
-                console.log(JSON.stringify(data));
+                if(data.vetos) {
+                    this.vetoDictionary = data.vetos;
+                }
+                else {
+                    let usernames = []
+                    for (let participant of this.participants) {
+                        usernames.push(participant.username)
+                    }
+                    for (let participant of usernames) {
+                        this.vetoDictionary[participant] = []
+                    }
+                }
             })
-            let usernames = []
-            for (let participant of this.participants) {
-                usernames.push(participant.username)
-            }
-            for (let participant of usernames) {
-                this.vetoDictionary[participant] = []
-            }
-            console.log(this.participants)
-            console.log(JSON.stringify(this.vetoDictionary))
+            .then(() => {
+                this.showVetos = true;
+            });
         },
         methods: {
             createEventRequest: function() {},

@@ -52,6 +52,13 @@ function correctInsertResult(req, res, eventId) {
     }
 }
 
+function correctDeleteResult(req, res) {
+    let JSONResponse = {
+        deleted: req.body,
+        status: 200
+    }
+    res.json(JSONResponse);
+}
 
 async function shortenURL(url) {
     let response = await Bitly.shorten(encodeURIComponent(url))
@@ -128,4 +135,5 @@ module.exports =
     sendError: sendErrorJSON,
     sendEmailInvite: sendEmailInvite,
     addUserToEvent: addUserToEvent,
+    correctDelete: correctDeleteResult
 };
