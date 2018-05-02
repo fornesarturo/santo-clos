@@ -25,8 +25,9 @@ app.use(logger);
 // }));
 
 app.use(express.static(__dirname + '/html'));
-app.use(express.static(path.join(__dirname, 'santo-clos-front', 'dist', 'static')));
+app.use(express.static(path.join(__dirname, 'santo-clos-front', 'dist')));
 app.use(express.static(path.join(__dirname, 'santo-clos-front', 'static')));
+
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
