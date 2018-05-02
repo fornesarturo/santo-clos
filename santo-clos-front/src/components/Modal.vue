@@ -108,16 +108,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container col-md-12">
-                        <span class="mainTitle">
-                            <b> Veto </b>
-                        </span>
-                        <span class="mainSubtitle">
-                            <b> Select the people that dislike each other</b>
-                        </span>
-                    </div>
                     <div v-if='sortDone'></div>
                     <div v-else>
+                        <div class="container col-md-12">
+                            <span class="mainTitle">
+                                <b> Veto </b>
+                            </span>
+                            <span class="mainSubtitle">
+                                <b> Select the people that dislike each other</b>
+                            </span>
+                        </div>
                         <div class="container col-md-12">
                             <BulmaAccordion
                                 :dropdown="true"
