@@ -43,7 +43,6 @@ export default {
                             }else if(this.sortDone){
                                 this.$emit("update:sortDone", true);
                             }
-                            console.log(this.sortDone);
                             request.getWishlist(this.id, myGifteeUsername).then(
                                 (resGifteeWishlist) => {
                                     let data = { 
