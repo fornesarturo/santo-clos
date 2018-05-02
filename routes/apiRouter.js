@@ -199,7 +199,8 @@ apiRouter.route("/event")
             util.sendError(res, 400, "Some data was missing.");
     })
     .delete((req, res, next) => {
-        if (req.body.id) {
+        let id = req.body.id;
+        if (id) {
             mariadb.query("DELETE FROM event WHERE eventId = :id", { id: id }, 
                 (err, rows) => {
                     if (err) {
@@ -499,11 +500,8 @@ async function getCurrentVetos(eventId) {
             if (err) {
                 reject(err);
             }
-            else if (rows.info.numRows > 0) {
+            else if (rows.info.numRows >= 0) {
                 resolve(util.process(rows));
-            }
-            else {
-                reject(false);
             }
         });
     });
@@ -558,11 +556,8 @@ apiRouter.route("/canDraw")
                     // Will check if old data works. IT SHOULD.
                     else {
                         getCurrentVetos(eventId).then((rawVetos) => {
-                            if(rawVetos === null) {
+                            if(!rawVetos) {
                                 util.sendError(res, 500, err);
-                            }
-                            else if(rawVetos === false){
-                                util.sendError(res, 404, "Not found in DB.");
                             }
                             else {
                                 let oldVeto = {};
@@ -575,17 +570,22 @@ apiRouter.route("/canDraw")
                                         oldVeto[vetoer].push(element.vetoed);
                                     }
                                 });
-
-                                canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
-                                    if(canDraw) {
-                                        req.body.vetos = oldVeto;
-                                        req.body.draw = canDraw;
-                                        util.correctPost(req, res, null);
-                                    }
-                                    else {
-                                        util.sendError(res, 500, err);
-                                    }
-                                });
+                                if(participants.length > 1) {
+                                    canDrawCheck(eventId, participants, oldVeto).then((canDraw) => {
+                                        if(!canDraw) {
+                                            util.sendError(res, 500, err);
+                                        }
+                                        else {
+                                            req.body.vetos = oldVeto;
+                                            req.body.draw = canDraw;
+                                            util.correctPost(req, res, null);
+                                        }
+                                    });
+                                }
+                                else {
+                                    req.body.vetos = oldVeto;
+                                    util.correctPost(req, res, null);
+                                }
                             }
                         });
                     }

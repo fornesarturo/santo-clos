@@ -46,7 +46,8 @@
         v-bind:wishlist="eventModal.wishlist"
         v-bind:participants="eventModal.participants"
         v-bind:sortDone.sync="eventModal.sortDone"
-        v-bind:parentComponent="eventModal.parentComponent">
+        v-bind:parentComponent="eventModal.parentComponent"
+        @delete="setHubActivePlz()">
     </Modal>
     <ModalJoined v-if="showModalJoined" @close="showModalJoinedClose()"
         v-bind:gifteeList="eventModal.gifteeList"
@@ -104,6 +105,15 @@ export default {
       this.activeView = "hub"
       this.$router.push('/hub')
     },
+    setHubActivePlz: function() {
+      this.activeView = "create-event";
+      this.$router.push('/create-event');
+      let myThis = this;
+      setTimeout(function(){
+          myThis.activeView = "hub";
+          myThis.$router.push('/hub');
+      }, 50);
+    },
     setCreateEventActive: function() {
       this.activeView = "create-event"
       this.$router.push('/create-event')
@@ -133,7 +143,6 @@ export default {
       this.showModal = false;
     },
     showModalJoinedClose: function() {
-      console.log("CLOSE MOFO");
       this.showModalJoined = false;
     },
   },

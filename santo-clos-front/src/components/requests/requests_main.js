@@ -413,7 +413,7 @@ export async function putAllWishes(eventId, wishes) {
 // Put wishlist (Erase and update) of user
 export async function deleteEvent(eventId) {
     let data = {
-        eventId: eventId,
+        id: eventId,
     };
     let response = await axios({
         method: "delete",
@@ -428,7 +428,6 @@ export async function deleteEvent(eventId) {
     .then(
         (res) => {
             let resJSON = res.data;
-            console.log(resJSON);
             if(res.status == 200){
                 return true;
             }

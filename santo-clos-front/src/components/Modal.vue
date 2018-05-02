@@ -39,8 +39,8 @@
                             </div>
                             <div v-if='sortDone'>
                                 <span class="mainTitle">
-                                                <b> Your wishlist </b>
-                                            </span>
+                                    <b> Your wishlist </b>
+                                </span>
                                 <div class="row">
                                     <div class="buttonColumn">
                                         <input type="button" id="addWishButton" v-on:click='addWish()' value="New Wish" class="loginOnly btn btn-lg btn-primary btn-block">
@@ -125,8 +125,8 @@
                             >
                                 <BulmaAccordionItem class="accordionContainer" v-for="p in participants" v-bind:key="p.email" v-bind:email="p.email" v-bind:username="p.username">
                                     <b class="accordionItem" slot="title">{{p.username}}</b>
-                                    <div slot="content">
-                                        <Veto v-on:changecheck='changeChecked($event, p.username)' v-bind:hostname="p.username" v-bind:participants="participants"></Veto>
+                                    <div slot="content" v-if="showVetos">
+                                        <Veto v-on:changecheck='changeChecked($event, p.username)' v-bind:hostname="p.username" v-bind:participants="participants" v-bind:checked="vetoDictionary[p.username]"></Veto>
                                     </div>
                                 </BulmaAccordionItem>
                             </BulmaAccordion>
@@ -137,7 +137,7 @@
                     </div>
                     <div class="row">
                         <div class="container col-md-12">
-                            <input type="button" v-on:click='myFunction()' value="WARNING: DELETE EVENT" class="btn btn-warning btn-block">
+                            <input type="button" v-on:click='deleteEvent()' value="WARNING: DELETE EVENT" class="btn btn-warning btn-block">
                         </div>
                     </div>
                 </div>
@@ -292,6 +292,7 @@
             },
             deleteEvent: function() {
                 this.$emit('close');
+                this.$emit('delete');
                 request.deleteEvent(this.eventId);
             }
         }
