@@ -71,7 +71,7 @@
                                         <b> Veto </b>
                                 </span>
                                 <span class="mainSubtitle">
-                                    <b> Select the people you hate</b>
+                                    <b> Select the people that dislike each other</b>
                                 </span>
                             </div>
                             <div class="container col-md-12">
@@ -129,6 +129,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <b>FUCK OFF</b>
                     </div>
                 </div>
             </div>
