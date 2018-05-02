@@ -8,9 +8,7 @@
                             <b>{{ name }}</b>
                             <b class="mainSubtitle">Hosted by {{ hostName }}</b>
                             <div class="row">
-                                <div class="buttonColumn">
-                                    <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-danger btn-block">
-                                </div>
+                                <input type="button" @click="$emit('close')" value="Close" class="loginOnly btn btn-lg btn-danger btn-block">
                             </div>
                         </span>
                          <span class="mainB">
