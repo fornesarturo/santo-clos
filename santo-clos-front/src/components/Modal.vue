@@ -277,6 +277,10 @@
                 request.canDraw(this.eventId, this.vetoDictionary).then((data) => {
                     if(!data) {
                         // VETO FAILED!!!
+                        alert("Impossible veto settings.\nCheck vetos and try again.");
+                    }
+                    else {
+                        alert("Vetos saved");
                     }
                 });
             }
