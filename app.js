@@ -8,6 +8,7 @@ const dotenv = require('dotenv').config();
 const cors = require('cors');
 
 const PORT = process.env.PORT || 8080;
+process.env.BASE_PORT = PORT;
 
 var app = express();
 app.use(cookieParser(process.env.COOKIE_SECRET));
