@@ -41,5 +41,9 @@
     "request": "^2.85.0",
     "vue-bulma-accordion": "^0.3.5",
     "vue-checkbox-radio": "^0.6.0"
+  },
+  "engines": {
+    "npm": "6.x",
+    "node": "9.x"
   }
 }
