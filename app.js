@@ -28,16 +28,8 @@ app.use(express.static(__dirname + '/html'));
 app.use(express.static(path.join(__dirname, 'santo-clos-front', 'dist', 'static')));
 
 app.use(function (req, res, next) {
-    // let origin = req.headers.origin;
-    // if(origin == null || origin == "null" || origin.length <= 0) {
-    //     origin="*";
-    // }
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Credentials", true);
-    res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, PUT, PATCH, POST, DELETE");
-    // res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader("Access-Control-Allow-Headers", "content-type, Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin, Accept");
-    // res.setHeader("Vary", "Origin, Access-Control-Request-Headers");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
