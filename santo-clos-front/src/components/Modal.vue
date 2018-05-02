@@ -271,10 +271,14 @@
                 } else {
                     this.vetoDictionary[owner].push(who)
                 }
-                console.log(JSON.stringify(this.vetoDictionary))
             },
             tryVeto(){
                 document.getElementById('doVetoButton').disabled = true;
+                request.canDraw(this.eventId, this.vetoDictionary).then((data) => {
+                    if(!data) {
+                        // VETO FAILED!!!
+                    }
+                });
             }
         }
     };
