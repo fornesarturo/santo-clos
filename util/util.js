@@ -91,6 +91,7 @@ function sendEmailInvite(participant, token) {
     }
     else {
         var url = "https://santo-clos.herokuapp.com/#/?tokenEvent=" + token;
+        console.log("URL" + url);
         shortenURL(url).then((urlS) => {
             mail.sendMail(
                 participant.email,
@@ -100,7 +101,7 @@ function sendEmailInvite(participant, token) {
                 <h2>Follow this link to sign up and join the event.</h2>\
                 <a href=\"" + url + "\">Sign Up!</a>\
                 <p>If you can't follow the previous link, please copy and paste the following address: </p>\
-                <p> " + urlS + " </p>"
+                <p> " + url + " </p>"
         
                 // <a href=3D\"localhost:8080?t=" + token + "\">localhost:8080?t=" + token + "</a>"
             );
