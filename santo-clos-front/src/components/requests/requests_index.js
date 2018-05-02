@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 let port = ""
-if(process.env.IS_LOCALHOST) {
+if(true) {
     port = "http://localhost:8080";
 }
 else {
