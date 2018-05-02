@@ -1,6 +1,7 @@
 /* eslint-disable */
 import axios from 'axios'
 
+let port = process.env.PORT || 8080;
 // Create USER in DB
 export async function createUser(name, email, username, password, eventToken="") {
     let data = {
@@ -12,7 +13,7 @@ export async function createUser(name, email, username, password, eventToken="")
 
     let response = await axios({
         method: 'post',
-        url: 'http://localhost:8080/api/user' + eventToken,
+        url: 'http://localhost:' + port + '/api/user' + eventToken,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -45,7 +46,7 @@ export async function loginUser(username, password, eventToken="") {
 
 	let response = await axios({
 		method: 'post',
-        url: "http://localhost:8080/auth/token" + eventToken,
+        url: "http://localhost:' + port + '/auth/token" + eventToken,
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
