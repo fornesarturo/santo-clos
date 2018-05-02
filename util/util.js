@@ -61,6 +61,7 @@ function correctDeleteResult(req, res) {
 }
 
 async function shortenURL(url) {
+    console.log(encodeURIComponent(url));
     let response = await Bitly.shorten(encodeURIComponent(url))
     .then(function(result) {
         return result;
@@ -91,7 +92,6 @@ function sendEmailInvite(participant, token) {
     }
     else {
         var url = "https://santo-clos.herokuapp.com/#/?tokenEvent=" + token;
-        console.log("URL: " + url);
         shortenURL(url).then((urlS) => {
             mail.sendMail(
                 participant.email,
