@@ -409,3 +409,35 @@ export async function putAllWishes(eventId, wishes) {
     });
     return response;
 }
+
+// Put wishlist (Erase and update) of user
+export async function deleteEvent(eventId) {
+    let data = {
+        eventId: eventId,
+    };
+    let response = await axios({
+        method: "delete",
+        url: "http://localhost:8080/api/event",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+        data: data
+    })
+    .then(
+        (res) => {
+            let resJSON = res.data;
+            console.log(resJSON);
+            if(res.status == 200){
+                return true;
+            }
+            else return false;
+        }
+    )
+    .catch(err => {
+        console.log('Error', err)
+        return null;
+    });
+    return response;
+}

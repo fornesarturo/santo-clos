@@ -276,17 +276,20 @@
                     this.vetoDictionary[owner].push(who)
                 }
             },
-            tryVeto(){
+            tryVeto: function() {
                 document.getElementById('doVetoButton').disabled = true;
                 request.canDraw(this.eventId, this.vetoDictionary).then((data) => {
                     if(!data) {
-                        // VETO FAILED!!!
                         alert("Impossible veto settings.\nCheck vetos and try again.");
                     }
                     else {
                         alert("Vetos saved");
                     }
                 });
+            },
+            deleteEvent: function() {
+                this.$emit('close');
+                request.deleteEvent(this.eventId);
             }
         }
     };
