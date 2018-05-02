@@ -97,7 +97,6 @@ export default {
     };
   },
   created: function() {
-    console.log("HELLO: ", process.env.PORT);
     if (this.$route.query.tokenEvent)
       this.eventToken = "?tokenEvent=" + this.$route.query.tokenEvent
     this.mode = login;

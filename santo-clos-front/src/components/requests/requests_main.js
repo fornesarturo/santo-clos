@@ -4,11 +4,12 @@ import '@/assets/vendor/js-cookie/js-cookie.js';
 
 let port = ""
 if(process.env.IS_LOCALHOST) {
-    port = "8080";
+    port = "http://localhost:8080";
 }
 else {
-    port = "";
+    port = "https://santo-clos.herokuapp.com";
 }
+
 // Create EVENT in DB
 export async function createEventRequest(name, date, address, amount) {
     let data = {
@@ -20,7 +21,7 @@ export async function createEventRequest(name, date, address, amount) {
 
     let response = await axios({
         method: 'post',
-        url: 'http://localhost:'+ port +'/api/event',
+        url: port +'/api/event',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -53,7 +54,7 @@ export async function postEventParticipants(eventId, participants) {
     };
     let response = await axios({
         method: 'post',
-        url: 'http://localhost:'+ port +'/api/event/users',
+        url: port +'/api/event/users',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -82,7 +83,7 @@ export async function getJoinedEventsRequest() {
     
     let response = await axios({
 		method: 'get',
-        url: "http://localhost:"+ port +"/api/user/joinedEvents",
+        url: port +"/api/user/joinedEvents",
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -110,7 +111,7 @@ export async function getJoinedEventsRequest() {
 export async function getEventsAdminRequest() {
     let response = await axios({
 		method: 'get',
-        url: "http://localhost:'+ port +'/api/user/events",
+        url: port +"/api/user/events",
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -142,7 +143,7 @@ export async function passwordValidationRequest(username, password) {
     };
     let response = await axios({
 		method: 'post',
-        url: "http://localhost:"+ port +"/auth/authPassword",
+        url: port +"/auth/authPassword",
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -169,7 +170,7 @@ export async function passwordValidationRequest(username, password) {
 export async function updateDataRequest(data) {
     let response = await axios({
 		method: 'put',
-        url: "http://localhost:"+ port +"/api/user",
+        url: port +"/api/user",
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -190,7 +191,7 @@ export async function updateDataRequest(data) {
 export async function checkIfLoggedIn() {
     let response = await axios({
         method: "post",
-        url: "http://localhost:"+ port +"/auth/whoami",
+        url: port +"/auth/whoami",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -214,7 +215,7 @@ export async function checkIfLoggedIn() {
 export async function getMyWishlist(eventId) {
     let response = await axios({
         method: "get",
-        url: "http://localhost:"+ port +"/api/event/wishlist?id="+ eventId + "&user=" + Cookies.get("current_user"),
+        url: port +"/api/event/wishlist?id="+ eventId + "&user=" + Cookies.get("current_user"),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -239,7 +240,7 @@ export async function getMyWishlist(eventId) {
 export async function getWishlist(eventId, username) {
     let response = await axios({
         method: "get",
-        url: "http://localhost:"+ port +"/api/event/wishlist?id="+ eventId + "&user=" + username,
+        url: port +"/api/event/wishlist?id="+ eventId + "&user=" + username,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -264,7 +265,7 @@ export async function getWishlist(eventId, username) {
 export async function getUsersFromEvent(eventId) {
     let response = await axios({
         method: "get",
-        url: "http://localhost:"+ port +"/api/event/users?id="+ eventId,
+        url: port +"/api/event/users?id="+ eventId,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -292,7 +293,7 @@ export async function startEvent(eventId) {
     };
     let response = await axios({
         method: "put",
-        url: "http://localhost:"+ port +"/api/eventStart",
+        url: port +"/api/eventStart",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -324,7 +325,7 @@ export async function canDraw(eventId, vetos) {
     };
     let response = await axios({
         method: "post",
-        url: "http://localhost:"+ port +"/api/canDraw",
+        url: port +"/api/canDraw",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -355,7 +356,7 @@ export async function draw(eventId) {
     };
     let response = await axios({
         method: "post",
-        url: "http://localhost:"+ port +"/api/draw",
+        url: port +"/api/draw",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -392,7 +393,7 @@ export async function putAllWishes(eventId, wishes) {
     };
     let response = await axios({
         method: "put",
-        url: "http://localhost:"+ port +"/api/event/wishlist",
+        url: port +"/api/event/wishlist",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -424,7 +425,7 @@ export async function deleteEvent(eventId) {
     };
     let response = await axios({
         method: "delete",
-        url: "http://localhost:"+ port +"/api/event",
+        url: port +"/api/event",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

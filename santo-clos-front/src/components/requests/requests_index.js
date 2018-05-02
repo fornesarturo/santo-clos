@@ -3,10 +3,10 @@ import axios from 'axios'
 
 let port = ""
 if(process.env.IS_LOCALHOST) {
-    port = "8080";
+    port = "http://localhost:8080";
 }
 else {
-    port = "";
+    port = "https://santo-clos.herokuapp.com";
 }
 
 // Create USER in DB
@@ -20,7 +20,7 @@ export async function createUser(name, email, username, password, eventToken="")
 
     let response = await axios({
         method: 'post',
-        url: 'http://localhost:' + port + '/api/user' + eventToken,
+        url: port + '/api/user' + eventToken,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -53,7 +53,7 @@ export async function loginUser(username, password, eventToken="") {
 
 	let response = await axios({
 		method: 'post',
-        url: "http://localhost:" + port + "/auth/token" + eventToken,
+        url: port + "/auth/token" + eventToken,
 		headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
