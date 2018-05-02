@@ -45,3 +45,8 @@ export default {
 }
 </script>
 
+<style scoped>
+    @import './../assets/fonts/font-awesome-4.7.0/css/font-awesome.css';
+</style>
+
+
