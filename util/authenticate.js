@@ -11,7 +11,7 @@ function signJWT(subParam) {
         {
             algorithm: 'HS256',
             audience: "santo-clos-server",
-            issuer: "santo-clos.herokuapp.com",
+            issuer: "santoclos.herokuapp.com",
             subject: subParam,
             expiresIn: Math.floor(Date.now() / 1000) + (10 * 60 * 60)
         }
@@ -29,7 +29,7 @@ function signJWTInvite(eventId, email) {
         {
             algorithm: 'HS256',
             audience: "santo-clos-server",
-            issuer: "santo-clos.herokuapp.com",
+            issuer: "santoclos.herokuapp.com",
             subject: "SignUp-EventInvite",
             expiresIn: Math.floor(Date.now() / 1000) + (10 * 60 * 60)
         }
@@ -42,7 +42,7 @@ async function authenticateJWTInvite(token) {
         {
             algorithms: ['HS256'],
             audience: "santo-clos-server",
-            issuer: ["santo-clos.herokuapp.com"],
+            issuer: ["santoclos.herokuapp.com"],
             clockTolerance: 5,
             clockTimestamp: Date.now() / 1000
         }, function (err, decoded) {
@@ -63,7 +63,7 @@ function authenticateJWT (req, res, next) {
         {
             algorithms: ['HS256'],
             audience: "santo-clos-server",
-            issuer: ["santo-clos.herokuapp.com"],
+            issuer: ["santoclos.herokuapp.com"],
             clockTolerance: 5,
             clockTimestamp: Date.now() / 1000
         }, function (err, decoded) {

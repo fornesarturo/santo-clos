@@ -6,7 +6,7 @@ if(false) {
     port = "http://localhost:8080";
 }
 else {
-    port = "https://santo-clos.herokuapp.com";
+    port = "https://santoclos.herokuapp.com";
 }
 
 // Create USER in DB
