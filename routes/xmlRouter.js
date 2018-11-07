@@ -14,7 +14,7 @@ xmlRouter.route("/user")
         let data;
         let user = req.query["user"] || false;
         if (user)
-            mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
+            mariadb.mariadb.query("SELECT username, name, email FROM user WHERE username = :id",
                 { id: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
@@ -29,7 +29,7 @@ xmlRouter.route("/event")
     .get(cache(20), (req, res, next) => {
         let user = req.query["user"] || false;
         if (user)
-            mariadb.query("SELECT * FROM event WHERE eventId = :id",
+            mariadb.mariadb.query("SELECT * FROM event WHERE eventId = :id",
                 { id: eventId }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
@@ -44,7 +44,7 @@ xmlRouter.route("/event/users")
     .get(cache(20), (req, res, next) => {
         let event = req.query["id"] || false;
         if (event)
-            mariadb.query("SELECT * FROM participant WHERE eventId = :id",
+            mariadb.mariadb.query("SELECT * FROM participant WHERE eventId = :id",
                 { id: event }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
@@ -61,7 +61,7 @@ xmlRouter.route("/event/wishlist")
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
-            mariadb.query("SELECT * FROM event JOIN wish ON event.eventId = wish.eventId AND wish.username = :username AND wish.eventId = :id",
+            mariadb.mariadb.query("SELECT * FROM event JOIN wish ON event.eventId = wish.eventId AND wish.username = :username AND wish.eventId = :id",
                 { id: event, username: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {
@@ -77,7 +77,7 @@ xmlRouter.route("/event/giftee")
         let user = req.query["user"] || false;
         let event = req.query["id"] || false;
         if (user && event)
-            mariadb.query("SELECT giftee FROM participant WHERE eventId = :id AND username = :username",
+            mariadb.mariadb.query("SELECT giftee FROM participant WHERE eventId = :id AND username = :username",
                 { id: event, username: user }, (err, rows) => {
                     if (err) throw err;
                     if (rows.info.numRows > 0) {

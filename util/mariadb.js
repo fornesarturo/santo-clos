@@ -302,4 +302,4 @@ module.exports.getEventGiftee = function (req, res, next) {
         util.sendError(res, 400, "Some data was missing.");
 }
 
-module.exports = mariadb;
+module.exports.mariadb = mariadb;

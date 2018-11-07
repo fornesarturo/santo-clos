@@ -35,7 +35,7 @@ authRouter.route("/token")
     let username = req.body.username;
     let password = req.body.password;
     if (username) {
-        mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
+        mariadb.mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
             {id: username, pass: password}, (err, rows) => {
                 if (err) throw err;
                 if (rows.info.numRows > 0) {
@@ -58,7 +58,7 @@ authRouter.route("/token")
                             let id = event.eventId;
                             let email = event.email;
                             let user = username;
-                            mariadb.query("SELECT * FROM user WHERE username = :username", { username: user },
+                            mariadb.mariadb.query("SELECT * FROM user WHERE username = :username", { username: user },
                                 (err, rows) => {
                                     if (err) {
                                         console.log(err);
@@ -87,7 +87,7 @@ authRouter.route("/authPassword")
     let username = req.body.username;
     let password = req.body.password;
     if (username) {
-        mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
+        mariadb.mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
             {id: username, pass: password}, (err, rows) => {
                 if (err) throw err;
                 if (rows.info.numRows > 0) {

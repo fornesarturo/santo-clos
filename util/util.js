@@ -118,7 +118,7 @@ function xml(data, res) {
 }
 
 function addUserToEvent(username, eventId, giftee) {
-    mariadb.query("INSERT INTO participant VALUES (:username, :eventId, :giftee)", { username: username, eventId: eventId, giftee: giftee }, 
+    mariadb.mariadb.query("INSERT INTO participant VALUES (:username, :eventId, :giftee)", { username: username, eventId: eventId, giftee: giftee }, 
     (err, rows) => {
         if (err) {
             console.log(err);
