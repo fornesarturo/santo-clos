@@ -10,7 +10,7 @@ var apiRouter = express.Router();
 apiRouter.route("/user")
 .post((req, res, next) => {
     if (req.body)
-        mariadb.postUser(req.body.username, req.body.password, req.body.name, req.body.email, req, res, next);
+        mariadb.postUser(req.body.username, req.body.password, req.body.name, req.body.email, req, res, next, util);
     else
         util.sendError(res, 400, "Some data was missing.");
 });
@@ -40,7 +40,7 @@ apiRouter.route("/user")
             util.sendError(res, 400, "Some data was missing.");
     })
     .put((req, res, next) => {
-        mariadb.updateUser(req, res, next);
+        mariadb.updateUser(req, res, next, util);
     });
 
 apiRouter.route("/user/events")
@@ -154,7 +154,7 @@ apiRouter.route("/event")
     .delete((req, res, next) => {
         let id = req.body.id;
         if (id)
-            mariadb.deleteEvent(id, req, res, next)
+            mariadb.deleteEvent(id, req, res, next, util)
         else
             util.sendError(res, 400, "Some data was missing.");
     })
@@ -185,7 +185,7 @@ apiRouter.route("/event/users")
             let participants = req.body.participants;
             while (participants.length > 0) {
                 let participant = participants.pop();
-                mariadb.postEventParticipant(participant, req, res, next);
+                mariadb.postEventParticipant(participant, req, res, next, util);
             }
             util.correctPost(req, res, null);
         }
@@ -195,18 +195,18 @@ apiRouter.route("/event/users")
 
 apiRouter.route("/event/wishlist")
     .get((req, res, next) => {
-        mariadb.getEventWishlist(req, res, next);
+        mariadb.getEventWishlist(req, res, next, util);
     })
     .post((req, res, next) => {
-        mariadb.postEventWishlist(req, res, next);
+        mariadb.postEventWishlist(req, res, next, util);
     })
     .put((req, res, next) => {
-        mariadb.updateEventWishlist(req, res, next);
+        mariadb.updateEventWishlist(req, res, next, util);
     });
 
 apiRouter.route("/event/giftee")
     .get((req, res, next) => {
-        mariadb.getEventGiftee(req, res, next);
+        mariadb.getEventGiftee(req, res, next, util);
     });
 
 async function getEventParticipants(eventId) {

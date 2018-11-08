@@ -14,11 +14,7 @@ mariadb.query('SHOW DATABASES', (err, rows) => {
     else console.log("Connected to DB");
 });
 
-const util = require('./util');
-
-console.log("Util", util)
-
-module.exports.postUser = function (username, password, name, email, req, res, next) {
+module.exports.postUser = function (username, password, name, email, req, res, next, util) {
     mariadb.query("INSERT INTO user VALUES (:username, :password, :name, :email)",
         {
             username: req.body.username, password: req.body.password,
@@ -36,7 +32,7 @@ module.exports.getUser = function (user, cb) {
         { id: user }, cb);
 }
 
-module.exports.updateUser = function (req, res, next) {
+module.exports.updateUser = function (req, res, next, util) {
     let user = req.body.authUsername || false;
     if (user) {
         let toChange = [];
@@ -93,7 +89,7 @@ module.exports.postEvent = function (admin, name, eventDate, address, amount, cb
         }, cb);
 }
 
-module.exports.deleteEvent = function (id, req, res, next) {
+module.exports.deleteEvent = function (id, req, res, next, util) {
     mariadb.query("DELETE FROM event WHERE eventId = :id", { id: id },
         (err, rows) => {
             if (err) {
@@ -167,7 +163,7 @@ module.exports.deleteAllVetos = function (eventId, cb) {
     mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId }, cb);
 }
 
-module.exports.postEventUser = function (participant, req, res, next) {
+module.exports.postEventParticipant = function (participant, req, res, next, util) {
     mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant.email }, (err, rowsParticipants) => {
         if (err) {
             util.sendError(res, 500, err);
@@ -196,7 +192,7 @@ module.exports.postEventUser = function (participant, req, res, next) {
     });
 }
 
-module.exports.getEventWishlist = function (req, res, next) {
+module.exports.getEventWishlist = function (req, res, next, util) {
     let user = req.query["user"] || false;
     let event = req.query["id"] || false;
     if (user && event) {
@@ -220,7 +216,7 @@ module.exports.getEventWishlist = function (req, res, next) {
         util.sendError(res, 400, "Some data was missing.");
 }
 
-module.exports.postEventWishlist = function (req, res, next) {
+module.exports.postEventWishlist = function (req, res, next, util) {
     let user = req.body.authUsername || false;
     let event = req.body.eventId || false;
     let wish = req.body.wish || false;
@@ -243,7 +239,7 @@ module.exports.postEventWishlist = function (req, res, next) {
         util.sendError(res, 400, "Some data was missing.");
 }
 
-module.exports.updateEventWishlist = function (req, res, next) {
+module.exports.updateEventWishlist = function (req, res, next, util) {
     let user = req.body.authUsername || false;
     let event = req.body.eventId || false;
     let wishes = req.body.wishes || false;
@@ -282,7 +278,7 @@ module.exports.updateEventWishlist = function (req, res, next) {
         util.sendError(res, 400, "Some data was missing.");
 }
 
-module.exports.getEventGiftee = function (req, res, next) {
+module.exports.getEventGiftee = function (req, res, next, util) {
     let user = req.query["user"] || false;
     let event = req.query["id"] || false;
     if (user && event)
