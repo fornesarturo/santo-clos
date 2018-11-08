@@ -117,16 +117,6 @@ function xml(data, res) {
     }));
 }
 
-function addUserToEvent(username, eventId, giftee) {
-    mariadb.mariadb.query("INSERT INTO participant VALUES (:username, :eventId, :giftee)", { username: username, eventId: eventId, giftee: giftee }, 
-    (err, rows) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-    });
-}
-
 module.exports = 
 {
     process: processQueryResult, 
@@ -135,6 +125,5 @@ module.exports =
     emptyWishlist: sendEmptyWishlist, 
     sendError: sendErrorJSON,
     sendEmailInvite: sendEmailInvite,
-    addUserToEvent: addUserToEvent,
     correctDelete: correctDeleteResult
 };

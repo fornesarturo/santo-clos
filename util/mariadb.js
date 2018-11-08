@@ -32,6 +32,15 @@ module.exports.getUser = function (user, cb) {
         { id: user }, cb);
 }
 
+module.exports.getAllUser = function(user, cb) {
+    mariadb.query("SELECT * FROM user WHERE username = :username", { username: user }, cb);
+}
+
+module.exports.getUserPass = function (username, password, cb) {
+    mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
+            {id: username, pass: password}, cb)
+}
+
 module.exports.updateUser = function (req, res, next, util) {
     let user = req.body.authUsername || false;
     if (user) {
@@ -299,6 +308,16 @@ module.exports.getEventGiftee = function (req, res, next, util) {
             });
     else
         util.sendError(res, 400, "Some data was missing.");
+}
+
+module.exports.addUserToEvent = function (username, eventId, giftee) {
+    mariadb.query("INSERT INTO participant VALUES (:username, :eventId, :giftee)", { username: username, eventId: eventId, giftee: giftee },
+        (err, rows) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        });
 }
 
 module.exports.mariadb = mariadb;

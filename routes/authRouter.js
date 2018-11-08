@@ -35,8 +35,7 @@ authRouter.route("/token")
     let username = req.body.username;
     let password = req.body.password;
     if (username) {
-        mariadb.mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
-            {id: username, pass: password}, (err, rows) => {
+        mariadb.getUserPass(username, password, (err, rows) => {
                 if (err) throw err;
                 if (rows.info.numRows > 0) {
                     let bearToken = auth.signJWT(username);
@@ -58,14 +57,14 @@ authRouter.route("/token")
                             let id = event.eventId;
                             let email = event.email;
                             let user = username;
-                            mariadb.mariadb.query("SELECT * FROM user WHERE username = :username", { username: user },
+                            mariadb.getAllUser(user,
                                 (err, rows) => {
                                     if (err) {
                                         console.log(err);
                                     }
                                     else {
                                         let emailDB = util.process(rows)[0].email
-                                        if (email == emailDB) util.addUserToEvent(user, id, null);
+                                        if (email == emailDB) mariadb.addUserToEvent(user, id, null);
                                         res.cookie("current_user", username);
                                         res.json(data);
                                     }
@@ -87,8 +86,7 @@ authRouter.route("/authPassword")
     let username = req.body.username;
     let password = req.body.password;
     if (username) {
-        mariadb.mariadb.query("SELECT * FROM user WHERE username = :id AND password = :pass",
-            {id: username, pass: password}, (err, rows) => {
+        mariadb.getUserPass(username, password, (err, rows) => {
                 if (err) throw err;
                 if (rows.info.numRows > 0) {
                     data = {

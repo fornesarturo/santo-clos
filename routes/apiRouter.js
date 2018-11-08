@@ -140,7 +140,7 @@ apiRouter.route("/event")
                     }
                     if (rows.info.affectedRows > 0) {
                         req.body.eventId = rows.info.insertId;
-                        util.addUserToEvent(req.body.authUsername, req.body.eventId, null);
+                        mariadb.addUserToEvent(req.body.authUsername, req.body.eventId, null);
                         util.correctPost(req, res, rows.info.insertId);
                         return;
                     }
