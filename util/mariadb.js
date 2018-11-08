@@ -163,7 +163,7 @@ module.exports.deleteAllVetos = function (eventId, cb) {
     mariadb.query("DELETE FROM veto WHERE eventId = :eventId", { eventId }, cb);
 }
 
-module.exports.postEventParticipant = function (participant, req, res, next, util) {
+module.exports.postEventParticipant = function (participant, req, res, next, util, auth) {
     mariadb.query("SELECT * FROM user WHERE email = :email", { email: participant.email }, (err, rowsParticipants) => {
         if (err) {
             util.sendError(res, 500, err);

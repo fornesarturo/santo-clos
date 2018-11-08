@@ -185,7 +185,7 @@ apiRouter.route("/event/users")
             let participants = req.body.participants;
             while (participants.length > 0) {
                 let participant = participants.pop();
-                mariadb.postEventParticipant(participant, req, res, next, util);
+                mariadb.postEventParticipant(participant, req, res, next, util, auth);
             }
             util.correctPost(req, res, null);
         }
