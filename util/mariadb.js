@@ -1,6 +1,5 @@
 const MariaDBClient = require('mariasql');
 const dotenv = require('dotenv').config();
-const util = require('./util.js');
 
 const mariadb = new MariaDBClient({
     host: process.env.DB_HOST,
@@ -14,6 +13,10 @@ mariadb.query('SHOW DATABASES', (err, rows) => {
     if (err) throw err;
     else console.log("Connected to DB");
 });
+
+const util = require('./util');
+
+console.log("Util", util)
 
 module.exports.postUser = function (username, password, name, email, req, res, next) {
     mariadb.query("INSERT INTO user VALUES (:username, :password, :name, :email)",
